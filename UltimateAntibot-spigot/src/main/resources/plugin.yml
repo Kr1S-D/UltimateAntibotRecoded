@@ -1,0 +1,6 @@
+name: UltimateAntibot
+version: '${project.version}'
+main: me.kr1s_d.ultimateantibot.UltimateAntibotSpigot
+api-version: 1.16
+authors: [ Kr1S_D ]
+description: Good antibot plugin!

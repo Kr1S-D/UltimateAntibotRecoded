@@ -1,0 +1,91 @@
+package me.kr1s_d.ultimateantibot.objects;
+
+import me.kr1s_d.commons.objects.interfaces.IConfiguration;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.function.Consumer;
+
+public class Config implements IConfiguration {
+    private final File file;
+
+    private YamlConfiguration config;
+    private Consumer<Exception> exceptionHandler;
+
+    public Config(JavaPlugin plugin, String configName) {
+        file = new File(plugin.getDataFolder(), configName + ".yml");
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            plugin.saveResource(configName + ".yml", false);
+        }
+
+        reload();
+    }
+
+    public void reload() {
+        config = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public void save() {
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            if (exceptionHandler == null)
+                Bukkit.getLogger().severe(String.format("C'è stato un errore durante il salvataggio di %s.yml", file.getName()));
+            else
+                exceptionHandler.accept(e);
+        }
+    }
+
+    public void setExceptionHandler(Consumer<Exception> exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
+    }
+
+    @Override
+    public Object get(String path) {
+        return config.get(path);
+    }
+
+    @Override
+    public String getString(String path) {
+        return config.getString(path);
+    }
+
+    @Override
+    public int getInt(String path) {
+        return config.getInt(path);
+    }
+
+    @Override
+    public short getShort(String path) {
+        return Integer.valueOf(getInt(path)).shortValue();
+    }
+
+    @Override
+    public long getLong(String path) {
+        return config.getLong(path);
+    }
+
+    @Override
+    public double getDouble(String path) {
+        return config.getDouble(path);
+    }
+
+    @Override
+    public boolean getBoolean(String path) {
+        return config.getBoolean(path);
+    }
+
+    @Override
+    public List<String> getStringList(String path) {
+        return config.getStringList(path);
+    }
+
+    public YamlConfiguration asBukkitConfig() {
+        return this.config;
+    }
+}
