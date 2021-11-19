@@ -50,9 +50,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.kr1s_d.commons</groupId>
+            <groupId>me.kr1s_d.ultimateantibot</groupId>
             <artifactId>UltimateAntibot-common</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

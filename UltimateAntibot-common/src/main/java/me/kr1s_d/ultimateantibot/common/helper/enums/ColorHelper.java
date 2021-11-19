@@ -1,4 +1,4 @@
-package me.kr1s_d.commons.helper.enums;
+package me.kr1s_d.ultimateantibot.common.helper.enums;
 
 import java.util.regex.Pattern;
 /**

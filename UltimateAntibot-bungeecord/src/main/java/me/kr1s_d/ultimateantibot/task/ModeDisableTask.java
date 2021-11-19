@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.task;
 
 import me.kr1s_d.ultimateantibot.AntBotManager;
-import me.kr1s_d.commons.objects.enums.ModeType;
+import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
 
 public class ModeDisableTask implements Runnable {
 

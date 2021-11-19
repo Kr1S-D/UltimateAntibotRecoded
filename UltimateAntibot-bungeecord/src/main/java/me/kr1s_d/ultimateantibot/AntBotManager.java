@@ -1,15 +1,19 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.commons.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.commons.objects.enums.ModeType;
-import me.kr1s_d.commons.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.commons.service.BlackListService;
-import me.kr1s_d.commons.service.QueueService;
-import me.kr1s_d.commons.service.WhitelistService;
+import me.kr1s_d.ultimateantibot.common.cache.AntiBotAttackInfo;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotAttackInfo;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.service.BlackListService;
+import me.kr1s_d.ultimateantibot.common.service.QueueService;
+import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 
 public class AntBotManager implements IAntiBotManager {
     private int checkPerSecond;
     private int joinPerSecond;
+    private int botPerSecond;
     private int pingPerSecond;
     private int packetPerSecond;
     private final long totalPing;
@@ -23,28 +27,38 @@ public class AntBotManager implements IAntiBotManager {
     boolean isSlowAntiBotModeOnline;
     boolean isPacketModeEnabled;
     boolean isPingModeEnabled;
+    private final IAntiBotAttackInfo antiBotAttackInfo;
+    private final LogHelper logHelper;
 
     public AntBotManager(IAntiBotPlugin plugin){
         this.checkPerSecond = 0;
         this.joinPerSecond = 0;
+        this.botPerSecond = 0;
         this.pingPerSecond = 0;
         this.packetPerSecond = 0;
         this.totalPing = 0;
         this.totalBotBlocked = 0;
         this.totalPacketBlocked = 0;
-        this.blackListService = new BlackListService();
-        this.whitelistService = new WhitelistService();
+        this.blackListService = new BlackListService(plugin.getBlackList());
+        this.whitelistService = new WhitelistService(plugin.getWhitelist());
         this.queueService = new QueueService();
         this.modeType = ModeType.OFFLINE;
         this.isAntiBotModeOnline = false;
         this.isSlowAntiBotModeOnline = false;
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
+        this.antiBotAttackInfo = new AntiBotAttackInfo(this);
+        this.logHelper = plugin.getLogHelper();
     }
 
     @Override
     public int getChecksPerSecond() {
         return checkPerSecond;
+    }
+
+    @Override
+    public int getBotPerSecond() {
+        return botPerSecond;
     }
 
     @Override
@@ -105,6 +119,11 @@ public class AntBotManager implements IAntiBotManager {
     @Override
     public void setCheckPerSecond(int value) {
         this.checkPerSecond = value;
+    }
+
+    @Override
+    public void setBotPerSecond(int value) {
+        this.botPerSecond = value;
     }
 
     @Override
@@ -210,5 +229,23 @@ public class AntBotManager implements IAntiBotManager {
     @Override
     public void enablePingMode() {
 
+    }
+
+    @Override
+    public void onCoreRefresh() {
+        antiBotAttackInfo.setBotPerSecond(botPerSecond);
+        antiBotAttackInfo.setJoinPerSecond(joinPerSecond);
+        antiBotAttackInfo.setPingPerSecond(pingPerSecond);
+        antiBotAttackInfo.setPacketPerSecond(packetPerSecond);
+        this.checkPerSecond = 0;
+        this.joinPerSecond = 0;
+        this.botPerSecond = 0;
+        this.pingPerSecond = 0;
+        this.packetPerSecond = 0;
+    }
+
+    @Override
+    public IAntiBotAttackInfo getAntiBotAttackInfo() {
+        return antiBotAttackInfo;
     }
 }

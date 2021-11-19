@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.objects;
 
-import me.kr1s_d.commons.objects.interfaces.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class Config implements IConfiguration {
@@ -83,6 +84,16 @@ public class Config implements IConfiguration {
     @Override
     public List<String> getStringList(String path) {
         return config.getStringList(path);
+    }
+
+    @Override
+    public Set<String> getConfigurationSection(String path) {
+        return config.getConfigurationSection(path).getKeys(false);
+    }
+
+    @Override
+    public void set(String path, Object value) {
+        config.set(path, value);
     }
 
     public YamlConfiguration asBukkitConfig() {

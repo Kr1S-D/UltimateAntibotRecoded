@@ -1,12 +1,14 @@
-package me.kr1s_d.commons.objects.interfaces;
+package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
-import me.kr1s_d.commons.objects.enums.ModeType;
-import me.kr1s_d.commons.service.BlackListService;
-import me.kr1s_d.commons.service.QueueService;
-import me.kr1s_d.commons.service.WhitelistService;
+import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
+import me.kr1s_d.ultimateantibot.common.service.BlackListService;
+import me.kr1s_d.ultimateantibot.common.service.QueueService;
+import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 
 public interface IAntiBotManager {
     int getChecksPerSecond();
+
+    int getBotPerSecond();
 
     int getJoinPerSecond();
 
@@ -31,6 +33,8 @@ public interface IAntiBotManager {
     void setModeType(ModeType type);
 
     void setCheckPerSecond(int value);
+
+    void setBotPerSecond(int value);
 
     void setJoinPerSecond(int value);
 
@@ -67,6 +71,10 @@ public interface IAntiBotManager {
     void enablePacketMode();
 
     void enablePingMode();
+
+    void onCoreRefresh();
+
+    IAntiBotAttackInfo getAntiBotAttackInfo();
 
 
 }

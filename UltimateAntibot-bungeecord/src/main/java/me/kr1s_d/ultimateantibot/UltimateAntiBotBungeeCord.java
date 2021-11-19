@@ -1,84 +1,135 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.commons.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.common.utils.Version;
 import me.kr1s_d.ultimateantibot.objects.Config;
-import me.kr1s_d.commons.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
-import me.kr1s_d.commons.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.commons.objects.interfaces.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 
 import java.util.concurrent.TimeUnit;
 
 public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotPlugin {
 
     private TaskScheduler scheduler;
-    private IConfiguration configuration;
+    private IConfiguration config;
     private IConfiguration messages;
     private IConfiguration whitelist;
     private IConfiguration blacklist;
+    private IConfiguration database;
     private IAntiBotManager antiBotManager;
     private LogHelper logHelper;
 
     @Override
     public void onEnable() {
+        long a = System.currentTimeMillis();
         this.scheduler = ProxyServer.getInstance().getScheduler();
-        this.configuration = new Config(this, "%datafolder%/config.yml");
+        this.config = new Config(this, "%datafolder%/config.yml");
         this.messages = new Config(this, "%datafolder%/messages.yml");
-        this.whitelist = new Config(this, "%datafolder/whitelist.yml%");
+        this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
+        this.database = new Config(this, "%datafolder%/database.yml");
         this.antiBotManager = new AntBotManager(this);
         this.logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
-        logHelper.debug("&aCiao &badd &c&lcoasd");
+        ConfigManger.init(config);
+        MessageManager.init(messages);
+        Version.init(this);
+        antiBotManager.getQueueService().load();
+        antiBotManager.getWhitelistService().load();
+        antiBotManager.getBlackListService().load();
+        long b = System.currentTimeMillis() - a;
+        logHelper.info("&aLoaded UltimateAntiBot!");
+        logHelper.sendLogo();
+        logHelper.info("&aVersion: $1 | Author: $2 | Cores: $3"
+                .replace("$1", this.getDescription().getVersion())
+                .replace("$2", this.getDescription().getAuthor())
+                .replace("$3", String.valueOf(Version.getCores()))
+        );
+        logHelper.info("&eTook " + b + "ms to load");
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        long a = System.currentTimeMillis();
+        logHelper.info("&aUnloading...");
+        runTask(() -> {
+            antiBotManager.getBlackListService().unload();
+            antiBotManager.getWhitelistService().unload();
+            logHelper.info("&atThanks for choosing us!");
+            long b = System.currentTimeMillis() - a;
+            logHelper.info("&eTook " + b + "ms to unload");
+        }, true);
     }
 
     @Override
-    public void scheduleSyncDelayedTask(Runnable runnable, boolean async, long milliseconds){
+    public void scheduleDelayedTask(Runnable runnable, boolean async, long milliseconds){
         if(async){
-            scheduler.schedule(this, ()-> scheduler.runAsync(this, runnable), milliseconds, TimeUnit.SECONDS);
+            scheduler.schedule(this, ()-> scheduler.runAsync(this, runnable), milliseconds, TimeUnit.MILLISECONDS);
         }else {
-            scheduler.schedule(this, runnable, milliseconds, TimeUnit.SECONDS);
+            scheduler.schedule(this, runnable, milliseconds, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    @Override
+    public void runTask(Runnable task, boolean isAsync) {
+        if(isAsync){
+            scheduler.runAsync(this, task);
+        }else{
+            scheduler.schedule(this, task, 0, TimeUnit.SECONDS);
+        }
+    }
+
+    @Override
+    public void scheduleRepeatingTask(Runnable runnable, boolean async, long repeatMilliseconds) {
+        if(async){
+            scheduler.schedule(this, ()-> scheduler.runAsync(this, runnable), repeatMilliseconds, TimeUnit.MILLISECONDS);
+        }else {
+            scheduler.schedule(this, runnable, repeatMilliseconds, TimeUnit.MILLISECONDS);
         }
     }
 
     @Override
     public IConfiguration getConfig() {
-        return null;
+        return config;
     }
 
     @Override
     public IConfiguration getMessages() {
-        return null;
+        return messages;
     }
 
     @Override
     public IConfiguration getWhitelist() {
-        return null;
+        return whitelist;
     }
 
     @Override
     public IConfiguration getBlackList() {
-        return null;
+        return blacklist;
     }
 
     @Override
     public IConfiguration getDatabase() {
-        return null;
+        return database;
     }
 
     @Override
     public IAntiBotManager getAntiBotManager() {
-        return null;
+        return antiBotManager;
     }
 
     @Override
     public LogHelper getLogHelper() {
-        return null;
+        return logHelper;
+    }
+
+    @Override
+    public Class<?> getClassInstance() {
+        return ProxyServer.getInstance().getClass();
     }
 }

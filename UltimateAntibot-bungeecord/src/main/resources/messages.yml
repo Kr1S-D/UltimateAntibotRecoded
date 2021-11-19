@@ -1,0 +1,22 @@
+version: 1.0
+prefix: '&e&lA&b&lB &7» '
+commands:
+  perms: '&cYou dont have permission to do this!'
+    cleared: '&a$1 has been cleared!'
+    added: '&a$1 has been added in the $2'
+    removed: '&a$1 has been removed from the $2'
+#actionbar allowed values
+#%bots% - return botpersecond
+#%ping% - return pingpersecond
+#%queue% - return queue
+#%whitelist% - return whitelist size
+#%type% - return current attacktype
+#%packets% - return packetspersecond
+#%totalpackets% - return totalpackets
+#%totalbots% - return totalbots
+#%totalpings% - return totalpings
+
+actionbar:
+  offline: '&6Join &e$1 &b- &6Ping &e$2 &b- &6Queue &e$3 - &6Whitelist &e$4 &b- &6Check &e$5 » &c&l%type%'
+  antibot: '&6Bot &e$1/sec &b- &6Ping &e$2/sec &b- &6Queue &e$3 &b- &6Blacklist &e$4 &b- &6Check &e$5 » &a&l%type%'
+  packets: '&6Packets &e$1/sec &b- &6Blocked &e$2 &b- &6Blacklist » &a&l%type%'

@@ -1,4 +1,4 @@
 name: UltimateAntibot
 version: '${project.version}'
-main: me.kr1s_d.ultimateantibot.UltimateAntibotBungeeCord
+main: me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord
 description: Good Antibot Plugin

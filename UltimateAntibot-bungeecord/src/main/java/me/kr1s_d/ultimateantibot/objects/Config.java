@@ -5,13 +5,14 @@ import net.md_5.bungee.api.scheduler.TaskScheduler;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import me.kr1s_d.commons.objects.interfaces.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 
@@ -126,5 +127,15 @@ public class Config implements IConfiguration {
     @Override
     public List<String> getStringList(String path) {
         return config.getStringList(path);
+    }
+
+    @Override
+    public Set<String> getConfigurationSection(String path) {
+        return (Set<String>) config.getSection(path).getKeys();
+    }
+
+    @Override
+    public void set(String path, Object value){
+        config.set(path, value);
     }
 }
