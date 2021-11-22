@@ -25,4 +25,6 @@ public interface IConfiguration{
 
     void set(String path, Object value);
 
+    void save();
+
 }

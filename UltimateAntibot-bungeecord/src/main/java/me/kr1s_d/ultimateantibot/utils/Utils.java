@@ -10,6 +10,10 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.util.List;
 
 public class Utils {
+
+    private Utils(){}
+
+
     public static String getIP(ProxiedPlayer player){
         return player.getAddress().getAddress().toString();
     }

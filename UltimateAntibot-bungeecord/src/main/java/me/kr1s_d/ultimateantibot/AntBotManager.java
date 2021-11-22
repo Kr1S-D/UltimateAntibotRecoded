@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot;
 
 import me.kr1s_d.ultimateantibot.common.cache.AntiBotAttackInfo;
+import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotAttackInfo;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
@@ -16,9 +17,9 @@ public class AntBotManager implements IAntiBotManager {
     private int botPerSecond;
     private int pingPerSecond;
     private int packetPerSecond;
-    private final long totalPing;
-    private final long totalBotBlocked;
-    private final long totalPacketBlocked;
+    private long totalPing;
+    private long totalBotBlocked;
+    private long totalPacketBlocked;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
     private final QueueService queueService;
@@ -29,8 +30,10 @@ public class AntBotManager implements IAntiBotManager {
     boolean isPingModeEnabled;
     private final IAntiBotAttackInfo antiBotAttackInfo;
     private final LogHelper logHelper;
+    private final JoinCache joinCache;
 
     public AntBotManager(IAntiBotPlugin plugin){
+        this.logHelper = plugin.getLogHelper();
         this.checkPerSecond = 0;
         this.joinPerSecond = 0;
         this.botPerSecond = 0;
@@ -39,8 +42,8 @@ public class AntBotManager implements IAntiBotManager {
         this.totalPing = 0;
         this.totalBotBlocked = 0;
         this.totalPacketBlocked = 0;
-        this.blackListService = new BlackListService(plugin.getBlackList());
-        this.whitelistService = new WhitelistService(plugin.getWhitelist());
+        this.blackListService = new BlackListService(plugin.getBlackList(), logHelper);
+        this.whitelistService = new WhitelistService(plugin.getWhitelist(), logHelper);
         this.queueService = new QueueService();
         this.modeType = ModeType.OFFLINE;
         this.isAntiBotModeOnline = false;
@@ -48,7 +51,7 @@ public class AntBotManager implements IAntiBotManager {
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
         this.antiBotAttackInfo = new AntiBotAttackInfo(this);
-        this.logHelper = plugin.getLogHelper();
+        this.joinCache = new JoinCache(plugin.getCore());
     }
 
     @Override
@@ -191,7 +194,22 @@ public class AntBotManager implements IAntiBotManager {
     }
 
     @Override
-    public boolean isAntiBotModeEnable() {
+    public void increaseTotalBots() {
+        totalBotBlocked++;
+    }
+
+    @Override
+    public void increaseTotalPings() {
+        totalPing++;
+    }
+
+    @Override
+    public void increaseTotalPackets() {
+        totalPacketBlocked++;
+    }
+
+    @Override
+    public boolean isAntiBotModeEnabled() {
         return isAntiBotModeOnline;
     }
 
@@ -233,7 +251,7 @@ public class AntBotManager implements IAntiBotManager {
 
     @Override
     public void onCoreRefresh() {
-        antiBotAttackInfo.setBotPerSecond(botPerSecond);
+        antiBotAttackInfo.setCheckPerSecond(botPerSecond);
         antiBotAttackInfo.setJoinPerSecond(joinPerSecond);
         antiBotAttackInfo.setPingPerSecond(pingPerSecond);
         antiBotAttackInfo.setPacketPerSecond(packetPerSecond);
@@ -247,5 +265,15 @@ public class AntBotManager implements IAntiBotManager {
     @Override
     public IAntiBotAttackInfo getAntiBotAttackInfo() {
         return antiBotAttackInfo;
+    }
+
+    @Override
+    public boolean canDisable(ModeType modeType) {
+        return false;
+    }
+
+    @Override
+    public JoinCache getJoinCache() {
+        return null;
     }
 }

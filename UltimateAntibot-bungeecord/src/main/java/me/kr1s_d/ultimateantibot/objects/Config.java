@@ -25,7 +25,10 @@ public class Config implements IConfiguration {
 
     private final TaskScheduler scheduler;
 
+    private final String file;
+
     public Config(Plugin plugin, String file) {
+        this.file = file;
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.scheduler = plugin.getProxy().getScheduler();
@@ -137,5 +140,10 @@ public class Config implements IConfiguration {
     @Override
     public void set(String path, Object value){
         config.set(path, value);
+    }
+
+    @Override
+    public void save(){
+        saveConfiguration(config, file);
     }
 }

@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
+import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
 import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
@@ -56,7 +57,13 @@ public interface IAntiBotManager {
 
     void increasePacketPerSecond();
 
-    boolean isAntiBotModeEnable();
+    void increaseTotalBots();
+
+    void increaseTotalPings();
+
+    void increaseTotalPackets();
+
+    boolean isAntiBotModeEnabled();
 
     boolean isSlowAntiBotModeEnabled();
 
@@ -76,5 +83,7 @@ public interface IAntiBotManager {
 
     IAntiBotAttackInfo getAntiBotAttackInfo();
 
+    boolean canDisable(ModeType modeType);
 
+    JoinCache getJoinCache();
 }

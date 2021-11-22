@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
 public interface IAntiBotAttackInfo {
-    int getBotPerSecond();
+    int getCheckPerSecond();
 
     int getJoinPerSecond();
 
@@ -15,7 +15,7 @@ public interface IAntiBotAttackInfo {
 
     long getTotalPackets();
 
-    void setBotPerSecond(int value);
+    void setCheckPerSecond(int value);
 
     void setJoinPerSecond(int value);
 
@@ -30,4 +30,6 @@ public interface IAntiBotAttackInfo {
     void setTotalPackets(long value);
 
     boolean isBypassAttack();
+
+    String replaceInfo(String str);
 }

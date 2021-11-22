@@ -6,7 +6,7 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 public class AntiBotAttackInfo implements IAntiBotAttackInfo {
 
     private final IAntiBotManager antiBotManager;
-    private int botPerSecond;
+    private int checkPerSecond;
     private int joinPerSecond;
     private int pingPerSecond;
     private int packetPerSecond;
@@ -16,7 +16,7 @@ public class AntiBotAttackInfo implements IAntiBotAttackInfo {
 
     public AntiBotAttackInfo(IAntiBotManager antiBotManager){
         this.antiBotManager = antiBotManager;
-        this.botPerSecond = 0;
+        this.checkPerSecond = 0;
         this.joinPerSecond = 0;
         this.pingPerSecond = 0;
         this.packetPerSecond = 0;
@@ -26,8 +26,8 @@ public class AntiBotAttackInfo implements IAntiBotAttackInfo {
     }
 
     @Override
-    public int getBotPerSecond() {
-        return botPerSecond;
+    public int getCheckPerSecond() {
+        return checkPerSecond;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class AntiBotAttackInfo implements IAntiBotAttackInfo {
     }
 
     @Override
-    public void setBotPerSecond(int value) {
-        this.botPerSecond = value;
+    public void setCheckPerSecond(int value) {
+        this.checkPerSecond = value;
     }
 
     @Override
@@ -97,6 +97,11 @@ public class AntiBotAttackInfo implements IAntiBotAttackInfo {
 
     @Override
     public boolean isBypassAttack() {
-        return antiBotManager.isAntiBotModeEnable() && pingPerSecond >= 20;
+        return antiBotManager.isAntiBotModeEnabled() && pingPerSecond >= 20;
+    }
+
+    @Override
+    public String replaceInfo(String str) {
+        return null;
     }
 }

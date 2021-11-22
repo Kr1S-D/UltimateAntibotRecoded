@@ -1,0 +1,6 @@
+data:
+  uuid:
+    name: 'name'
+    ip: ip
+    join: 0
+    isfirstjoin: true

@@ -31,6 +31,7 @@ public class Config implements IConfiguration {
         config = YamlConfiguration.loadConfiguration(file);
     }
 
+    @Override
     public void save() {
         try {
             config.save(file);

@@ -1,1 +1,54 @@
-version: 1.0
+version: 3.3
+#   _    _ _ _   _                 _                        _   _ _           _
+#  | |  | | | | (_)               | |           /\         | | (_) |         | |
+#  | |  | | | |_ _ _ __ ___   __ _| |_ ___     /  \   _ __ | |_ _| |__   ___ | |_
+#  | |  | | | __| | '_ ` _ \ / _` | __/ _ \   / /\ \ | '_ \| __| | '_ \ / _ \| __|
+#  | |__| | | |_| | | | | | | (_| | ||  __/  / ____ \| | | | |_| | |_) | (_) | |_
+#  \____/|_|\__|_|_| |_| |_|\__,_|\__\___| /_/    \_\_| |_|\__|_|_.__/ \___/ \__|
+#
+#For any question / problem please open a ticket on my discord server,
+#here is the link: https://discord.gg/vgsjmbXez3
+
+#debug mode
+debug: false
+
+#Antibotmode has the utility of mitigating the attack, blacklisting + ip possible,
+antibotmode:
+  #Duration of the anti-botmode when activated
+  keep: 15 #seconds
+  #If there are 15 connections in 1 second the antibot mode will be activated!
+  trigger: 15
+
+#Pingmode allows player connections to your server!
+pingmode:
+  #Duration of the ping-mode when activated
+  keep: 10
+  #How many pings in 1 second does it take to activate the protection?
+  trigger: 100
+  #MotdKiller Protection
+  #Send the server logo during a ping attack?
+  send_info: false
+
+#Works Only on Bungeecord Waterfall ect...
+packetmode:
+  #Duration of handshakemode
+  keep: 10
+  #How many handshake in 1 second to enable?
+  trigger: 150 #Set (Your online players * 4) | If you have 40 average online players you have to do 40 x 3 and the result will be the value to write
+  #if the handshake has an invalid protocol do I have to blacklist it?
+  blacklist-invalid-protocol: true
+
+#Minimum online time to be whitelisted
+playtime_for_whitelist: 2 #minutes
+
+taskmanager:
+  clearcache: 15 #minutes
+  account: 60 #seconnds
+  auth: 300 #seconds
+  packet: 300 #seconds
+  register: 300 #seconds
+
+checks:
+  firstjoin:
+    #enable firstjoin
+    enabled: true

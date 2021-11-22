@@ -1,7 +1,9 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
+import sun.rmi.runtime.Log;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,16 +12,19 @@ public class WhitelistService implements IService {
 
     private final Set<String> whitelist;
     private final IConfiguration whitelistList;
+    private final LogHelper logHelper;
 
-    public WhitelistService(IConfiguration whitelistList){
+    public WhitelistService(IConfiguration whitelistList, LogHelper logHelper){
         this.whitelist = new HashSet<>();
         this.whitelistList = whitelistList;
+        this.logHelper = logHelper;
         load();
     }
 
     @Override
     public void load() {
         whitelist.addAll(whitelistList.getConfigurationSection("data"));
+        logHelper.info("&a" + whitelist.size() + "IP added to whitelist!");
     }
 
     @Override

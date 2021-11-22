@@ -1,10 +1,10 @@
-version: 1.0
+version: 3.3
 prefix: '&e&lA&b&lB &7» '
 commands:
   perms: '&cYou dont have permission to do this!'
-    cleared: '&a$1 has been cleared!'
-    added: '&a$1 has been added in the $2'
-    removed: '&a$1 has been removed from the $2'
+  cleared: '&a$1 has been cleared!'
+  added: '&a$1 has been added in the $2'
+  removed: '&a$1 has been removed from the $2'
 #actionbar allowed values
 #%bots% - return botpersecond
 #%ping% - return pingpersecond
@@ -15,8 +15,91 @@ commands:
 #%totalpackets% - return totalpackets
 #%totalbots% - return totalbots
 #%totalpings% - return totalpings
-
 actionbar:
   offline: '&6Join &e$1 &b- &6Ping &e$2 &b- &6Queue &e$3 - &6Whitelist &e$4 &b- &6Check &e$5 » &c&l%type%'
   antibot: '&6Bot &e$1/sec &b- &6Ping &e$2/sec &b- &6Queue &e$3 &b- &6Blacklist &e$4 &b- &6Check &e$5 » &a&l%type%'
   packets: '&6Packets &e$1/sec &b- &6Blocked &e$2 &b- &6Blacklist » &a&l%type%'
+help:
+  - '&4/uab &chelp'
+  - '&4/uab &ctoggle &factionbar/title'
+  - '&4/uab &cstats'
+  - '&4/uab &cclearwhitelist'
+  - '&4/uab &cclearblacklist'
+  - '&4/uab &caddblacklist &f<ip>'
+  - '&4/uab &cremoveblacklist &f<ip>'
+  - '&4/uab &caddwhitelist &f<ip>'
+  - '&4/uab &cremovewhitelist &f<ip>'
+  - '&4/uab &ccheck &f<id>'
+  - '&4/uab &cdump'
+stats:
+  - '&4Current &cBot &f$1'
+  - '&4Current &cPing &f$2'
+  - '&4Current &cQueue &f$3'
+  - '&4Checking &cList &f$4'
+  - '&4Current &CWhitelist &f$6'
+  - '&4Current &cBlacklist &f$7'
+  - '&4Bot &cBlocked &f$8'
+  - '&4Total &cPing &f$9'
+antibotmode:
+  - '&4Ultimate&cAnti&fBot'
+  - '&7We are receiving a bot attack!'
+  - '&7--------------------------------'
+  - ''
+  - '&cThe AntibotMode is currently Online!'
+  - '&cIt will remain active until &f$1%&c of IPs are blacklisted'
+  - '&cBlacklist status &f$2%'
+  - ''
+  - '&7______________________________'
+  - '&emc.yourserver.net'
+first_join:
+  - '&4Ultimate&cAnti&fBot'
+  - '&7--------------------------------'
+  - ''
+  - '&cWe are analyzing your connection!'
+  - '&cNow you can re-join'
+  - ''
+  - '&7--------------------------------'
+  - '&emc.yourserver.net'
+safe_mode:
+  - '&4Ultimate&cAnti&fBot'
+  - '&7We were unable to verify you in time!'
+  - '&7--------------------------------'
+  - ''
+  - '&cThe server has received a bot attack and you have been disconnected'
+  - '&cPlease Rejoin'
+  - ''
+  - '&7--------------------------------'
+  - '&emc.yourserver.net'
+account-online:
+  - '&4Ultimate&cAnti&fBot'
+  - '&7--------------------------------'
+  - ''
+  - '&cYou have too many accounts connected at the same time on the server!'
+  - ''
+  - '&7--------------------------------'
+  - '&emc.yourserver.net'
+ping:
+  - '&4Ultimate&cAnti&fBot'
+  - '&7--------------------------------'
+  - ''
+  - '&cPing the server in exactly &f$1&c times and join'
+  - ''
+  - '&7--------------------------------'
+  - '&emc.yourserver.net'
+timer:
+  - '&4Ultimate&cAnti&fBot'
+  - '&7--------------------------------'
+  - ''
+  - '&cRe-enter the server in exactly in &f$1&c seconds'
+  - ''
+  - '&7--------------------------------'
+  - '&emc.yourserver.net'
+blacklisted:
+  - '&4Ultimate&cAnti&fBot'
+  - '&7--------------------------------'
+  - ''
+  - '&cYou have been blacklisted by the Antibot System'
+  - '&cReason: &f$1'
+  - ''
+  - '&7--------------------------------'
+  - '&emc.yourserver.net'
