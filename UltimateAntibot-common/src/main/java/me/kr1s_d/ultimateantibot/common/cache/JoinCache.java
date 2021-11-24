@@ -27,4 +27,7 @@ public class JoinCache {
         lastIpJoined.clear();
     }
 
+    public List<String> getJoined() {
+        return lastIpJoined;
+    }
 }

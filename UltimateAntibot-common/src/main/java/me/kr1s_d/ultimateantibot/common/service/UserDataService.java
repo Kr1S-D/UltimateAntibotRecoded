@@ -47,6 +47,10 @@ public class UserDataService implements IService {
         database.save();
     }
 
+    public void resetFirstJoin(PlayerProfile profile){
+        profile.setFirstJoin(true);
+    }
+
     public PlayerProfile getFromUUID(String uuid){
         for(PlayerProfile profile : loadedProfiles){
             if(uuid.equals(profile.getUUID())){

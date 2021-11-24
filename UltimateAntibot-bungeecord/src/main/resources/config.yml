@@ -43,7 +43,6 @@ playtime_for_whitelist: 2 #minutes
 
 taskmanager:
   clearcache: 15 #minutes
-  account: 60 #seconnds
   auth: 300 #seconds
   packet: 300 #seconds
   register: 300 #seconds
@@ -51,4 +50,11 @@ taskmanager:
 checks:
   firstjoin:
     #enable firstjoin
+    enabled: true
+  namechanger:
+    #Clear cache time
+    time: 60
+    #max accounts to blackist
+    limit: 3
+    #enable?
     enabled: true

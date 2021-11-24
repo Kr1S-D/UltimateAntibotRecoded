@@ -19,6 +19,12 @@ actionbar:
   offline: '&6Join &e$1 &b- &6Ping &e$2 &b- &6Queue &e$3 - &6Whitelist &e$4 &b- &6Check &e$5 » &c&l%type%'
   antibot: '&6Bot &e$1/sec &b- &6Ping &e$2/sec &b- &6Queue &e$3 &b- &6Blacklist &e$4 &b- &6Check &e$5 » &a&l%type%'
   packets: '&6Packets &e$1/sec &b- &6Blocked &e$2 &b- &6Blacklist » &a&l%type%'
+reason:
+  names: 'Too many nicks on your IP'
+  joins: 'Too many joins from your IP'
+  pings: 'Too many pings from your IP'
+  strange: 'Strange Player'
+
 help:
   - '&4/uab &chelp'
   - '&4/uab &ctoggle &factionbar/title'
@@ -100,6 +106,7 @@ blacklisted:
   - ''
   - '&cYou have been blacklisted by the Antibot System'
   - '&cReason: &f$1'
+  - '&cId: &f$2'
   - ''
   - '&7--------------------------------'
   - '&emc.yourserver.net'

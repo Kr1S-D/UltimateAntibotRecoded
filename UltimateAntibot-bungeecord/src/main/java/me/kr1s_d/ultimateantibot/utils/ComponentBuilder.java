@@ -8,7 +8,7 @@ public class ComponentBuilder {
 
     private ComponentBuilder() {}
 
-    public static BaseComponent buildColorizedComponent(String str){
+    public static BaseComponent buildColorized(String str){
         return new TextComponent(ColorHelper.colorize(str));
     }
 }

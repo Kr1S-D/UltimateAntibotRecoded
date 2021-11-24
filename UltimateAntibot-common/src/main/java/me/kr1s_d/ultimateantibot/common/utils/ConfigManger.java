@@ -15,11 +15,13 @@ public class ConfigManger {
     public static boolean blacklistInvalidProtocol;
     public static int playtimeForWhitelist;
     public static int taskManagerClearCache;
-    public static int taskManagerClearAccount;
     public static int taskManagerAuth;
     public static int taskManagerClearPacket;
     public static int taskManagerClearRegister;
     public static boolean isFirstJoinEnabled;
+    public static boolean isNameChangerEnabled;
+    public static int nameChangerTime;
+    public static int nameChangerLimit;
 
     public static void init(IConfiguration cfg){
         version = cfg.getDouble("version");
@@ -34,10 +36,12 @@ public class ConfigManger {
         blacklistInvalidProtocol = cfg.getBoolean("packetmode.blacklist-invalid-protocol");
         playtimeForWhitelist = cfg.getInt("playtime_for_whitelist");
         taskManagerClearCache = cfg.getInt("taskmanager.clearcache");
-        taskManagerClearAccount = cfg.getInt("taskmanager.account");
         taskManagerAuth = cfg.getInt("taskmanager.auth");
         taskManagerClearPacket = cfg.getInt("taskmanager.packet");
         taskManagerClearRegister = cfg.getInt("taskmanager.register");
         isFirstJoinEnabled = cfg.getBoolean("checks.firstjoin.enabled");
+        isNameChangerEnabled = cfg.getBoolean("checks.namechanger.enabled");
+        nameChangerTime = cfg.getInt("checks.namechanger.time");
+        nameChangerLimit = cfg.getInt("checks.namechanger.limit");
     }
 }

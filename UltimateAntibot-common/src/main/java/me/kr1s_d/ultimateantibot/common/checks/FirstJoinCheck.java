@@ -1,11 +1,12 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICheck;
 import me.kr1s_d.ultimateantibot.common.objects.user.PlayerProfile;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
-public class FirstJoinCheck{
+public class FirstJoinCheck implements ICheck {
 
     private final UserDataService userDataService;
 
@@ -19,7 +20,7 @@ public class FirstJoinCheck{
      * @param uuid - uuid of player
      * @return - false if player can join or true if is first join
      */
-    public boolean check(String ip, String name, String uuid) {
+    public boolean needToDeny(String ip, String name, String uuid) {
         if(!isEnabled()){
             return false;
         }
@@ -36,5 +37,10 @@ public class FirstJoinCheck{
 
     public boolean isEnabled() {
         return ConfigManger.isFirstJoinEnabled;
+    }
+
+    @Override
+    public void loadTask() {
+
     }
 }
