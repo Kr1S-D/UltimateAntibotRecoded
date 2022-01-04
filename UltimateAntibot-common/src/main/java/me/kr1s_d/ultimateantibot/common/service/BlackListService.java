@@ -23,7 +23,6 @@ public class BlackListService implements IService {
         this.blacklist = new HashMap<>();
         this.blacklistConfig = blacklistConfig;
         this.logHelper = logHelper;
-        load();
     }
 
     /**
@@ -49,7 +48,7 @@ public class BlackListService implements IService {
             String id = blacklistConfig.getString("data." + a + ".reason");
             blacklist.put(ip, new BlackListProfile(reason, id));
         }
-        logHelper.info("&a" + blacklist.size() + "IP added to blacklist!");
+        logHelper.info("&f" + blacklist.size() + " &dIP added to blacklist!");
     }
 
     @Override
@@ -70,8 +69,21 @@ public class BlackListService implements IService {
 
     /**
      *
-     * @param ip - The IP to BlackList
-     * @param reason - The Reason for BlackList
+     * @param ip The IP to BlackList
+     * @param reason The Reason for BlackList
+     * @param name The name of the player
+     */
+    public void blacklist(String ip, String reason, String name){
+        if(blacklist.containsKey(ip)){
+            return;
+        }
+        blacklist.put(ip, new BlackListProfile(reason, name));
+    }
+
+    /**
+     *
+     * @param ip The IP to BlackList
+     * @param reason The Reason for BlackList
      */
     public void blacklist(String ip, String reason){
         if(blacklist.containsKey(ip)){

@@ -31,4 +31,6 @@ public interface IAntiBotPlugin {
     ICore getCore();
 
     boolean isConnected(String ip);
+
+    String getVersion();
 }

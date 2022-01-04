@@ -7,6 +7,7 @@ import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
@@ -69,5 +70,15 @@ public class Utils {
         for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
             p.sendMessage(str);
         }
+    }
+
+    public static String colora(String str){
+        return ColorHelper.colorize(str);
+    }
+
+    public static List<String> coloraLista(List<String> str){
+        List<String> a = new ArrayList<>();
+        str.forEach(b -> a.add(colora(b)));
+        return a;
     }
 }

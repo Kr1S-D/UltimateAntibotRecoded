@@ -32,11 +32,11 @@ public class LogHelper {
     }
 
     public void sendLogo(){
-        debug(MessageManager.prefix + "&a _    _         ____ ");
-        debug(MessageManager.prefix + "&a| |  | |  /\\   |  _ \\ ");
-        debug(MessageManager.prefix + "&a| |  | | /  \\  | |_) |");
-        debug(MessageManager.prefix + "&a| |  | |/ /\\ \\ |  _ <");
-        debug(MessageManager.prefix + "&a| |__| / ____ \\| |_) |");
-        debug(MessageManager.prefix + "&a\\____/_/     \\_\\____/");
+        info(MessageManager.prefix + "&d _    _         &d____ ");
+        info(MessageManager.prefix + "&d| |  | |&f  /\\   &d|  _ \\ ");
+        info(MessageManager.prefix + "&d| |  | |&f /  \\  &d| |_) |");
+        info(MessageManager.prefix + "&d| |  | |&f/ /\\ \\&d |  _ <");
+        info(MessageManager.prefix + "&d| |__| &f/ ____ \\&d| |_) |");
+        info(MessageManager.prefix + "&d\\____&f/_/     \\_&d\\____/");
     }
 }

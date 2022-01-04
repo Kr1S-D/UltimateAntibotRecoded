@@ -19,8 +19,8 @@ public class MessageManager {
     public static String actionbarOffline;
     public static String actionbarAntiBotMode;
     public static String actionbarPackets;
-    public static String helpMessage;
-    public static String statsMessage;
+    public static List<String> helpMessage;
+    public static List<String> statsMessage;
     private static String antiBotModeMessage;
     public static String firstJoinMessage;
     private static String safeModeMessage;
@@ -35,6 +35,10 @@ public class MessageManager {
     public static String toggledActionbar;
     public static String toggledTitle;
     public static String toggledChat;
+    public static String commandWrongArgument;
+    public static String reasonBlacklistAdmin;
+    public static String commandNoBlacklist;
+    public static List<String> blacklistProfileString;
 
     public static void init(IConfiguration messages){
         version = messages.getDouble("version");
@@ -50,8 +54,8 @@ public class MessageManager {
         actionbarOffline = messages.getString("actionbar.offline");
         actionbarAntiBotMode = messages.getString("actionbar.antibot");
         actionbarPackets = messages.getString("actionbar.packets");
-        helpMessage = convertToString(messages.getStringList("help"));
-        statsMessage = convertToString(messages.getStringList("stats"));
+        helpMessage = messages.getStringList("help");
+        statsMessage = messages.getStringList("stats");
         antiBotModeMessage = convertToString(messages.getStringList("antibotmode"));
         firstJoinMessage = convertToString(messages.getStringList("first_join"));
         safeModeMessage = convertToString(messages.getStringList("safe_mode"));
@@ -66,6 +70,10 @@ public class MessageManager {
         toggledActionbar = messages.getString("notifications.action");
         toggledTitle = messages.getString("notifications.title");
         toggledChat = messages.getString("notifications.chat");
+        commandWrongArgument = messages.getString("commands.wrong-args");
+        reasonBlacklistAdmin = messages.getString("reason.admin");
+        commandNoBlacklist = messages.getString("commands.no-blacklist");
+        blacklistProfileString = messages.getStringList("blacklist_info");
     }
 
     public static String getCommandNoPerms() {

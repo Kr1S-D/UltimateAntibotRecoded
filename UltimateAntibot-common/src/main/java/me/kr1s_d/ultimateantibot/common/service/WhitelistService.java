@@ -18,13 +18,12 @@ public class WhitelistService implements IService {
         this.whitelist = new HashSet<>();
         this.whitelistList = whitelistList;
         this.logHelper = logHelper;
-        load();
     }
 
     @Override
     public void load() {
         whitelist.addAll(whitelistList.getConfigurationSection("data"));
-        logHelper.info("&a" + whitelist.size() + "IP added to whitelist!");
+        logHelper.info("&f" + whitelist.size() + " &dIP added to whitelist!");
     }
 
     @Override

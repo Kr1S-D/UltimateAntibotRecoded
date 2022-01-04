@@ -28,7 +28,7 @@ public class UserDataService implements IService {
             String[] part = str.split(";");
             ipMap.put(part[0], Boolean.valueOf(part[1]));
         }
-        logHelper.info("&aLoaded " + ipMap.size() + " &ajoins!");
+        logHelper.info("&fLoaded &d" + ipMap.size() + " &fjoins!");
     }
 
     @Override
@@ -47,5 +47,9 @@ public class UserDataService implements IService {
 
     public void resetFirstJoin(String ip){
         ipMap.put(ip, true);
+    }
+
+    public int size(){
+        return ipMap.size();
     }
 }

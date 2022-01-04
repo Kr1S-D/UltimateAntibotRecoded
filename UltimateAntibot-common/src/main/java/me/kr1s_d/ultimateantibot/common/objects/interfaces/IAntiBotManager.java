@@ -9,8 +9,6 @@ import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 public interface IAntiBotManager {
     int getChecksPerSecond();
 
-    int getBotPerSecond();
-
     int getJoinPerSecond();
 
     int getPingPerSecond();
@@ -34,8 +32,6 @@ public interface IAntiBotManager {
     void setModeType(ModeType type);
 
     void setCheckPerSecond(int value);
-
-    void setBotPerSecond(int value);
 
     void setJoinPerSecond(int value);
 

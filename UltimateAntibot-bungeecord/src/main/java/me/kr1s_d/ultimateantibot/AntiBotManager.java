@@ -22,7 +22,6 @@ public class AntiBotManager implements IAntiBotManager {
     private final IAntiBotPlugin iAntiBotPlugin;
     private int checkPerSecond;
     private int joinPerSecond;
-    private int botPerSecond;
     private int pingPerSecond;
     private int packetPerSecond;
     private long totalPing;
@@ -45,7 +44,6 @@ public class AntiBotManager implements IAntiBotManager {
         this.logHelper = plugin.getLogHelper();
         this.checkPerSecond = 0;
         this.joinPerSecond = 0;
-        this.botPerSecond = 0;
         this.pingPerSecond = 0;
         this.packetPerSecond = 0;
         this.totalPing = 0;
@@ -66,11 +64,6 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public int getChecksPerSecond() {
         return checkPerSecond;
-    }
-
-    @Override
-    public int getBotPerSecond() {
-        return botPerSecond;
     }
 
     @Override
@@ -131,11 +124,6 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public void setCheckPerSecond(int value) {
         this.checkPerSecond = value;
-    }
-
-    @Override
-    public void setBotPerSecond(int value) {
-        this.botPerSecond = value;
     }
 
     @Override
@@ -298,7 +286,7 @@ public class AntiBotManager implements IAntiBotManager {
 
     @Override
     public void updateTasks() {
-        antiBotAttackInfo.setCheckPerSecond(botPerSecond);
+        antiBotAttackInfo.setCheckPerSecond(checkPerSecond);
         antiBotAttackInfo.setJoinPerSecond(joinPerSecond);
         antiBotAttackInfo.setPingPerSecond(pingPerSecond);
         antiBotAttackInfo.setPacketPerSecond(packetPerSecond);
@@ -311,7 +299,6 @@ public class AntiBotManager implements IAntiBotManager {
         }
         this.checkPerSecond = 0;
         this.joinPerSecond = 0;
-        this.botPerSecond = 0;
         this.pingPerSecond = 0;
         this.packetPerSecond = 0;
     }

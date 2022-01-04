@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.ultimateantibot.commands.commands;
+import me.kr1s_d.ultimateantibot.commands.CommandManager;
+import me.kr1s_d.ultimateantibot.commands.subcommands.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilter;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICore;
@@ -50,7 +51,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         MessageManager.init(messages);
         Version.init(this);
         logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
-        logHelper.info("&aLoading UltimateAntiBot...");
+        logHelper.info("&fLoading &dUltimateAntiBot...");
         antiBotManager = new AntiBotManager(this);
         core = new UltimateAntiBotCore(this);
         core.load();
@@ -61,29 +62,38 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         userDataService.load();
         ProxyServer.getInstance().getLogger().setFilter(new LogFilter(antiBotManager));
         NotificationUtils.update(this);
-        logHelper.info("&aLoaded UltimateAntiBot!");
+        logHelper.info("&fLoaded &dUltimateAntiBot!");
         logHelper.sendLogo();
-        logHelper.info("&aVersion: $1 | Author: $2 | Cores: $3"
+        logHelper.info("&dVersion: &f$1 &5| &dAuthor: &f$2 &5| &dCores: &f$3"
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthor())
                 .replace("$3", String.valueOf(Version.getCores()))
         );
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new commands(this));
+        logHelper.info("&fThe &dabyss&f is ready to swallow all the bots!");
+        CommandManager commandManager = new CommandManager(this, "uab", "", "ab");
+        commandManager.register(new AddRemoveBlacklistCommand(this));
+        commandManager.register(new AddRemoveWhitelistCommand(this));
+        commandManager.register(new ClearCommand(this));
+        commandManager.register(new DumpCommand(this));
+        commandManager.register(new HelpCommand(this));
+        commandManager.register(new StatsCommand(this));
+        commandManager.register(new ToggleNotificationCommand());
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
         long b = System.currentTimeMillis() - a;
-        logHelper.info("&eTook " + b + "ms to load");
+        logHelper.info("&7Took &d" + b + "ms&7 to load");
     }
 
     @Override
     public void onDisable() {
         long a = System.currentTimeMillis();
-        logHelper.info("&aUnloading...");
+        logHelper.info("&7Unloading...");
         userDataService.unload();
         antiBotManager.getBlackListService().unload();
         antiBotManager.getWhitelistService().unload();
-        logHelper.info("&atThanks for choosing us!");
+        logHelper.info("&dThanks for choosing us!");
         long b = System.currentTimeMillis() - a;
-        logHelper.info("&eTook " + b + "ms to unload");
+        logHelper.info("&7Took &d" + b + "ms&7 to unload");
     }
 
     @Override
@@ -168,5 +178,10 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         List<String> ips = new ArrayList<>();
         ProxyServer.getInstance().getPlayers().forEach(a -> ips.add(Utils.getIP(a)));
         return ips.contains(ip);
+    }
+
+    @Override
+    public String getVersion() {
+        return this.getDescription().getVersion();
     }
 }
