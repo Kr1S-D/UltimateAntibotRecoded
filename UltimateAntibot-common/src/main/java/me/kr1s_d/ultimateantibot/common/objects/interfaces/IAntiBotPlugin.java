@@ -29,4 +29,6 @@ public interface IAntiBotPlugin {
     UserDataService getUserDataService();
 
     ICore getCore();
+
+    boolean isConnected(String ip);
 }

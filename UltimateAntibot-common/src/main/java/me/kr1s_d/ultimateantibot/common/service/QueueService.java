@@ -7,12 +7,14 @@ import java.util.Set;
 
 public class QueueService implements IService {
 
-    private Set<String> queue;
+    private final Set<String> queue;
 
-    @Override
-    public void load() {
+    public QueueService(){
         this.queue = new HashSet<>();
     }
+
+    @Override
+    public void load() {}
 
     @Override
     public void unload() {

@@ -51,6 +51,7 @@ checks:
   firstjoin:
     #enable firstjoin
     enabled: true
+  #This check checks the number of accounts entered by the same ip within 60 seconds
   namechanger:
     #Clear cache time
     time: 60
@@ -58,3 +59,50 @@ checks:
     limit: 3
     #enable?
     enabled: true
+  #If an ip joins 35 times in 300 seconds
+  superjoin:
+    #Clear cache time
+    time: 300
+    #max joins in 60 seconds to get blacklisted
+    limit: 35
+    #enable?
+    enabled: true
+  auth:
+    #Clear cache time
+    time: 300
+    #Allows users to whitelist
+    #Through min-max ping
+    ping: 10-15
+    #Min max TimerCheck
+    timer: 5-10
+    #When the time for verification runs out,
+    #you have 1.2 second to join
+    between: 1200 #milliseconds
+    #BlackList enable condition
+    percent: 95
+    #If a player has to ping the verification,
+    #the non-verifying players will have a counter of the times they pinged the
+    #server to enter!
+    #On bungeecord will use protocol name
+    #On spigot will use the motd
+    #Editable in messages.yml
+    ping_interface: true
+    #Enable this check
+    enabled: true
+  slowjoin:
+    #This check will check if a player sends a certain packet,
+    #which the bots do not send, to 5 bots that do not send it
+    #in 60 it will perform the various actionsù
+    #WARNING
+    #1) Only works on bungeecord || waterfall etc!
+    #2) If you use plugins like Protocolize or Geyser it could give problems so you have to disable it
+    #3) Some bots can bypass this check but it's at least something
+    packet:
+      time: 60 #seconds
+      trigger: 5
+      blacklist: false
+      kick: true
+      antibotmode: true
+      enabled: true
+
+

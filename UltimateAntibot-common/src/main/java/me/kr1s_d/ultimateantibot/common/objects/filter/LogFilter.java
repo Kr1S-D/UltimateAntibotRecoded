@@ -16,11 +16,9 @@ public class LogFilter implements Filter {
 
     @Override
     public boolean isLoggable(LogRecord record) {
-        if(record.getLevel().equals(Level.SEVERE) && antiBotManager.isSomeModeOnline()){
+        if(record.getLevel().equals(Level.SEVERE) && antiBotManager.isPacketModeEnabled() || record.getLevel().equals(Level.WARNING) && antiBotManager.isPacketModeEnabled()){
             antiBotManager.increasePacketPerSecond();
-            return false;
-        }else {
-            return !antiBotManager.isAntiBotModeEnabled() && !antiBotManager.isPingModeEnabled();
         }
+        return !record.getMessage().contains("{0}");
     }
 }

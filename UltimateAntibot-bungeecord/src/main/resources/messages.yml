@@ -1,30 +1,41 @@
 version: 3.3
 prefix: '&e&lA&b&lB &7» '
+onping: #<-- works only on bungeecord!
+  normal: '&e&l◆ &a&l$1&7/&a&l$2'
+  ready: '&e&l◆ &a&lVERIFIED!'
+title:
+  title: '&a%blocked% Blocked Bots'
+  subtitle: '&6%ip%% BlackListed IP'
 commands:
   perms: '&cYou dont have permission to do this!'
   cleared: '&a$1 has been cleared!'
   added: '&a$1 has been added in the $2'
   removed: '&a$1 has been removed from the $2'
+notifications:
+  action: '&aToggled ActionBar notifications!'
+  title: '&aToggled Title notifications!'
+  chat: '&aToggled Chat notifications'
 #actionbar allowed values
 #%bots% - return botpersecond
-#%ping% - return pingpersecond
+#%pings% - return pingpersecond
 #%queue% - return queue
 #%whitelist% - return whitelist size
+#%blacklist% - return blacklist size
 #%type% - return current attacktype
 #%packets% - return packetspersecond
 #%totalpackets% - return totalpackets
 #%totalbots% - return totalbots
 #%totalpings% - return totalpings
+#%checks% - return checkspersecond
 actionbar:
-  offline: '&6Join &e$1 &b- &6Ping &e$2 &b- &6Queue &e$3 - &6Whitelist &e$4 &b- &6Check &e$5 » &c&l%type%'
-  antibot: '&6Bot &e$1/sec &b- &6Ping &e$2/sec &b- &6Queue &e$3 &b- &6Blacklist &e$4 &b- &6Check &e$5 » &a&l%type%'
-  packets: '&6Packets &e$1/sec &b- &6Blocked &e$2 &b- &6Blacklist » &a&l%type%'
+  offline: '&6Join &e%bots% &b- &6Ping &e%pings% &b- &6Queue &e%queue% - &6Whitelist &e%whitelist% &b- &6Check &e%checks% » &c&l%type%'
+  antibot: '&6Bot &e%bots%/sec &b- &6Ping &e%pings%/sec &b- &6Queue &e%queue% &b- &6Blacklist &e%blacklist% &b- &6Check &e%checks% » &a&l%type%'
+  packets: '&6Packets &e%packets%/sec &b- &6Blocked &e%totalpackets% &b- &6Blacklist &e%blacklist%/sec » &a&l%type%'
 reason:
   names: 'Too many nicks on your IP'
   joins: 'Too many joins from your IP'
   pings: 'Too many pings from your IP'
   strange: 'Strange Player'
-
 help:
   - '&4/uab &chelp'
   - '&4/uab &ctoggle &factionbar/title'

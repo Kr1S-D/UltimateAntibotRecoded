@@ -13,7 +13,6 @@ public class Utils {
 
     private Utils(){}
 
-
     public static String getIP(ProxiedPlayer player){
         return player.getAddress().getAddress().toString();
     }
@@ -64,5 +63,11 @@ public class Utils {
                 }
             });
         });
+    }
+
+    public static void debug(String str){
+        for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
+            p.sendMessage(str);
+        }
     }
 }

@@ -79,11 +79,13 @@ public interface IAntiBotManager {
 
     void enablePingMode();
 
-    void onCoreRefresh();
+    void updateTasks();
 
     IAntiBotAttackInfo getAntiBotAttackInfo();
 
     boolean canDisable(ModeType modeType);
 
     JoinCache getJoinCache();
+
+    String replaceInfo(String str);
 }

@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.helper;
 
 import me.kr1s_d.ultimateantibot.common.helper.enums.ColorHelper;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ public class LogHelper {
     }
 
     public void debug(String msg){
+        if(!ConfigManger.isDebugModeOnline) return;
         logger.log(Level.INFO, ColorHelper.colorize("&F[UAB DEBUG] &7» " + msg));
     }
 

@@ -5,14 +5,12 @@ public class PlayerProfile {
     private String uuid;
     private String ip;
     private long joins;
-    private boolean isFirstJoin;
 
-    public PlayerProfile(String name, String uuid, String ip, long joins, boolean isFirstJoin) {
+    public PlayerProfile(String name, String uuid, String ip, long joins) {
         this.name = name;
         this.uuid = uuid;
         this.ip = ip;
         this.joins = joins;
-        this.isFirstJoin = isFirstJoin;
     }
 
     public String getName() {
@@ -29,10 +27,6 @@ public class PlayerProfile {
 
     public long getJoins() {
         return joins;
-    }
-
-    public boolean isFirstJoin() {
-        return isFirstJoin;
     }
 
     public boolean isSimilar(PlayerProfile profile){
@@ -55,7 +49,4 @@ public class PlayerProfile {
         this.joins = joins;
     }
 
-    public void setFirstJoin(boolean firstJoin) {
-        isFirstJoin = firstJoin;
-    }
 }

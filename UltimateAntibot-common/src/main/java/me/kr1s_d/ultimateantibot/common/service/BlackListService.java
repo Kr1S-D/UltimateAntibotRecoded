@@ -45,8 +45,8 @@ public class BlackListService implements IService {
     public void load() {
         for(String a : blacklistConfig.getConfigurationSection("data")){
             String ip = toIp(a);
-            String reason = blacklistConfig.getString("data." + a + "reason");
-            String id = blacklistConfig.getString("data." + a + "reason");
+            String reason = blacklistConfig.getString("data." + a + ".reason");
+            String id = blacklistConfig.getString("data." + a + ".reason");
             blacklist.put(ip, new BlackListProfile(reason, id));
         }
         logHelper.info("&a" + blacklist.size() + "IP added to blacklist!");
@@ -96,10 +96,27 @@ public class BlackListService implements IService {
         return blacklist.get(ip);
     }
 
+    /**
+     * @param id The Blacklist ID
+     * @return Ip of the Player
+     */
     public String getIPFromID(String id){
         for(Map.Entry<String, BlackListProfile> map : blacklist.entrySet()){
             if(map.getValue().getId().equals(id)){
                 return map.getKey();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param id The Blacklist ID
+     * @return BlackListProfile of the Player
+     */
+    public BlackListProfile getBlacklistProfileFromID(String id){
+        for(Map.Entry<String, BlackListProfile> map : blacklist.entrySet()){
+            if(map.getValue().getId().equals(id)){
+                return map.getValue();
             }
         }
         return null;

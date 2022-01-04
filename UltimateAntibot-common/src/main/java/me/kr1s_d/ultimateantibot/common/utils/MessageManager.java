@@ -4,11 +4,14 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.other.BlackListProfile;
 
 import java.util.List;
-import java.util.Locale;
 
 public class MessageManager {
     public static double version;
     public static String prefix;
+    public static String normalPingInterface;
+    public static String verifiedPingInterface;
+    public static String titleTitle;
+    public static String titleSubtitle;
     public static String commandNoPerms;
     public static String commandCleared;
     public static String commandAdded;
@@ -29,10 +32,17 @@ public class MessageManager {
     public static String reasonTooManyJoins;
     public static String reasonTooManyPings;
     public static String reasonStrangePlayer;
+    public static String toggledActionbar;
+    public static String toggledTitle;
+    public static String toggledChat;
 
     public static void init(IConfiguration messages){
         version = messages.getDouble("version");
         prefix = messages.getString("prefix");
+        normalPingInterface = messages.getString("onping.normal");
+        verifiedPingInterface = messages.getString("onping.ready");
+        titleTitle = messages.getString("title.title");
+        titleSubtitle = messages.getString("title.subtitle");
         commandNoPerms = messages.getString("commands.perms");
         commandCleared = messages.getString("commands.cleared");
         commandAdded = messages.getString("commands.added");
@@ -53,6 +63,9 @@ public class MessageManager {
         reasonTooManyJoins = messages.getString("reason.joins");
         reasonTooManyPings = messages.getString("reason.pings");
         reasonStrangePlayer = messages.getString("reason.strange");
+        toggledActionbar = messages.getString("notifications.action");
+        toggledTitle = messages.getString("notifications.title");
+        toggledChat = messages.getString("notifications.chat");
     }
 
     public static String getCommandNoPerms() {

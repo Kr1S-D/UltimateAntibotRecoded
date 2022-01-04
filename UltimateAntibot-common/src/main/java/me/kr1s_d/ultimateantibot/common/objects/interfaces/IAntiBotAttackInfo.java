@@ -30,6 +30,4 @@ public interface IAntiBotAttackInfo {
     void setTotalPackets(long value);
 
     boolean isBypassAttack();
-
-    String replaceInfo(String str);
 }

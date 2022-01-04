@@ -11,29 +11,16 @@ public class UltimateAntiBotCore implements ICore {
         this.plugin = plugin;
     }
 
-    public void coreRefresher(){
-        plugin.scheduleRepeatingTask(() -> {
-            plugin.getAntiBotManager().onCoreRefresh();
-        }, true, 1000);
-    }
-
-    public void initCoreCache(){
-        plugin.scheduleRepeatingTask(() -> {
-            plugin.getAntiBotManager().getQueueService().clear();
-        }, true, 1000L * ConfigManger.taskManagerClearCache);
-    }
-
     @Override
     public void load() {
         plugin.getLogHelper().info("&aLoading Core...");
-        coreRefresher();
-        initCoreCache();
-        plugin.getLogHelper().info("&aCore Loaded!");
+        plugin.scheduleRepeatingTask(this::refresh, false, 1000L);
+        plugin.scheduleRepeatingTask(plugin.getAntiBotManager().getQueueService()::clear, false, ConfigManger.taskManagerClearCache * 1000L);
     }
 
     @Override
-    public void addNewThread(Runnable runnable, long millis) {
-        plugin.scheduleDelayedTask(runnable, false, millis);
+    public void refresh() {
+        plugin.getAntiBotManager().updateTasks();
     }
 
     // TODO: 19/11/2021 AUTOPURGER 

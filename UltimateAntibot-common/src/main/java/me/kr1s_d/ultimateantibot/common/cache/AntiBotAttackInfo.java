@@ -99,9 +99,4 @@ public class AntiBotAttackInfo implements IAntiBotAttackInfo {
     public boolean isBypassAttack() {
         return antiBotManager.isAntiBotModeEnabled() && pingPerSecond >= 20;
     }
-
-    @Override
-    public String replaceInfo(String str) {
-        return null;
-    }
 }

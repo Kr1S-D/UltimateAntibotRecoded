@@ -7,81 +7,45 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
 import me.kr1s_d.ultimateantibot.common.objects.user.PlayerProfile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDataService implements IService {
-    private final List<PlayerProfile> loadedProfiles;
     private final IConfiguration database;
     private final LogHelper logHelper;
+    private final Map<String, Boolean> ipMap;
 
     public UserDataService(IConfiguration database, IAntiBotPlugin plugin){
         this.logHelper = plugin.getLogHelper();
+        this.ipMap = new HashMap<>();
         this.database = database;
-        this.loadedProfiles = new ArrayList<>();
     }
 
     @Override
     public void load() {
-        for (String UUID : database.getConfigurationSection("data")){
-            final String name = database.getString("data." + UUID + ".name");
-            final String ip = database.getString("data." + UUID + ".ip");
-            final long join = database.getLong("data." + UUID + ".join");
-            final boolean firstjoin = database.getBoolean("data." + UUID + ".firstjoin");
-            loadedProfiles.add(new PlayerProfile(UUID, name, ip, join, firstjoin));
+        for(String str : database.getStringList("data")){
+            String[] part = str.split(";");
+            ipMap.put(part[0], Boolean.valueOf(part[1]));
         }
+        logHelper.info("&aLoaded " + ipMap.size() + " &ajoins!");
     }
 
     @Override
     public void unload() {
-        for(PlayerProfile profile : loadedProfiles){
-            final String UUID = profile.getUUID();
-            final String name = profile.getName();
-            final String ip = profile.getIp();
-            final long join = profile.getJoins();
-            final boolean firstJoin = profile.isFirstJoin();
-            database.set("data." + UUID + ".name", name);
-            database.set("data." + UUID + ".ip", ip);
-            database.set("data." + UUID + ".join", join);
-            database.set("data." + UUID + ".isfirstjoin", firstJoin);
+        List<String> list = new ArrayList<>();
+        for(Map.Entry<String, Boolean> map : ipMap.entrySet()){
+            list.add(map.getKey() + ";" + map.getValue());
         }
+        database.set("data", list);
         database.save();
     }
 
-    public void resetFirstJoin(PlayerProfile profile){
-        profile.setFirstJoin(true);
+    public Map<String, Boolean> getFirstJoinMap() {
+        return ipMap;
     }
 
-    public PlayerProfile getFromUUID(String uuid){
-        for(PlayerProfile profile : loadedProfiles){
-            if(uuid.equals(profile.getUUID())){
-                return profile;
-            }
-        }
-        return null;
-    }
-
-    public PlayerProfile getFromName(String name){
-        for(PlayerProfile profile : loadedProfiles){
-            if(profile.getName().equals(name)) return profile;
-        }
-        return null;
-    }
-
-    public PlayerProfile getFromIP(String ip){
-        for(PlayerProfile profile : loadedProfiles){
-            if(profile.getIp().equals(ip)) return profile;
-        }
-        return null;
-    }
-
-    public boolean isLoaded(PlayerProfile profile){
-        return loadedProfiles.contains(profile);
-    }
-
-    public void loadNewUser(PlayerProfile profile){
-        if(!isLoaded(profile)){
-            loadedProfiles.add(profile);
-            logHelper.debug("Adding new PlayerProfile " + profile.getName());
-        }
+    public void resetFirstJoin(String ip){
+        ipMap.put(ip, true);
     }
 }
