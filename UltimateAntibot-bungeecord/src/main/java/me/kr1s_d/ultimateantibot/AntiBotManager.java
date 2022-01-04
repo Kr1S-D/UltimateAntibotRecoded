@@ -229,7 +229,6 @@ public class AntiBotManager implements IAntiBotManager {
 
     @Override
     public void enableAntiBotMode() {
-        Utils.debug("Enable ANtibotMode");
         setModeType(ModeType.ANTIBOT);
         isAntiBotModeOnline = true;
         isSlowAntiBotModeOnline = false;

@@ -60,7 +60,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         antiBotManager.getBlackListService().load();
         userDataService = new UserDataService(database, this);
         userDataService.load();
-        ProxyServer.getInstance().getLogger().setFilter(new LogFilter(antiBotManager));
+        ProxyServer.getInstance().getLogger().setFilter(new LogFilter(this));
         NotificationUtils.update(this);
         logHelper.info("&fLoaded &dUltimateAntiBot!");
         logHelper.sendLogo();
@@ -78,6 +78,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         commandManager.register(new HelpCommand(this));
         commandManager.register(new StatsCommand(this));
         commandManager.register(new ToggleNotificationCommand());
+        commandManager.register(new CheckIDCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
         long b = System.currentTimeMillis() - a;

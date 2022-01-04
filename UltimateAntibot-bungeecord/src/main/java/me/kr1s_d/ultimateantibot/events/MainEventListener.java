@@ -105,7 +105,7 @@ public class MainEventListener implements Listener {
             // NameChangerCheck
             //
             if(nameChangerCheck.needToDeny(ip, name)){
-                blackListService.blacklist(ip, MessageManager.reasonTooManyNicks);
+                blackListService.blacklist(ip, MessageManager.reasonTooManyNicks, name);
                 e.setCancelReason(blacklistMSG(ip));
                 e.setCancelled(true);
                 return;
@@ -114,7 +114,7 @@ public class MainEventListener implements Listener {
             // SuperJoinCheck
             //
             if(superJoinCheck.needToDeny(ip, name)){
-                blackListService.blacklist(ip, MessageManager.reasonTooManyJoins);
+                blackListService.blacklist(ip, MessageManager.reasonTooManyJoins, name);
                 e.setCancelReason(blacklistMSG(ip));
                 e.setCancelled(true);
                 return;
@@ -125,7 +125,6 @@ public class MainEventListener implements Listener {
         //
         if(antiBotManager.getJoinPerSecond() > ConfigManger.antiBotModeTrigger){
             if(!antiBotManager.isAntiBotModeEnabled()){
-                Utils.debug("a");
                 antiBotManager.enableAntiBotMode();
             }
         }

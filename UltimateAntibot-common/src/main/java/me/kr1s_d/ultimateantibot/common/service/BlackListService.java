@@ -46,7 +46,8 @@ public class BlackListService implements IService {
             String ip = toIp(a);
             String reason = blacklistConfig.getString("data." + a + ".reason");
             String id = blacklistConfig.getString("data." + a + ".reason");
-            blacklist.put(ip, new BlackListProfile(reason, id));
+            String name = blacklistConfig.getString("data." + a + ".name");
+            blacklist.put(ip, new BlackListProfile(reason, id, name));
         }
         logHelper.info("&f" + blacklist.size() + " &dIP added to blacklist!");
     }
@@ -59,6 +60,7 @@ public class BlackListService implements IService {
             String id = map.getValue().getId();
             blacklistConfig.set("data." + ip + ".reason", reason);
             blacklistConfig.set("data." + ip + ".id", id);
+            blacklistConfig.set("data." + ip + ".name", map.getValue().getName());
         }
         blacklistConfig.save();
     }

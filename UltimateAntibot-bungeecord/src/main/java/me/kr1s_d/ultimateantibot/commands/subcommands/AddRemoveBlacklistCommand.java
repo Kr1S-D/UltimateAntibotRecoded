@@ -29,7 +29,7 @@ public class AddRemoveBlacklistCommand implements SubCommand {
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandAdded(args[2], "Blacklist")));
         } else {
             if (args[1].equals("remove")) {
-                iAntiBotManager.getBlackListService().blacklist(args[2], MessageManager.reasonBlacklistAdmin);
+                iAntiBotManager.getBlackListService().unBlacklist(args[2]);
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandRemove(args[2], "Blacklist")));
             } else {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.commandWrongArgument));

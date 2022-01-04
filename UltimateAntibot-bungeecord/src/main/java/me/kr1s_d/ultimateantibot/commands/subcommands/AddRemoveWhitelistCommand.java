@@ -18,7 +18,7 @@ public class AddRemoveWhitelistCommand implements SubCommand {
 
     @Override
     public String getSubCommandId() {
-        return "blacklist";
+        return "whitelist";
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AddRemoveWhitelistCommand implements SubCommand {
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandAdded(args[2], "Whitelist")));
         } else {
             if (args[1].equals("remove")) {
-                iAntiBotManager.getWhitelistService().whitelist(args[2]);
+                iAntiBotManager.getWhitelistService().unWhitelist(args[2]);
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandRemove(args[2], "Whitelist")));
             } else {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.commandWrongArgument));

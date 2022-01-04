@@ -120,3 +120,5 @@ blacklist_info:
   - '&5Reason &7»  &d$reason'
   - '&5IP &7»  &d$ip'
   - '&5NickName &7»  &d$nick'
+filter:
+  - 'Another plugin has cancelled the connection for'
