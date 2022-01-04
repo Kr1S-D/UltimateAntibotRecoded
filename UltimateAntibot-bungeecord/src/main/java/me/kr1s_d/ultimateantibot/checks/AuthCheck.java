@@ -74,7 +74,7 @@ public class AuthCheck {
         plugin.scheduleDelayedTask(() -> {
             completedChecksWaiting.remove(ip);
             pendingChecks.remove(ip);
-        }, false, 1000L * ConfigManger.authBetween);
+        }, false, ConfigManger.authBetween);
     }
 
     /**

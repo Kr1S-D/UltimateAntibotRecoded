@@ -45,7 +45,7 @@ public class BlackListService implements IService {
         for(String a : blacklistConfig.getConfigurationSection("data")){
             String ip = toIp(a);
             String reason = blacklistConfig.getString("data." + a + ".reason");
-            String id = blacklistConfig.getString("data." + a + ".reason");
+            String id = blacklistConfig.getString("data." + a + ".id");
             String name = blacklistConfig.getString("data." + a + ".name");
             blacklist.put(ip, new BlackListProfile(reason, id, name));
         }

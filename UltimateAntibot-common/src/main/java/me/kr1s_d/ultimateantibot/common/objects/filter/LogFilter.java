@@ -2,7 +2,9 @@ package me.kr1s_d.ultimateantibot.common.objects.filter;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Filter;
@@ -14,9 +16,10 @@ public class LogFilter implements Filter {
     private final List<String> blocked;
 
     public LogFilter(IAntiBotPlugin antiBotPlugin){
+
         this.antiBotManager = antiBotPlugin.getAntiBotManager();
-        this.blocked = Arrays.asList(
-                "nitialHandler has",
+        this.blocked = new ArrayList<>(Arrays.asList(
+                "InitialHandler has",
                 "Connection reset by peer",
                 "Unexpected packet received",
                 "read timed out",
@@ -34,21 +37,28 @@ public class LogFilter implements Filter {
                 "lost connection: Disconnected",
                 "Took too long to log in",
                 "disconnected with"
-        );
+        ));
         blocked.addAll(antiBotPlugin.getMessages().getStringList("filter"));
     }
 
     @Override
     public boolean isLoggable(LogRecord record) {
-        for(String blocked : blocked){
-            if(record.getMessage().toLowerCase().contains(blocked.toLowerCase())){
-                if(!antiBotManager.isPacketModeEnabled()) antiBotManager.enablePacketMode();
-                return false;
+        if(antiBotManager.isSomeModeOnline()){
+            return isFiltered(record.getMessage());
+        }
+        if(isFiltered(record.getMessage()) && antiBotManager.getPacketPerSecond() >= ConfigManger.packetModeTrigger){
+            antiBotManager.increasePacketPerSecond();
+            if(!antiBotManager.isPacketModeEnabled()){
+                antiBotManager.enablePacketMode();
             }
         }
-        if(antiBotManager.isPacketModeEnabled()){
-            antiBotManager.increasePacketPerSecond();
-            return false;
+        return true;
+    }
+
+    public boolean isFiltered(String record){
+        for(String str : blocked){
+            //System.out.println(record.toLowerCase().contains(str.toLowerCase() + ""));
+            return record.toLowerCase().contains(str.toLowerCase());
         }
         return true;
     }

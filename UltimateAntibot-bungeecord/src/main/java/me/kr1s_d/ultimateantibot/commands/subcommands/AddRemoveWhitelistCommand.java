@@ -27,7 +27,7 @@ public class AddRemoveWhitelistCommand implements SubCommand {
             iAntiBotManager.getWhitelistService().whitelist(args[2]);
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandAdded(args[2], "Whitelist")));
         } else {
-            if (args[1].equals("remove")) {
+            if (args[1].equalsIgnoreCase("remove")) {
                 iAntiBotManager.getWhitelistService().unWhitelist(args[2]);
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandRemove(args[2], "Whitelist")));
             } else {
