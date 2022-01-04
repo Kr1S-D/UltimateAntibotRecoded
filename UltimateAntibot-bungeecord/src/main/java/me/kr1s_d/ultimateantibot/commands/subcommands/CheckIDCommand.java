@@ -34,8 +34,9 @@ public class CheckIDCommand implements SubCommand {
         for(String str : MessageManager.blacklistProfileString){
             sender.sendMessage(Utils.colora(str
                     .replace("$reason", profile.getReason())
-                    .replace("$ip", profile.getId())
+                    .replace("$id", profile.getId())
                     .replace("$nick", profile.getName())
+                    .replace("$id", plugin.getAntiBotManager().getBlackListService().getIPFromID(profile.getId()))
             ));
         }
 

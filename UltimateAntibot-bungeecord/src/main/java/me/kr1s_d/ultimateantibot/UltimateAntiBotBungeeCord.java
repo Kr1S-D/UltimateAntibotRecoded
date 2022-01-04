@@ -11,6 +11,7 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.Version;
 import me.kr1s_d.ultimateantibot.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.events.MainEventListener;
+import me.kr1s_d.ultimateantibot.events.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.utils.NotificationUtils;
@@ -80,6 +81,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         commandManager.register(new ToggleNotificationCommand());
         commandManager.register(new CheckIDCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
         long b = System.currentTimeMillis() - a;
         logHelper.info("&7Took &d" + b + "ms&7 to load");

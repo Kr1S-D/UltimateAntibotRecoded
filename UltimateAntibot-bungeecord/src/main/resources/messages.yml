@@ -32,7 +32,7 @@ notifications:
 actionbar:
   offline: '&dJoin &f%bots% &5- &dPing &f%pings% &5- &dQueue &f%queue% &5- &dWhitelist &f%whitelist% &5- &dCheck &f%checks% » &d&l%type%'
   antibot: '&dBot &f%bots%/sec &5- &dPing &f%pings%/sec &5- &dQueue &f%queue% &5- &dBlacklist &f%blacklist% &5- &dCheck &f%checks% » &a&l%type%'
-  packets: '&dPackets &f%packets%/sec &5- &dBlocked &f%totalpackets% &5- &dBlacklist &f%blacklist%/sec » &d&l%type%'
+  packets: '&dPackets &f%packets%/sec &5- &dBlocked &f%totalpackets% &5- &dBlacklist &f%blacklist% » &d&l%type%'
 reason:
   names: 'Too many nicks on your IP'
   joins: 'Too many joins from your IP'
@@ -116,10 +116,10 @@ blacklisted:
   - '&dDiscord &7» &d&ndiscord.myserver.com'
   - '&d&nmc.yourserver.net'
 blacklist_info:
-  - '&fᛃ &5&LU&D&LA&5&LB &fᛃ'
-  - ''
+  - '&d&lBLACKLIST INFO:'
   - '&5Reason &7»  &d$reason'
   - '&5IP &7»  &d$ip'
   - '&5NickName &7»  &d$nick'
+  - '&5ID &7»  &d$id'
 filter:
   - 'Another plugin has cancelled the connection for'

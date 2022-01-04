@@ -289,13 +289,19 @@ public class AntiBotManager implements IAntiBotManager {
         antiBotAttackInfo.setJoinPerSecond(joinPerSecond);
         antiBotAttackInfo.setPingPerSecond(pingPerSecond);
         antiBotAttackInfo.setPacketPerSecond(packetPerSecond);
-        if (isSlowAntiBotModeOnline) {
-            if (modeType.equals(ModeType.PACKETS)) {
+        if (isAntiBotModeOnline || isPingModeEnabled || isSlowAntiBotModeOnline) {
+            logHelper.info(replaceInfo(MessageManager.actionbarAntiBotMode));
+        }else{
+            if(isPacketModeEnabled){
                 logHelper.info(replaceInfo(MessageManager.actionbarPackets));
-            } else {
-                logHelper.info(replaceInfo(MessageManager.actionbarAntiBotMode));
             }
         }
+        this.totalBotBlocked += joinPerSecond;
+        this.totalPing += pingPerSecond;
+        this.totalPacketBlocked += packetPerSecond;
+        antiBotAttackInfo.setTotalBot(totalBotBlocked);
+        antiBotAttackInfo.setTotalPing(totalPing);
+        antiBotAttackInfo.setTotalPackets(totalPacketBlocked);
         this.checkPerSecond = 0;
         this.joinPerSecond = 0;
         this.pingPerSecond = 0;

@@ -46,8 +46,7 @@ public class LogFilter implements Filter {
         if(antiBotManager.isSomeModeOnline()){
             return isFiltered(record.getMessage());
         }
-        if(isFiltered(record.getMessage()) && antiBotManager.getPacketPerSecond() >= ConfigManger.packetModeTrigger){
-            antiBotManager.increasePacketPerSecond();
+        if(!isFiltered(record.getMessage()) && antiBotManager.getPacketPerSecond() >= ConfigManger.packetModeTrigger){
             if(!antiBotManager.isPacketModeEnabled()){
                 antiBotManager.enablePacketMode();
             }
@@ -57,7 +56,7 @@ public class LogFilter implements Filter {
 
     public boolean isFiltered(String record){
         for(String str : blocked){
-            //System.out.println(record.toLowerCase().contains(str.toLowerCase() + ""));
+            antiBotManager.increasePacketPerSecond();
             return record.toLowerCase().contains(str.toLowerCase());
         }
         return true;
