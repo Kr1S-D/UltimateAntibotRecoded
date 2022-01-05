@@ -7,7 +7,6 @@ import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotAttackInfo;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICore;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
@@ -16,7 +15,6 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.events.custom.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
-import me.kr1s_d.ultimateantibot.utils.Utils;
 
 public class AntiBotManager implements IAntiBotManager {
     private final IAntiBotPlugin iAntiBotPlugin;

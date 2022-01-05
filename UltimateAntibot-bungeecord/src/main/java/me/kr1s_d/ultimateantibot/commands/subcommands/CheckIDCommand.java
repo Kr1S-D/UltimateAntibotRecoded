@@ -36,7 +36,7 @@ public class CheckIDCommand implements SubCommand {
                     .replace("$reason", profile.getReason())
                     .replace("$id", profile.getId())
                     .replace("$nick", profile.getName())
-                    .replace("$id", plugin.getAntiBotManager().getBlackListService().getIPFromID(profile.getId()))
+                    .replace("$ip", plugin.getAntiBotManager().getBlackListService().getIPFromID(profile.getId()))
             ));
         }
 

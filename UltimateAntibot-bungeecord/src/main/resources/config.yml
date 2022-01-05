@@ -32,9 +32,9 @@ pingmode:
 #Works Only on Bungeecord Waterfall ect...
 packetmode:
   #Duration of handshakemode
-  keep: 10
-  #How many handshake in 1 second to enable?
-  trigger: 150 #Set (Your online players * 4) | If you have 40 average online players you have to do 40 x 3 and the result will be the value to write
+  keep: 15
+  #How many blocked packets in 1 second for enable?
+  trigger: 5
   #if the handshake has an invalid protocol do I have to blacklist it?
   blacklist-invalid-protocol: true
 
@@ -104,5 +104,8 @@ checks:
       kick: true
       antibotmode: true
       enabled: true
-
+#Custom Message filter only during bot / packet / ping attack
+filter:
+  - 'Another plugin has cancelled the connection for' #luckperms on spigot
+  - 'The UUID the player is connecting with now is NOT Mojang-assigned' #luckperms on bungeecord
 

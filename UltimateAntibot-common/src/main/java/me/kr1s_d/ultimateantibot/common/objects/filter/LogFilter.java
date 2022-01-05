@@ -36,9 +36,11 @@ public class LogFilter implements Filter {
                 "lost connection: Timed out",
                 "lost connection: Disconnected",
                 "Took too long to log in",
-                "disconnected with"
+                "disconnected with",
+                "read time out",
+                "Connect reset by peer"
         ));
-        blocked.addAll(antiBotPlugin.getMessages().getStringList("filter"));
+        blocked.addAll(antiBotPlugin.getConfig().getStringList("filter"));
     }
 
     @Override
@@ -51,13 +53,16 @@ public class LogFilter implements Filter {
                 antiBotManager.enablePacketMode();
             }
         }
+        isFiltered(record.getMessage());
         return true;
     }
 
     public boolean isFiltered(String record){
         for(String str : blocked){
-            antiBotManager.increasePacketPerSecond();
-            return record.toLowerCase().contains(str.toLowerCase());
+            if(record.toLowerCase().contains(str.toLowerCase())){
+                antiBotManager.increasePacketPerSecond();
+                return false;
+            }
         }
         return true;
     }
