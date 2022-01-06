@@ -296,7 +296,9 @@ public class AntiBotManager implements IAntiBotManager {
         }
         this.totalBotBlocked += joinPerSecond;
         this.totalPing += pingPerSecond;
-        this.totalPacketBlocked += packetPerSecond;
+        if(isPacketModeEnabled) {
+            this.totalPacketBlocked += packetPerSecond;
+        }
         antiBotAttackInfo.setTotalBot(totalBotBlocked);
         antiBotAttackInfo.setTotalPing(totalPing);
         antiBotAttackInfo.setTotalPackets(totalPacketBlocked);

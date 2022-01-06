@@ -18,8 +18,8 @@ public class PacketCheck {
     private final Set<String> packetReceived;
     private final Set<String> suspected;
     private final IAntiBotManager antibotManager;
-    private BlackListService blacklist;
-    private WhitelistService whitelistService;
+    private final BlackListService blacklist;
+    private final WhitelistService whitelistService;
 
     public PacketCheck(IAntiBotPlugin plugin){
         this.iAntiBotPlugin = plugin;
@@ -27,6 +27,8 @@ public class PacketCheck {
         this.packetReceived = new HashSet<>();
         this.suspected = new HashSet<>();
         this.antibotManager = plugin.getAntiBotManager();
+        this.blacklist = plugin.getAntiBotManager().getBlackListService();
+        this.whitelistService = plugin.getAntiBotManager().getWhitelistService();
         loadTask();
     }
 

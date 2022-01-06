@@ -1,15 +1,16 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
-import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.other.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.CommandSender;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CheckIDCommand implements SubCommand {
 

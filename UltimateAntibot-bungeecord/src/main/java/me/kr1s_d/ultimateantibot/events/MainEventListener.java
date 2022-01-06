@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.events;
 
 import me.kr1s_d.ultimateantibot.checks.AuthCheck;
+import me.kr1s_d.ultimateantibot.checks.PacketCheck;
 import me.kr1s_d.ultimateantibot.common.checks.FirstJoinCheck;
 import me.kr1s_d.ultimateantibot.common.checks.NameChangerCheck;
 import me.kr1s_d.ultimateantibot.common.checks.SuperJoinCheck;
@@ -17,10 +18,7 @@ import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.PreLoginEvent;
-import net.md_5.bungee.api.event.ProxyPingEvent;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -34,6 +32,7 @@ public class MainEventListener implements Listener {
     private final NameChangerCheck nameChangerCheck;
     private final SuperJoinCheck superJoinCheck;
     private final AuthCheck authCheck;
+    private final PacketCheck packetCheck;
 
     public MainEventListener(IAntiBotPlugin antiBotPlugin){
         this.plugin = antiBotPlugin;
@@ -45,6 +44,7 @@ public class MainEventListener implements Listener {
         this.nameChangerCheck = new NameChangerCheck(antiBotPlugin);
         this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
         this.authCheck = new AuthCheck(antiBotPlugin);
+        this.packetCheck = new PacketCheck(antiBotPlugin);
     }
 
     @EventHandler(priority = -128)
@@ -150,6 +150,7 @@ public class MainEventListener implements Listener {
     public void onLoginEvent(PostLoginEvent e){
         ProxiedPlayer player = e.getPlayer();
         String ip = Utils.getIP(player);
+        packetCheck.registerJoin(ip);
         if(!antiBotManager.getWhitelistService().isWhitelisted(ip)){
             antiBotManager.getJoinCache().addJoined(ip);
             plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
@@ -166,6 +167,13 @@ public class MainEventListener implements Listener {
     @EventHandler
     public void onUnlogin(PlayerDisconnectEvent e){
         String ip = Utils.getIP(e.getPlayer());
+        packetCheck.onUnLogin(ip);
+    }
+
+    @EventHandler
+    public void onSettings(SettingsChangedEvent e){
+        String ip = Utils.getIP(e.getPlayer());
+        packetCheck.registerPacket(ip);
     }
 
     private BaseComponent blacklistMSG(String ip){

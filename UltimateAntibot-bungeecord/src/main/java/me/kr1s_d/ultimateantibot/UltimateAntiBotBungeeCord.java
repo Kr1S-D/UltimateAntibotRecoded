@@ -14,6 +14,7 @@ import me.kr1s_d.ultimateantibot.events.MainEventListener;
 import me.kr1s_d.ultimateantibot.events.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.NotificationUtils;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.ProxyServer;
@@ -51,6 +52,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         ConfigManger.init(config);
         MessageManager.init(messages);
         Version.init(this);
+        new Metrics(this, 11712);
         logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
         logHelper.info("&fLoading &dUltimateAntiBot...");
         antiBotManager = new AntiBotManager(this);
