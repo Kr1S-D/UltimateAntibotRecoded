@@ -46,7 +46,10 @@ public class LogFilter implements Filter {
     @Override
     public boolean isLoggable(LogRecord record) {
         if(antiBotManager.isSomeModeOnline()){
-            return isFiltered(record.getMessage());
+            if(record.getMessage().toLowerCase().contains("{0}")){
+                antiBotManager.increasePacketPerSecond();
+                return false;
+            }
         }
         if(!isFiltered(record.getMessage()) && antiBotManager.getPacketPerSecond() >= ConfigManger.packetModeTrigger){
             if(!antiBotManager.isPacketModeEnabled()){

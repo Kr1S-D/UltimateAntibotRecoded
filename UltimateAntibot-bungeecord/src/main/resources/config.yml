@@ -34,7 +34,7 @@ packetmode:
   #Duration of handshakemode
   keep: 15
   #How many blocked packets in 1 second for enable?
-  trigger: 5
+  trigger: 60
   #if the handshake has an invalid protocol do I have to blacklist it?
   blacklist-invalid-protocol: true
 
@@ -100,10 +100,49 @@ checks:
     packet:
       time: 60 #seconds
       trigger: 5
+      #dev only
+      condition: 0
       blacklist: false
       kick: true
       antibotmode: true
       enabled: true
+    #Check if bots have similar names
+    #when 4 bots have similar names containing 5 similar
+    #characters it will activate the antibot mode
+    similar:
+      time: 300 #seconds
+      trigger: 4
+      condition: 5
+      blacklist: false
+      kick: true
+      antibotmode: true
+      enabled: true
+    #If 6 bots enter the server within 1 minute
+    #having the same name length it will perform
+    #the various actions
+    lenght:
+      time: 60 #seconds
+      trigger: 6
+      #Dev only
+      condition: 15
+      blacklist: false
+      kick: true
+      antibotmode: true
+      enabled: true
+    #if from same ip 4 accounts are online
+    #will perform the various actions
+    account:
+      time: 0 #ignored here
+      trigger: 4
+      condition: 0 #ignored here
+      blacklist: true
+      kick: true
+      antibotmode: true
+      enabled: true
+
+
+
+
 #Custom Message filter only during bot / packet / ping attack
 filter:
   - 'Another plugin has cancelled the connection for' #luckperms on spigot

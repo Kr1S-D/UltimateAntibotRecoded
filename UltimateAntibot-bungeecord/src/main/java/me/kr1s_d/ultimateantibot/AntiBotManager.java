@@ -16,6 +16,8 @@ import me.kr1s_d.ultimateantibot.events.custom.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
 
+import javax.print.DocFlavor;
+
 public class AntiBotManager implements IAntiBotManager {
     private final IAntiBotPlugin iAntiBotPlugin;
     private int checkPerSecond;
@@ -315,11 +317,14 @@ public class AntiBotManager implements IAntiBotManager {
 
     @Override
     public boolean canDisable(ModeType modeType) {
-        if(modeType.equals(ModeType.ANTIBOT)){
-            return joinPerSecond > ConfigManger.antiBotModeTrigger;
+        if(modeType.equals(ModeType.ANTIBOT) || modeType.equals(ModeType.SLOW)){
+            return antiBotAttackInfo.getJoinPerSecond() <= ConfigManger.antiBotModeTrigger;
         }
-        if(modeType.equals(ModeType.SLOW)){
-            return joinPerSecond > ConfigManger.antiBotModeTrigger;
+        if(modeType.equals(ModeType.PING)){
+            return antiBotAttackInfo.getPingPerSecond() <= ConfigManger.pingModeTrigger;
+        }
+        if (modeType.equals(ModeType.PACKETS)) {
+            return antiBotAttackInfo.getPacketPerSecond() < ConfigManger.packetModeTrigger;
         }
         return false;
     }

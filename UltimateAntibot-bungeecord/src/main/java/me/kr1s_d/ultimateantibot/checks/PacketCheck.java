@@ -39,7 +39,7 @@ public class PacketCheck {
     }
 
     public void registerJoin(String ip) {
-        if (ConfigManger.getPacketCheckConfiguration().isEnabled() && !whitelistService.isWhitelisted(ip)) {
+        if (ConfigManger.getPacketCheckConfig().isEnabled() && !whitelistService.isWhitelisted(ip)) {
             joined.add(ip);
             removeTask(ip);
             checkForAttack();
@@ -48,7 +48,7 @@ public class PacketCheck {
 
 
     public void registerPacket(String ip){
-        if(ConfigManger.getPacketCheckConfiguration().isEnabled() && joined.contains(ip) & !whitelistService.isWhitelisted(ip)) {
+        if(ConfigManger.getPacketCheckConfig().isEnabled() && joined.contains(ip) & !whitelistService.isWhitelisted(ip)) {
             packetReceived.add(ip);
         }
     }
@@ -57,7 +57,7 @@ public class PacketCheck {
         iAntiBotPlugin.scheduleDelayedTask(() -> {
             joined.remove(ip);
             packetReceived.remove(ip);
-        }, false, 1000L * ConfigManger.getPacketCheckConfiguration().getTime());
+        }, false, 1000L * ConfigManger.getPacketCheckConfig().getTime());
     }
 
     /**
@@ -70,14 +70,14 @@ public class PacketCheck {
                     suspected.add(user);
                 }
             });
-            if(suspected.size() >= ConfigManger.getPacketCheckConfiguration().getTrigger()){
+            if(suspected.size() >= ConfigManger.getPacketCheckConfig().getTrigger()){
                 Utils.disconnectAll(new ArrayList<>(suspected), MessageManager.getSafeModeMessage());
                 for(String ip : suspected){
-                    if(ConfigManger.getPacketCheckConfiguration().isBlacklist()) {
+                    if(ConfigManger.getPacketCheckConfig().isBlacklist()) {
                         blacklist.blacklist(ip, MessageManager.reasonStrangePlayer);
                     }
                 }
-                if(ConfigManger.getPacketCheckConfiguration().isEnableAntiBotMode()) {
+                if(ConfigManger.getPacketCheckConfig().isEnableAntiBotMode()) {
                     antibotManager.enableSlowAntiBotMode();
                 }
                 suspected.clear();
@@ -86,7 +86,7 @@ public class PacketCheck {
     }
 
     private void loadTask(){
-        if(!ConfigManger.getPacketCheckConfiguration().isEnabled()) return;
+        if(!ConfigManger.getPacketCheckConfig().isEnabled()) return;
         iAntiBotPlugin.getLogHelper().debug("PacketCheck has been initialized!");
         iAntiBotPlugin.scheduleRepeatingTask(() -> {
             if(!antibotManager.isAntiBotModeEnabled()){

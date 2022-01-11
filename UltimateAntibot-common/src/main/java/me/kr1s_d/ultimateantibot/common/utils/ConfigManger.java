@@ -35,6 +35,9 @@ public class ConfigManger {
     public static boolean authPingInterface;
     public static boolean authEnabled;
     private static SlowJoinCheckConfiguration packetSlowJoinCheckConfiguration;
+    private static SlowJoinCheckConfiguration similarNameCheck;
+    private static SlowJoinCheckConfiguration lenghtCheck;
+    private static SlowJoinCheckConfiguration accountCheck;
 
     public static void init(IConfiguration cfg){
         version = cfg.getDouble("version");
@@ -68,9 +71,24 @@ public class ConfigManger {
         authPingInterface = cfg.getBoolean("checks.auth.ping_interface");
         authEnabled = cfg.getBoolean("checks.auth.enabled");
         packetSlowJoinCheckConfiguration = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.packet");
+        similarNameCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.similar");
+        lenghtCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.lenght");
+        accountCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.account");
     }
 
-    public static SlowJoinCheckConfiguration getPacketCheckConfiguration() {
+    public static SlowJoinCheckConfiguration getAccountCheckConfig() {
+        return accountCheck;
+    }
+
+    public static SlowJoinCheckConfiguration getLenghtCheckConfig() {
+        return lenghtCheck;
+    }
+
+    public static SlowJoinCheckConfiguration getSimilarNameCheckConfig() {
+        return similarNameCheck;
+    }
+
+    public static SlowJoinCheckConfiguration getPacketCheckConfig() {
         return packetSlowJoinCheckConfiguration;
     }
 }

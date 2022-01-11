@@ -2,12 +2,9 @@ package me.kr1s_d.ultimateantibot.events;
 
 import me.kr1s_d.ultimateantibot.checks.AuthCheck;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
-import me.kr1s_d.ultimateantibot.common.checks.FirstJoinCheck;
-import me.kr1s_d.ultimateantibot.common.checks.NameChangerCheck;
-import me.kr1s_d.ultimateantibot.common.checks.SuperJoinCheck;
+import me.kr1s_d.ultimateantibot.common.checks.*;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.other.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
@@ -33,6 +30,9 @@ public class MainEventListener implements Listener {
     private final SuperJoinCheck superJoinCheck;
     private final AuthCheck authCheck;
     private final PacketCheck packetCheck;
+    private final AccountCheck accountCheck;
+    private final SimilarNameCheck similarNameCheck;
+    private final LengthCheck lengthCheck;
 
     public MainEventListener(IAntiBotPlugin antiBotPlugin){
         this.plugin = antiBotPlugin;
@@ -45,6 +45,9 @@ public class MainEventListener implements Listener {
         this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
         this.authCheck = new AuthCheck(antiBotPlugin);
         this.packetCheck = new PacketCheck(antiBotPlugin);
+        this.accountCheck = new AccountCheck(antiBotPlugin);
+        this.similarNameCheck = new SimilarNameCheck(antiBotPlugin);
+        this.lengthCheck = new LengthCheck(antiBotPlugin);
     }
 
     @EventHandler(priority = -128)
@@ -147,13 +150,45 @@ public class MainEventListener implements Listener {
     }
 
     @EventHandler
-    public void onLoginEvent(PostLoginEvent e){
+    public void onPostLoginEvent(PostLoginEvent e){
         ProxiedPlayer player = e.getPlayer();
+        String nickname = player.getName();
         String ip = Utils.getIP(player);
+        //
+        //Packet Check
+        //
         packetCheck.registerJoin(ip);
+        //
+        //Account Check
+        //
+        if(accountCheck.needToDeny(ip, nickname)){
+            plugin.disconnect(ip, MessageManager.getAccountOnlineMessage());
+            plugin.getLogHelper().debug("Account Check Executed!");
+            return;
+        }
+        //
+        //Similar Name Check
+        //
+        if(similarNameCheck.needToDeny(ip, nickname)){
+            plugin.disconnect(ip, MessageManager.getSafeModeMessage());
+            plugin.getLogHelper().debug("Similar Name Check!");
+            return;
+        }
+        //
+        //Length Check
+        //
+        if(lengthCheck.needToDeny(ip, nickname)){
+            plugin.disconnect(ip, MessageManager.getSafeModeMessage());
+            plugin.getLogHelper().debug("Length Check Executed!");
+            return;
+        }
+        //If isn't whitelisted
         if(!antiBotManager.getWhitelistService().isWhitelisted(ip)){
+            //Add to last join
             antiBotManager.getJoinCache().addJoined(ip);
+            //Auto Whitelist Task
             plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
+            //Remove from JoinCache after 30 Seconds
             plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip),false,1000L * 30);
         }
     }
@@ -161,18 +196,31 @@ public class MainEventListener implements Listener {
     @EventHandler
     public void onPing(ProxyPingEvent e){
         String ip = Utils.getIP(e.getConnection());
+        //
+        //Auth Check Ping Action
+        //
         authCheck.onPing(e, ip);
     }
 
     @EventHandler
     public void onUnlogin(PlayerDisconnectEvent e){
         String ip = Utils.getIP(e.getPlayer());
+        //
+        //Packet Check
+        //
         packetCheck.onUnLogin(ip);
+        //
+        //Account Check
+        //
+        accountCheck.onDisconnect(ip, e.getPlayer().getName());
     }
 
     @EventHandler
     public void onSettings(SettingsChangedEvent e){
         String ip = Utils.getIP(e.getPlayer());
+        //
+        //PacketCheck
+        //
         packetCheck.registerPacket(ip);
     }
 

@@ -18,6 +18,9 @@ import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.NotificationUtils;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
@@ -188,5 +191,14 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     @Override
     public String getVersion() {
         return this.getDescription().getVersion();
+    }
+
+    @Override
+    public void disconnect(String ip, String reasonNoColor) {
+        for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()){
+            if(Utils.getIP(player).equals(ip)){
+                player.disconnect(new TextComponent(Utils.colora(reasonNoColor)));
+            }
+        }
     }
 }
