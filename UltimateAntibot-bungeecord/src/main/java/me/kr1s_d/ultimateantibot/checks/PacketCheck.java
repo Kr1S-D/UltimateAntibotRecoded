@@ -71,6 +71,7 @@ public class PacketCheck {
                 }
             });
             if(suspected.size() >= ConfigManger.getPacketCheckConfig().getTrigger()){
+                iAntiBotPlugin.getLogHelper().info("Packet Check Executed!");
                 Utils.disconnectAll(new ArrayList<>(suspected), MessageManager.getSafeModeMessage());
                 for(String ip : suspected){
                     if(ConfigManger.getPacketCheckConfig().isBlacklist()) {

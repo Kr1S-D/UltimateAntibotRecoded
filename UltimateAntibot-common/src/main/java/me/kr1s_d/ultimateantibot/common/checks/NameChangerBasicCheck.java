@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICheck;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.HashMap;
@@ -9,12 +9,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class NameChangerCheck implements ICheck {
+public class NameChangerBasicCheck implements IBasicCheck {
 
     private final IAntiBotPlugin plugin;
     private final Map<String, Set<String>> data;
 
-    public NameChangerCheck(IAntiBotPlugin plugin){
+    public NameChangerBasicCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.data = new HashMap<>();
         loadTask();
@@ -33,7 +33,7 @@ public class NameChangerCheck implements ICheck {
         if(data.containsKey(ip)){
             Set<String> nicks = data.get(ip);
             nicks.add(name);
-            return nicks.size() > ConfigManger.nameChangerLimit;
+            return nicks.size() >= ConfigManger.nameChangerLimit;
         }else{
             data.put(ip, new HashSet<>());
         }

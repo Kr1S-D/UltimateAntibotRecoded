@@ -14,10 +14,10 @@ import net.md_5.bungee.event.EventHandler;
 
 public class PingListener implements Listener {
     private IAntiBotPlugin plugin;
-    private IAntiBotManager antiBotManager;
-    private QueueService queueService;
-    private BlackListService blackListService;
-    private WhitelistService whitelistService;
+    private final IAntiBotManager antiBotManager;
+    private final QueueService queueService;
+    private final BlackListService blackListService;
+    private final WhitelistService whitelistService;
     // TODO: 03/12/2021 superping check;
 
     public PingListener(IAntiBotPlugin plugin){
@@ -33,7 +33,7 @@ public class PingListener implements Listener {
         String ip = Utils.getIP(e.getConnection());
         antiBotManager.increasePingPerSecond();
         antiBotManager.increaseTotalPings();
-        if(blackListService.isBlackListed(ip)){
+        if(!blackListService.isBlackListed(ip) && antiBotManager.isPingModeEnabled()){
             antiBotManager.increaseChecksPerSecond();
         }
         //PingMode checks

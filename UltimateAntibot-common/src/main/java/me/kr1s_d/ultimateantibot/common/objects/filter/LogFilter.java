@@ -29,6 +29,7 @@ public class LogFilter implements Filter {
                 "corrupted",
                 "has pinged",
                 "has connected",
+                "in packet",
                 "bad packet ID",
                 "bad packet",
                 "encountered exception",

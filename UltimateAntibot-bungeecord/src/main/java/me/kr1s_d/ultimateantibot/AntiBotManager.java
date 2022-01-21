@@ -16,8 +16,6 @@ import me.kr1s_d.ultimateantibot.events.custom.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
 
-import javax.print.DocFlavor;
-
 public class AntiBotManager implements IAntiBotManager {
     private final IAntiBotPlugin iAntiBotPlugin;
     private int checkPerSecond;
@@ -349,6 +347,7 @@ public class AntiBotManager implements IAntiBotManager {
                 .replace("%totalpings%", String.valueOf(totalPing))
                 .replace("%totalpackets%", String.valueOf(totalPacketBlocked))
                 .replace("%totalchecks%", String.valueOf(antiBotAttackInfo.getCheckPerSecond()))
+                .replace("%latency%", iAntiBotPlugin.getLatencyService().getLatency())
                 ;
     }
 }

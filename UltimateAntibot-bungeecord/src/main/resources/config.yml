@@ -12,6 +12,12 @@ version: 3.3
 #debug mode
 debug: false
 
+#UltimateAntibot V4 brings with it great
+#improvements, ways of adapting the antibot
+#to the performance of the machine based on
+#its performance have been created.
+detect-server-performance: true
+
 #Antibotmode has the utility of mitigating the attack, blacklisting + ip possible,
 antibotmode:
   #Duration of the anti-botmode when activated
@@ -39,10 +45,10 @@ packetmode:
   blacklist-invalid-protocol: true
 
 #Minimum online time to be whitelisted
-playtime_for_whitelist: 2 #minutes
+playtime_for_whitelist: 10 #minutes
 
 taskmanager:
-  clearcache: 15 #minutes
+  clearcache: 300 #seconds
   auth: 300 #seconds
   packet: 300 #seconds
   register: 300 #seconds
@@ -72,14 +78,16 @@ checks:
     time: 300
     #Allows users to whitelist
     #Through min-max ping
-    ping: 10-15
+    ping: 3-5
     #Min max TimerCheck
-    timer: 5-10
+    timer: 3-7
     #When the time for verification runs out,
-    #you have 1.2 second to join
-    between: 1200 #milliseconds
+    #you have 1.3 second to join
+    between: 1300 #milliseconds
     #BlackList enable condition
     percent: 95
+    #If player fail this check 15 times will be blacklisted
+    maxfails: 15
     #If a player has to ping the verification,
     #the non-verifying players will have a counter of the times they pinged the
     #server to enter!
@@ -87,8 +95,6 @@ checks:
     #On spigot will use the motd
     #Editable in messages.yml
     ping_interface: true
-    #Enable this check
-    enabled: true
   slowjoin:
     #This check will check if a player sends a certain packet,
     #which the bots do not send, to 5 bots that do not send it
@@ -139,6 +145,7 @@ checks:
       kick: true
       antibotmode: true
       enabled: true
+
 
 
 

@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.utils;
 
 import me.kr1s_d.ultimateantibot.common.helper.enums.ColorHelper;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import net.md_5.bungee.api.ChatMessageType;
@@ -11,7 +10,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class NotificationUtils {
@@ -28,7 +26,7 @@ public class NotificationUtils {
         }else {
             actionbars.add(player);
         }
-        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.toggledActionbar)));
+        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledActionbar)));
     }
 
     public static void toggleTitle(ProxiedPlayer player){
@@ -37,7 +35,7 @@ public class NotificationUtils {
         }else {
             titles.add(player);
         }
-        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.titleTitle)));
+        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledTitle)));
     }
 
     public static void toggleChat(ProxiedPlayer player){
@@ -46,7 +44,7 @@ public class NotificationUtils {
         }else {
             chat.add(player);
         }
-        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.toggledChat)));
+        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledChat)));
     }
 
     public static void sendActionbar(String str){
@@ -55,8 +53,8 @@ public class NotificationUtils {
 
     public static void sendTitle(String title, String subtitle){
         Title t = ProxyServer.getInstance().createTitle();
-        t.title(new TextComponent(title));
-        t.subTitle(new TextComponent(subtitle));
+        t.title(new TextComponent(ColorHelper.colorize(title)));
+        t.subTitle(new TextComponent(ColorHelper.colorize(subtitle)));
         titles.forEach(t::send);
     }
 
@@ -66,6 +64,9 @@ public class NotificationUtils {
 
     public static void update(IAntiBotPlugin plugin){
         plugin.scheduleRepeatingTask(() -> {
+            if(plugin.getAntiBotManager().isSomeModeOnline()){
+                sendTitle(MessageManager.titleTitle, plugin.getAntiBotManager().replaceInfo(MessageManager.titleSubtitle));
+            }
             if(plugin.getAntiBotManager().isPacketModeEnabled()){
                 sendActionbar(MessageManager.prefix + plugin.getAntiBotManager().replaceInfo(MessageManager.actionbarPackets));
                 return;
@@ -75,6 +76,6 @@ public class NotificationUtils {
             }else{
                 sendActionbar(MessageManager.prefix + plugin.getAntiBotManager().replaceInfo(MessageManager.actionbarOffline));
             }
-        }, false, 200L);
+        }, false, 100L);
     }
 }

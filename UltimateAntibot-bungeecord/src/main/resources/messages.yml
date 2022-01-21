@@ -4,7 +4,7 @@ onping: #<-- works only on bungeecord!
   normal: '&d&l◆ &f&l$1&7/&d&l$2'
   ready: '&f&l◆ &d&lVERIFIED!'
 title:
-  title: '&a%blocked% Blocked Bots'
+  title: '&a%totalbots% Blocked Bots'
   subtitle: '&6%ip%% BlackListed IP'
 commands:
   perms: '&fYou dont have &dpermission&f to do this!'
@@ -29,15 +29,17 @@ notifications:
 #%totalbots% - return totalbots
 #%totalpings% - return totalpings
 #%checks% - return checkspersecond
+#%latency% - return server latency
 actionbar:
-  offline: '&dJoin &f%bots% &5- &dPing &f%pings% &5- &dQueue &f%queue% &5- &dWhitelist &f%whitelist% &5- &dCheck &f%checks% » &d&l%type%'
-  antibot: '&dBot &f%bots%/sec &5- &dPing &f%pings%/sec &5- &dQueue &f%queue% &5- &dBlacklist &f%blacklist% &5- &dCheck &f%checks% » &a&l%type%'
-  packets: '&dPackets &f%packets%/sec &5- &dBlocked &f%totalpackets% &5- &dBlacklist &f%blacklist% » &d&l%type%'
+  offline: '&dWaiting for new attack! &5- &dLatency &f%latency%ms &5- &dWhitelist &f%whitelist% » &c&l%type%'
+  antibot: '&dBot &f%bots%/sec &5- &dPing &f%pings%/sec &5- &dQueue &f%queue% &5- &dBlacklist &f%blacklist% &5- &dLatency &f%latency%ms » &d&l%type%'
+  packets: '&dPackets &f%packets%/sec &5- &dBlocked &f%totalpackets% &5- &dLatency &f%latency%ms » &d&l%type%'
 reason:
   names: 'Too many nicks on your IP'
   joins: 'Too many joins from your IP'
   pings: 'Too many pings from your IP'
   strange: 'Strange Player'
+  vpn: 'Using VPN/PROXY'
   admin: 'An administrator blacklisted you'
 help:
   - '&5/uab &dhelp'
@@ -112,6 +114,13 @@ blacklisted:
   - ''
   - '&5Reason &7» &d$1'
   - '&5Id &7» &d$2'
+  - ''
+  - '&dDiscord &7» &d&ndiscord.myserver.com'
+  - '&d&nmc.yourserver.net'
+wait:
+  - '&fᛃ &5&LU&D&LA&5&LB &fᛃ'
+  - ''
+  - '&7You are making too many attempts! Wait 10 seconds'
   - ''
   - '&dDiscord &7» &d&ndiscord.myserver.com'
   - '&d&nmc.yourserver.net'

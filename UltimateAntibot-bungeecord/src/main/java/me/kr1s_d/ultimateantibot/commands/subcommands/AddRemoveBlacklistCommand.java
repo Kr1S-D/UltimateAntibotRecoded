@@ -25,11 +25,11 @@ public class AddRemoveBlacklistCommand implements SubCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args[1].equalsIgnoreCase("add")) {
-            iAntiBotManager.getBlackListService().blacklist(args[2], MessageManager.reasonBlacklistAdmin);
+            iAntiBotManager.getBlackListService().blacklist("/" + args[2], MessageManager.reasonBlacklistAdmin);
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandAdded(args[2], "Blacklist")));
         } else {
             if (args[1].equalsIgnoreCase("remove")) {
-                iAntiBotManager.getBlackListService().unBlacklist(args[2]);
+                iAntiBotManager.getBlackListService().unBlacklist( "/" + args[2]);
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandRemove(args[2], "Blacklist")));
             } else {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.commandWrongArgument));

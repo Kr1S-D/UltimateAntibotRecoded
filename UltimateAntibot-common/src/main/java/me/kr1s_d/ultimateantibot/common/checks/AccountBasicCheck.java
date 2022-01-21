@@ -1,24 +1,23 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICheck;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.objects.other.SlowJoinCheckConfiguration;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class AccountCheck implements ICheck {
+public class AccountBasicCheck implements IBasicCheck {
 
     private final IAntiBotPlugin plugin;
     private final Map<String, Set<String>> map;
     private final SlowJoinCheckConfiguration config;
 
-    public AccountCheck(IAntiBotPlugin plugin){
+    public AccountBasicCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.map = new HashMap<>();
         this.config = ConfigManger.getAccountCheckConfig();
@@ -39,9 +38,7 @@ public class AccountCheck implements ICheck {
                 });
             }
             if(config.isBlacklist()){
-                subs.forEach(b -> {
-                    plugin.getAntiBotManager().getBlackListService().blacklist(b, MessageManager.reasonTooManyNicks);
-                });
+                plugin.getAntiBotManager().getBlackListService().blacklist(ip, MessageManager.reasonTooManyNicks);
             }
             if(config.isEnableAntiBotMode()){
                 plugin.getAntiBotManager().enableSlowAntiBotMode();
@@ -59,7 +56,7 @@ public class AccountCheck implements ICheck {
 
     @Override
     public void loadTask() {
-
+        plugin.scheduleRepeatingTask(map::clear, false, 1000L * ConfigManger.taskManagerClearCache);
     }
 
     public void onDisconnect(String ip, String name){

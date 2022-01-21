@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.PasteBinBuilder;
@@ -11,7 +10,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

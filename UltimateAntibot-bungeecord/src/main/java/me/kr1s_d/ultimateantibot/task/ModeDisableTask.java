@@ -6,7 +6,6 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.events.custom.AttackStateEvent;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
-import me.kr1s_d.ultimateantibot.utils.Utils;
 
 public class ModeDisableTask implements Runnable {
 

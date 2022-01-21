@@ -1,9 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.service.LatencyService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
-
-import java.util.List;
 
 public interface IAntiBotPlugin {
     void scheduleDelayedTask(Runnable runnable, boolean async, long milliseconds);
@@ -24,6 +23,8 @@ public interface IAntiBotPlugin {
 
     IAntiBotManager getAntiBotManager();
 
+    LatencyService getLatencyService();
+
     LogHelper getLogHelper();
 
     Class<?> getClassInstance();
@@ -37,4 +38,6 @@ public interface IAntiBotPlugin {
     String getVersion();
 
     void disconnect(String ip, String reasonNoColor);
+
+    boolean isRunning();
 }

@@ -58,9 +58,11 @@ public class CommandManager extends Command implements TabExecutor {
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
         SubCommand subCommand = getSubCommandFromArgs(args[0]);
-        if (subCommand != null && subCommand.argsSize() == args.length && args[0].equals(subCommand.getSubCommandId())) {
+        if (subCommand != null && args[0].equals(subCommand.getSubCommandId())) {
             if (subCommand.getTabCompleter() != null) {
                 return subCommand.getTabCompleter().get(args.length - 1);
+            }else{
+                return new ArrayList<>();
             }
         }
         if (args.length == 1) {

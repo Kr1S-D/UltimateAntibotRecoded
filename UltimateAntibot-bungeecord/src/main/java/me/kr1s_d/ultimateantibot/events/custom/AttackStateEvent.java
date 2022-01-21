@@ -7,8 +7,6 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import net.md_5.bungee.api.plugin.Event;
 
-import java.lang.ref.PhantomReference;
-
 public class AttackStateEvent extends Event {
 
     private IAntiBotPlugin plugin;

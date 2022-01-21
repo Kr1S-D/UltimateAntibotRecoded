@@ -3,8 +3,11 @@ package me.kr1s_d.ultimateantibot;
 import me.kr1s_d.ultimateantibot.commands.CommandManager;
 import me.kr1s_d.ultimateantibot.commands.subcommands.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
+import me.kr1s_d.ultimateantibot.common.helper.enums.Running;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilter;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICore;
+import me.kr1s_d.ultimateantibot.common.service.LatencyService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -18,7 +21,6 @@ import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.NotificationUtils;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -32,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotPlugin {
 
+    private static UltimateAntiBotBungeeCord instance;
     private TaskScheduler scheduler;
     private IConfiguration config;
     private IConfiguration messages;
@@ -39,12 +42,16 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private IConfiguration blacklist;
     private IConfiguration database;
     private IAntiBotManager antiBotManager;
+    private LatencyService latencyService;
     private LogHelper logHelper;
     private UserDataService userDataService;
     private ICore core;
+    private boolean isRunning;
 
     @Override
     public void onEnable() {
+        instance = this;
+        this.isRunning = true;
         long a = System.currentTimeMillis();
         this.scheduler = ProxyServer.getInstance().getScheduler();
         this.config = new Config(this, "%datafolder%/config.yml");
@@ -59,6 +66,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
         logHelper.info("&fLoading &dUltimateAntiBot...");
         antiBotManager = new AntiBotManager(this);
+        latencyService = new LatencyService(this);
         core = new UltimateAntiBotCore(this);
         core.load();
         antiBotManager.getQueueService().load();
@@ -70,10 +78,12 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         NotificationUtils.update(this);
         logHelper.info("&fLoaded &dUltimateAntiBot!");
         logHelper.sendLogo();
-        logHelper.info("&dVersion: &f$1 &5| &dAuthor: &f$2 &5| &dCores: &f$3"
+        PerformanceHelper.init(Running.BUNGEECORD);
+        logHelper.info("&dVersion: &f$1 &5| &dAuthor: &f$2 &5| &dCores: &f$3 &5| &dMode: $4"
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthor())
                 .replace("$3", String.valueOf(Version.getCores()))
+                .replace("$4", String.valueOf(PerformanceHelper.getPerformanceMode()))
         );
         logHelper.info("&fThe &dabyss&f is ready to swallow all the bots!");
         CommandManager commandManager = new CommandManager(this, "uab", "", "ab");
@@ -101,6 +111,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         antiBotManager.getWhitelistService().unload();
         logHelper.info("&dThanks for choosing us!");
         long b = System.currentTimeMillis() - a;
+        this.isRunning = false;
         logHelper.info("&7Took &d" + b + "ms&7 to unload");
     }
 
@@ -162,6 +173,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
+    public LatencyService getLatencyService() {
+        return latencyService;
+    }
+
+    @Override
     public LogHelper getLogHelper() {
         return logHelper;
     }
@@ -200,5 +216,14 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
                 player.disconnect(new TextComponent(Utils.colora(reasonNoColor)));
             }
         }
+    }
+
+    @Override
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public static UltimateAntiBotBungeeCord getInstance() {
+        return instance;
     }
 }

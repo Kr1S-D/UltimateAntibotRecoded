@@ -1,8 +1,6 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
-import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.NotificationUtils;
 import me.kr1s_d.ultimateantibot.utils.Utils;
@@ -23,13 +21,17 @@ public class ToggleNotificationCommand implements SubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(args[1].equals("actionbar")){
+        if (args[1].equals("actionbar")) {
             NotificationUtils.toggleActionBar((ProxiedPlayer) sender);
-        }else {
-            if(args[1].equals("title")){
+        } else {
+            if (args[1].equals("title")) {
                 NotificationUtils.toggleTitle((ProxiedPlayer) sender);
-            }else{
-                sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.commandWrongArgument));
+            } else {
+                if (args[1].equals("chat")) {
+                    NotificationUtils.toggleChat((ProxiedPlayer) sender);
+                } else {
+                    sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.commandWrongArgument));
+                }
             }
         }
     }
@@ -47,7 +49,7 @@ public class ToggleNotificationCommand implements SubCommand {
     @Override
     public Map<Integer, List<String>> getTabCompleter() {
         Map<Integer, List<String>> map = new HashMap<>();
-        map.put(1, Arrays.asList("actionbar", "title"));
+        map.put(1, Arrays.asList("actionbar", "title", "chat"));
         return map;
     }
 

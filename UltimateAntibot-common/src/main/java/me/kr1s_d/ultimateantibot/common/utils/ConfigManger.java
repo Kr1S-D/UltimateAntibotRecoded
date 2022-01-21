@@ -6,6 +6,7 @@ import me.kr1s_d.ultimateantibot.common.objects.other.SlowJoinCheckConfiguration
 public class ConfigManger {
     public static double version;
     public static boolean isDebugModeOnline;
+    public static boolean detectServerPerformance;
     public static int antiBotModeKeep;
     public static int antiBotModeTrigger;
     public static int pingModeKeep;
@@ -32,8 +33,8 @@ public class ConfigManger {
     public static int[] authMinMaxTimer;
     public static long authBetween;
     public static int authPercent;
+    public static int authMaxFails;
     public static boolean authPingInterface;
-    public static boolean authEnabled;
     private static SlowJoinCheckConfiguration packetSlowJoinCheckConfiguration;
     private static SlowJoinCheckConfiguration similarNameCheck;
     private static SlowJoinCheckConfiguration lenghtCheck;
@@ -42,6 +43,7 @@ public class ConfigManger {
     public static void init(IConfiguration cfg){
         version = cfg.getDouble("version");
         isDebugModeOnline = cfg.getBoolean("debug");
+        detectServerPerformance = cfg.getBoolean("detect-server-performance");
         antiBotModeKeep = cfg.getInt("antibotmode.keep");
         antiBotModeTrigger = cfg.getInt("antibotmode.trigger");
         pingModeKeep = cfg.getInt("pingmode.keep");
@@ -68,8 +70,8 @@ public class ConfigManger {
         authMinMaxTimer = Parser.toIntArray(Parser.toArray(cfg.getString("checks.auth.ping"), "-"));
         authBetween = cfg.getLong("checks.auth.between");
         authPercent = cfg.getInt("checks.auth.percent");
+        authMaxFails = cfg.getInt("checks.auth.maxfails");
         authPingInterface = cfg.getBoolean("checks.auth.ping_interface");
-        authEnabled = cfg.getBoolean("checks.auth.enabled");
         packetSlowJoinCheckConfiguration = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.packet");
         similarNameCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.similar");
         lenghtCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.lenght");

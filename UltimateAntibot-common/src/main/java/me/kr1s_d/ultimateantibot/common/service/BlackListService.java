@@ -5,7 +5,9 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
 import me.kr1s_d.ultimateantibot.common.objects.other.BlackListProfile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BlackListService implements IService {
@@ -47,13 +49,14 @@ public class BlackListService implements IService {
             String reason = blacklistConfig.getString("data." + a + ".reason");
             String id = blacklistConfig.getString("data." + a + ".id");
             String name = blacklistConfig.getString("data." + a + ".name");
-            blacklist.put(ip, new BlackListProfile(reason, id, name));
+            blacklist.put(ip, new BlackListProfile(ip, reason, id, name));
         }
         logHelper.info("&f" + blacklist.size() + " &dIP added to blacklist!");
     }
 
     @Override
     public void unload() {
+        blacklistConfig.set("data", null);
         for(Map.Entry<String, BlackListProfile> map : blacklist.entrySet()){
             String ip = toFileString(map.getKey());
             String reason = map.getValue().getReason();
@@ -64,6 +67,13 @@ public class BlackListService implements IService {
         }
         blacklistConfig.save();
     }
+
+    public List<String> getBlackListedIPS(){
+        List<String> a = new ArrayList<>();
+        new HashMap<>(blacklist).forEach((key, value) -> a.add(key));
+        return a;
+    }
+
 
     public int size(){
         return blacklist.size();
@@ -79,7 +89,7 @@ public class BlackListService implements IService {
         if(blacklist.containsKey(ip)){
             return;
         }
-        blacklist.put(ip, new BlackListProfile(reason, name));
+        blacklist.put(ip, new BlackListProfile(ip, reason, name));
     }
 
     /**
@@ -91,7 +101,7 @@ public class BlackListService implements IService {
         if(blacklist.containsKey(ip)){
             return;
         }
-        blacklist.put(ip, new BlackListProfile(reason));
+        blacklist.put(ip, new BlackListProfile(ip, reason));
     }
 
     public void clear(){

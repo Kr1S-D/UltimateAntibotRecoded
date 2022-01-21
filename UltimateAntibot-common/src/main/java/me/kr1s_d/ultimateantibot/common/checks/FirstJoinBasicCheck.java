@@ -1,17 +1,17 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICheck;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.Map;
 
-public class FirstJoinCheck implements ICheck {
+public class FirstJoinBasicCheck implements IBasicCheck {
 
     private final Map<String, Boolean> data;
 
-    public FirstJoinCheck(IAntiBotPlugin plugin){
+    public FirstJoinBasicCheck(IAntiBotPlugin plugin){
         UserDataService userDataService = plugin.getUserDataService();
         this.data = userDataService.getFirstJoinMap();
         if(isEnabled()){

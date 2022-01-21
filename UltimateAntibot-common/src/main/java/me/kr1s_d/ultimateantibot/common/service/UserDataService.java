@@ -4,7 +4,6 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
-import me.kr1s_d.ultimateantibot.common.objects.user.PlayerProfile;
 
 import java.util.ArrayList;
 import java.util.HashMap;

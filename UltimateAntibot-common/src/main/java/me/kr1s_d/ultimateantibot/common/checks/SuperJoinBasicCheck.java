@@ -1,19 +1,18 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICheck;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICore;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SuperJoinCheck implements ICheck {
+public class SuperJoinBasicCheck implements IBasicCheck {
 
     private final IAntiBotPlugin plugin;
     private final Map<String, Integer> data;
 
-    public SuperJoinCheck(IAntiBotPlugin plugin){
+    public SuperJoinBasicCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.data = new HashMap<>();
         loadTask();

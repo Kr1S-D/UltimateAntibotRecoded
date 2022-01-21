@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.events;
 
-import me.kr1s_d.ultimateantibot.checks.AuthCheck;
+import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
+import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
 import me.kr1s_d.ultimateantibot.common.checks.*;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
@@ -19,20 +20,23 @@ import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.UUID;
+
 public class MainEventListener implements Listener {
     private final IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
     private final QueueService queueService;
     private final WhitelistService whitelistService;
     private final BlackListService blackListService;
-    private final FirstJoinCheck firstJoinCheck;
-    private final NameChangerCheck nameChangerCheck;
-    private final SuperJoinCheck superJoinCheck;
-    private final AuthCheck authCheck;
+    private final FirstJoinBasicCheck firstJoinCheck;
+    private final NameChangerBasicCheck nameChangerCheck;
+    private final SuperJoinBasicCheck superJoinCheck;
+    private final AuthCheckReloaded authCheck;
     private final PacketCheck packetCheck;
-    private final AccountCheck accountCheck;
-    private final SimilarNameCheck similarNameCheck;
-    private final LengthCheck lengthCheck;
+    private final AccountBasicCheck accountCheck;
+    private final SimilarNameBasicCheck similarNameCheck;
+    private final LengthBasicCheck lengthCheck;
+    private int blacklistedPercentage;
 
     public MainEventListener(IAntiBotPlugin antiBotPlugin){
         this.plugin = antiBotPlugin;
@@ -40,21 +44,21 @@ public class MainEventListener implements Listener {
         this.queueService = antiBotManager.getQueueService();
         this.whitelistService = antiBotManager.getWhitelistService();
         this.blackListService = antiBotManager.getBlackListService();
-        this.firstJoinCheck = new FirstJoinCheck(antiBotPlugin);
-        this.nameChangerCheck = new NameChangerCheck(antiBotPlugin);
-        this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
-        this.authCheck = new AuthCheck(antiBotPlugin);
+        this.firstJoinCheck = new FirstJoinBasicCheck(antiBotPlugin);
+        this.nameChangerCheck = new NameChangerBasicCheck(antiBotPlugin);
+        this.superJoinCheck = new SuperJoinBasicCheck(antiBotPlugin);
+        this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.packetCheck = new PacketCheck(antiBotPlugin);
-        this.accountCheck = new AccountCheck(antiBotPlugin);
-        this.similarNameCheck = new SimilarNameCheck(antiBotPlugin);
-        this.lengthCheck = new LengthCheck(antiBotPlugin);
+        this.accountCheck = new AccountBasicCheck(antiBotPlugin);
+        this.similarNameCheck = new SimilarNameBasicCheck(antiBotPlugin);
+        this.lengthCheck = new LengthBasicCheck(antiBotPlugin);
+        this.blacklistedPercentage = 0;
     }
 
     @EventHandler(priority = -128)
     public void onPreLoginEvent(PreLoginEvent e){
         String ip = Utils.getIP(e.getConnection());
         String name = e.getConnection().getName();
-        int blacklistedPercentage = 0;
         int totals = blackListService.size() + queueService.size();
         if(blackListService.size() != 0 && totals != 0) {
             blacklistedPercentage = Math.round((float) blackListService.size() / totals * 100);
@@ -65,6 +69,7 @@ public class MainEventListener implements Listener {
         if(whitelistService.isWhitelisted(ip) || blackListService.isBlackListed(ip)){
             queueService.removeQueue(ip);
         }
+
         if(!whitelistService.isWhitelisted(ip)){
             antiBotManager.increaseJoinPerSecond();
             if(!blackListService.isBlackListed(ip)){
@@ -77,13 +82,12 @@ public class MainEventListener implements Listener {
         //
         //BlackList & Whitelist Checks
         //
-        if(whitelistService.isWhitelisted(ip)){
-            return;
-        }
         if(blackListService.isBlackListed(ip)){
-            whitelistService.unWhitelist(ip);
             e.setCancelReason(blacklistMSG(ip));
             e.setCancelled(true);
+            return;
+        }
+        if(whitelistService.isWhitelisted(ip)){
             return;
         }
         //
@@ -134,8 +138,8 @@ public class MainEventListener implements Listener {
         //
         //Auth Check
         //
-        if(blacklistedPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled() && ConfigManger.authEnabled){
-            authCheck.checkForJoin(e, ip);
+        if(blacklistedPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()){
+            authCheck.onJoin(e, ip);
             return;
         }
         //
@@ -199,7 +203,9 @@ public class MainEventListener implements Listener {
         //
         //Auth Check Ping Action
         //
-        authCheck.onPing(e, ip);
+        if(blacklistedPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()) {
+            authCheck.onPing(e, ip);
+        }
     }
 
     @EventHandler
