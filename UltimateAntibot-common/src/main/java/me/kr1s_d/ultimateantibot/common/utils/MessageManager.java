@@ -32,13 +32,18 @@ public class MessageManager {
     public static String reasonTooManyJoins;
     public static String reasonTooManyPings;
     public static String reasonStrangePlayer;
+    public static String reasonCheck;
+    public static String reasonVPN;
+    public static String reasonAdmin;
     public static String toggledActionbar;
     public static String toggledTitle;
-    public static String toggledChat;
+    public static String toggledBossBar;
     public static String commandWrongArgument;
     public static String reasonBlacklistAdmin;
     public static String commandNoBlacklist;
     public static List<String> blacklistProfileString;
+    public static String attackAnalyzerIncrease;
+    public static String attackAnalyzerDecrease;
 
     public static void init(IConfiguration messages){
         version = messages.getDouble("version");
@@ -67,13 +72,18 @@ public class MessageManager {
         reasonTooManyJoins = messages.getString("reason.joins");
         reasonTooManyPings = messages.getString("reason.pings");
         reasonStrangePlayer = messages.getString("reason.strange");
+        reasonCheck = messages.getString("reason.check");
+        reasonVPN = messages.getString("reason.vpn");
+        reasonAdmin = messages.getString("reason.admin");
         toggledActionbar = messages.getString("notifications.action");
         toggledTitle = messages.getString("notifications.title");
-        toggledChat = messages.getString("notifications.chat");
+        toggledBossBar = messages.getString("notifications.bossbar");
         commandWrongArgument = messages.getString("commands.wrong-args");
         reasonBlacklistAdmin = messages.getString("reason.admin");
         commandNoBlacklist = messages.getString("commands.no-blacklist");
         blacklistProfileString = messages.getStringList("blacklist_info");
+        attackAnalyzerIncrease = messages.getString("analyzer.increase");
+        attackAnalyzerDecrease = messages.getString("analyzer.decrease");
     }
 
     public static String getCommandNoPerms() {

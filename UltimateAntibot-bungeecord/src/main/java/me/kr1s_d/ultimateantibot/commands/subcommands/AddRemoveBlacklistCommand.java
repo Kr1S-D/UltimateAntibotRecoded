@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -25,7 +26,7 @@ public class AddRemoveBlacklistCommand implements SubCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args[1].equalsIgnoreCase("add")) {
-            iAntiBotManager.getBlackListService().blacklist("/" + args[2], MessageManager.reasonBlacklistAdmin);
+            iAntiBotManager.getBlackListService().blacklist("/" + args[2], BlackListReason.ADMIN);
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandAdded(args[2], "Blacklist")));
         } else {
             if (args[1].equalsIgnoreCase("remove")) {

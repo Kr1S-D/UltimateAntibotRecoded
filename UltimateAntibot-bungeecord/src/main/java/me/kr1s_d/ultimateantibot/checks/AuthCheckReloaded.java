@@ -42,6 +42,7 @@ public class AuthCheckReloaded {
         this.failure = new HashMap<>();
         this.taskScheduler = ProxyServer.getInstance().getScheduler();
         this.runningTasks = new HashMap<>();
+        plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
     }
 
 

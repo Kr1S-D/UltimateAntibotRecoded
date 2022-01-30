@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
@@ -23,6 +24,9 @@ public class SimilarNameBasicCheck implements IBasicCheck {
         this.suspects = new ArrayList<>();
         this.checks = 0;
         loadTask();
+        if(isEnabled()){
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
+        }
     }
 
     @Override
@@ -32,16 +36,23 @@ public class SimilarNameBasicCheck implements IBasicCheck {
             add(ip, name);
             return false;
         }
+        //if already contains remove dont check
+        if(joins.contains(name)){
+            return false;
+        }
         int similar = countChars(name);
         if(similar >= ConfigManger.getSimilarNameCheckConfig().getCondition()){
             suspects.add(ip);
         }else{
             checks++;
         }
-        if(checks > 7){
+        //why this?
+        if(checks > 10){
             joins.clear();
         }
+        //Register default ip
         add(ip, name);
+        //blacklist actions
         if(suspects.size() >= ConfigManger.getSimilarNameCheckConfig().getTrigger()){
             if (ConfigManger.getSimilarNameCheckConfig().isKick()) {
                 suspects.forEach(a -> {
@@ -49,7 +60,7 @@ public class SimilarNameBasicCheck implements IBasicCheck {
                 });
             }
             if(ConfigManger.getSimilarNameCheckConfig().isBlacklist()){
-                antiBotManager.getBlackListService().blacklist(ip, MessageManager.reasonStrangePlayer, name);
+                antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
             }
             if(ConfigManger.getSimilarNameCheckConfig().isEnableAntiBotMode()){
                 antiBotManager.enableSlowAntiBotMode();
@@ -74,6 +85,7 @@ public class SimilarNameBasicCheck implements IBasicCheck {
     }
 
     private void add(String ip, String name){
+        //add the player in joinlist removing the last
         List<String> lastNicks = joins;
         if(lastNicks.size() >= 3){
             lastNicks.remove(0);
@@ -84,13 +96,16 @@ public class SimilarNameBasicCheck implements IBasicCheck {
     }
 
     private int countChars(String toCount){
+        //a charmap counter
         Map<String, Integer> map = new HashMap<>();
+        //value to increase
         int a = 0;
         for(String s : joins){
             map.put(s, a);
             a++;
         }
         int[] theI = new int[3];
+        //count chars
         for(Map.Entry<String, Integer> map1 : map.entrySet()){
             String str = map1.getKey();
             int checkLength = str.length();

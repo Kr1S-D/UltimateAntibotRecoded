@@ -16,7 +16,9 @@ public class SuperJoinBasicCheck implements IBasicCheck {
         this.plugin = plugin;
         this.data = new HashMap<>();
         loadTask();
-        if(isEnabled()) plugin.getLogHelper().debug("SuperJoinCheck initialized!");;
+        if(isEnabled()){
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
+        }
     }
 
     @Override

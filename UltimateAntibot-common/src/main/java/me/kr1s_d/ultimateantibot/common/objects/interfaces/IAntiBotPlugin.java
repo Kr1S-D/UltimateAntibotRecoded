@@ -1,7 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.service.LatencyService;
+import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
+import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 
 public interface IAntiBotPlugin {
@@ -23,13 +24,17 @@ public interface IAntiBotPlugin {
 
     IAntiBotManager getAntiBotManager();
 
-    LatencyService getLatencyService();
+    LatencyThread getLatencyThread();
+
+    AnimationThread getAnimationThread();
 
     LogHelper getLogHelper();
 
     Class<?> getClassInstance();
 
     UserDataService getUserDataService();
+
+    INotificator getNotificator();
 
     ICore getCore();
 

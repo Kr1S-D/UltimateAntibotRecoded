@@ -6,27 +6,26 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.enums.Running;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilter;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.ICore;
-import me.kr1s_d.ultimateantibot.common.service.LatencyService;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
+import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
+import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
+import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.Version;
 import me.kr1s_d.ultimateantibot.core.UltimateAntiBotCore;
+import me.kr1s_d.ultimateantibot.events.CustomEventListener;
 import me.kr1s_d.ultimateantibot.events.MainEventListener;
 import me.kr1s_d.ultimateantibot.events.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
-import me.kr1s_d.ultimateantibot.utils.NotificationUtils;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +41,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private IConfiguration blacklist;
     private IConfiguration database;
     private IAntiBotManager antiBotManager;
-    private LatencyService latencyService;
+    private LatencyThread latencyThread;
+    private AnimationThread animationThread;
     private LogHelper logHelper;
     private UserDataService userDataService;
+    private Notificator notificator;
     private ICore core;
     private boolean isRunning;
 
@@ -66,7 +67,8 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
         logHelper.info("&fLoading &dUltimateAntiBot...");
         antiBotManager = new AntiBotManager(this);
-        latencyService = new LatencyService(this);
+        latencyThread = new LatencyThread(this);
+        animationThread = new AnimationThread(this);
         core = new UltimateAntiBotCore(this);
         core.load();
         antiBotManager.getQueueService().load();
@@ -75,7 +77,9 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         userDataService = new UserDataService(database, this);
         userDataService.load();
         ProxyServer.getInstance().getLogger().setFilter(new LogFilter(this));
-        NotificationUtils.update(this);
+        notificator = new Notificator();
+        notificator.init(this);
+        new AttackAnalyzerThread(this);
         logHelper.info("&fLoaded &dUltimateAntiBot!");
         logHelper.sendLogo();
         PerformanceHelper.init(Running.BUNGEECORD);
@@ -98,6 +102,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new CustomEventListener());
         long b = System.currentTimeMillis() - a;
         logHelper.info("&7Took &d" + b + "ms&7 to load");
     }
@@ -173,8 +178,13 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
-    public LatencyService getLatencyService() {
-        return latencyService;
+    public LatencyThread getLatencyThread() {
+        return latencyThread;
+    }
+
+    @Override
+    public AnimationThread getAnimationThread() {
+        return animationThread;
     }
 
     @Override
@@ -190,6 +200,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     @Override
     public UserDataService getUserDataService() {
         return userDataService;
+    }
+
+    @Override
+    public INotificator getNotificator() {
+        return notificator;
     }
 
     @Override

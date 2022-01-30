@@ -26,8 +26,8 @@ public class StatsCommand implements SubCommand {
     public void execute(CommandSender sender, String[] args) {
         sender.sendMessage("§8§l§n___________________________________________");
         sender.sendMessage("");
-        sender.sendMessage("§f§lRunning §6§lRuby§e§lEnchant§f§lManager §r§7- V" + iAntiBotPlugin.getVersion());
-        MessageManager.statsMessage.forEach(a -> sender.sendMessage(Utils.colora(a)));
+        sender.sendMessage("§f§lRunning §5§lUltimate§d§lAnti§f§lBot §r§7- V" + iAntiBotPlugin.getVersion());
+        MessageManager.statsMessage.forEach(a -> sender.sendMessage(Utils.colora(iAntiBotPlugin.getAntiBotManager().replaceInfo(a))));
         sender.sendMessage("§8§l§n___________________________________________");
     }
 

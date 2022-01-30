@@ -18,7 +18,9 @@ public class NameChangerBasicCheck implements IBasicCheck {
         this.plugin = plugin;
         this.data = new HashMap<>();
         loadTask();
-        if(isEnabled()) plugin.getLogHelper().debug("NameChangerCheck initialized!");;
+        if(isEnabled()){
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
+        }
     }
 
     /**

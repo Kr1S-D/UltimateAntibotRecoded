@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.objects.other.SlowJoinCheckConfiguration;
@@ -22,6 +23,9 @@ public class AccountBasicCheck implements IBasicCheck {
         this.map = new HashMap<>();
         this.config = ConfigManger.getAccountCheckConfig();
         loadTask();
+        if(isEnabled()){
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
+        }
     }
 
     @Override
@@ -38,7 +42,7 @@ public class AccountBasicCheck implements IBasicCheck {
                 });
             }
             if(config.isBlacklist()){
-                plugin.getAntiBotManager().getBlackListService().blacklist(ip, MessageManager.reasonTooManyNicks);
+                plugin.getAntiBotManager().getBlackListService().blacklist(ip, BlackListReason.TOO_MUCH_NAMES);
             }
             if(config.isEnableAntiBotMode()){
                 plugin.getAntiBotManager().enableSlowAntiBotMode();

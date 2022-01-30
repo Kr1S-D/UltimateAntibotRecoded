@@ -5,15 +5,16 @@ import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
+import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 
 public interface IAntiBotManager {
-    int getChecksPerSecond();
+    long getChecksPerSecond();
 
-    int getJoinPerSecond();
+    long getJoinPerSecond();
 
-    int getPingPerSecond();
+    long getPingPerSecond();
 
-    int getPacketPerSecond();
+    long getPacketPerSecond();
 
     long getTotalPing();
 
@@ -30,14 +31,6 @@ public interface IAntiBotManager {
     ModeType getModeType();
 
     void setModeType(ModeType type);
-
-    void setCheckPerSecond(int value);
-
-    void setJoinPerSecond(int value);
-
-    void setPingPerSecond(int value);
-
-    void setPacketPerSecond(int value);
 
     void disableAll();
 
@@ -76,8 +69,6 @@ public interface IAntiBotManager {
     void enablePingMode();
 
     void updateTasks();
-
-    IAntiBotAttackInfo getAntiBotAttackInfo();
 
     boolean canDisable(ModeType modeType);
 

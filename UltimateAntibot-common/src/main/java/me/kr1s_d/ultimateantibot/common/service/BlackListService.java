@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
 import me.kr1s_d.ultimateantibot.common.objects.other.BlackListProfile;
@@ -85,11 +86,11 @@ public class BlackListService implements IService {
      * @param reason The Reason for BlackList
      * @param name The name of the player
      */
-    public void blacklist(String ip, String reason, String name){
+    public void blacklist(String ip, BlackListReason reason, String name){
         if(blacklist.containsKey(ip)){
             return;
         }
-        blacklist.put(ip, new BlackListProfile(ip, reason, name));
+        blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
     }
 
     /**
@@ -97,11 +98,11 @@ public class BlackListService implements IService {
      * @param ip The IP to BlackList
      * @param reason The Reason for BlackList
      */
-    public void blacklist(String ip, String reason){
+    public void blacklist(String ip, BlackListReason reason){
         if(blacklist.containsKey(ip)){
             return;
         }
-        blacklist.put(ip, new BlackListProfile(ip, reason));
+        blacklist.put(ip, new BlackListProfile(ip, reason.getReason()));
     }
 
     public void clear(){

@@ -15,7 +15,7 @@ public class FirstJoinBasicCheck implements IBasicCheck {
         UserDataService userDataService = plugin.getUserDataService();
         this.data = userDataService.getFirstJoinMap();
         if(isEnabled()){
-            plugin.getLogHelper().debug("FirstJoinCheck initialized!");
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
     }
 

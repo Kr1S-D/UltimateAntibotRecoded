@@ -3,9 +3,6 @@ prefix: '&5&LU&D&LA&5&LB&r &7» '
 onping: #<-- works only on bungeecord!
   normal: '&d&l◆ &f&l$1&7/&d&l$2'
   ready: '&f&l◆ &d&lVERIFIED!'
-title:
-  title: '&a%totalbots% Blocked Bots'
-  subtitle: '&6%ip%% BlackListed IP'
 commands:
   perms: '&fYou dont have &dpermission&f to do this!'
   cleared: '&d$1&f has been &dcleared! '
@@ -13,27 +10,45 @@ commands:
   removed: '&d$1&f has been removed from the &d$2'
   wrong-args: '&fInvalid argument! Use &d/uab help!'
   no-blacklist: '&cThis ID does not appear to be associated with anything!'
+analyzer:
+  increase: "&a↑ &7- &f%old% &d➜ &f%new% &7- &d%perc%%"
+  decrease: "&c↓ &7- &f%old% &d➜ &f%new% &7- &d%perc%%"
 notifications:
   action: '&aToggled ActionBar notifications!'
   title: '&aToggled Title notifications!'
-  chat: '&aToggled Chat notifications'
-#actionbar allowed values
+  bossbar: '&aToggled BossBar notifications'
+#actionbar/title/stats allowed values
 #%bots% - return botpersecond
 #%pings% - return pingpersecond
 #%queue% - return queue
 #%whitelist% - return whitelist size
 #%blacklist% - return blacklist size
 #%type% - return current attacktype
+#%checks% - return checkspersecond
+#%latency% - return server latency
 #%packets% - return packetspersecond
 #%totalpackets% - return totalpackets
 #%totalbots% - return totalbots
 #%totalpings% - return totalpings
-#%checks% - return checkspersecond
-#%latency% - return server latency
+#%prefix% - return prefix
+#%ippercent% - return blacklist percent
 actionbar:
-  offline: '&dWaiting for new attack! &5- &dLatency &f%latency%ms &5- &dWhitelist &f%whitelist% » &c&l%type%'
-  antibot: '&dBot &f%bots%/sec &5- &dPing &f%pings%/sec &5- &dQueue &f%queue% &5- &dBlacklist &f%blacklist% &5- &dLatency &f%latency%ms » &d&l%type%'
-  packets: '&dPackets &f%packets%/sec &5- &dBlocked &f%totalpackets% &5- &dLatency &f%latency%ms » &d&l%type%'
+  offline: '%prefix%&dJoin/Ping &f%bots%&7/&f%pings% &5- &dLatency &f%latency%ms &5- &dWhitelist &f%whitelist% » &c&l%type%'
+  antibot: '%prefix%&dBot/Ping &f%bots%&7/&f%pings% &5- &dBlacklist/Queue &f%blacklist%&7/&f%queue% &5- &dLatency &f%latency%ms » &d&l%type%'
+  packets: '%prefix%&dPackets &f%packets%/sec &5- &dBlocked &f%totalpackets% &5- &dLatency &f%latency%ms » &d&l%type%'
+stats:
+  - '&5Service Stats'
+  - '&dQueue &f%queue%'
+  - '&dWhitelist &f%whitelist%'
+  - '&dBlacklist &f%blacklist%'
+  - ''
+  - '&5AntibotManager stats'
+  - '&5Bot &dBlocked &f%totalbots%'
+  - '&5Total &dPing &f%totalpings%'
+  - '&5Total &DPackets &f&%totalpackets%'
+title:
+  title: '&f%totalbots% &dBlocked Bots'
+  subtitle: '&f%ippercent%% &dBlackListed IP'
 reason:
   names: 'Too many nicks on your IP'
   joins: 'Too many joins from your IP'
@@ -41,6 +56,7 @@ reason:
   strange: 'Strange Player'
   vpn: 'Using VPN/PROXY'
   admin: 'An administrator blacklisted you'
+  check: 'Too many check fails!'
 help:
   - '&5/uab &dhelp'
   - '&5/uab &dtoggle &factionbar/title'
@@ -50,15 +66,6 @@ help:
   - '&5/uab &dblacklist &fadd/remove &f<ip>'
   - '&5/uab &dcheck &f<id>'
   - '&5/uab &ddump'
-stats:
-  - '&5Current &dBot &f$1'
-  - '&5Current &dPing &f$2'
-  - '&5Current &dQueue &f$3'
-  - '&5Checking &dList &f$4'
-  - '&5Current &dWhitelist &f$6'
-  - '&5Current &dBlacklist &f$7'
-  - '&5Bot &dBlocked &f$8'
-  - '&5Total &dPing &f$9'
 antibotmode:
   - '&fᛃ &5&LU&D&LA&5&LB &fᛃ'
   - ''

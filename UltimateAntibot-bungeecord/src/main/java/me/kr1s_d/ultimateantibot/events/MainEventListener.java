@@ -4,6 +4,7 @@ import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
 import me.kr1s_d.ultimateantibot.common.checks.*;
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
@@ -55,8 +56,9 @@ public class MainEventListener implements Listener {
         this.blacklistedPercentage = 0;
     }
 
-    @EventHandler(priority = -128)
+    @EventHandler
     public void onPreLoginEvent(PreLoginEvent e){
+       // e.registerIntent(UltimateAntiBotBungeeCord.getInstance());
         String ip = Utils.getIP(e.getConnection());
         String name = e.getConnection().getName();
         int totals = blackListService.size() + queueService.size();
@@ -112,7 +114,7 @@ public class MainEventListener implements Listener {
             // NameChangerCheck
             //
             if(nameChangerCheck.needToDeny(ip, name)){
-                blackListService.blacklist(ip, MessageManager.reasonTooManyNicks, name);
+                blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
                 e.setCancelReason(blacklistMSG(ip));
                 e.setCancelled(true);
                 return;
@@ -121,7 +123,7 @@ public class MainEventListener implements Listener {
             // SuperJoinCheck
             //
             if(superJoinCheck.needToDeny(ip, name)){
-                blackListService.blacklist(ip, MessageManager.reasonTooManyJoins, name);
+                blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
                 e.setCancelReason(blacklistMSG(ip));
                 e.setCancelled(true);
                 return;

@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
@@ -26,6 +27,9 @@ public class LengthBasicCheck implements IBasicCheck {
         this.suspects = new ArrayList<>();
         this.config = ConfigManger.getLenghtCheckConfig();
         loadTask();
+        if(isEnabled()){
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
+        }
     }
 
     @Override
@@ -49,7 +53,7 @@ public class LengthBasicCheck implements IBasicCheck {
                 });
             }
             if(config.isBlacklist()){
-                antiBotManager.getBlackListService().blacklist(ip, MessageManager.reasonStrangePlayer, name);
+                antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
             }
             if(config.isEnableAntiBotMode()){
                     antiBotManager.enableSlowAntiBotMode();

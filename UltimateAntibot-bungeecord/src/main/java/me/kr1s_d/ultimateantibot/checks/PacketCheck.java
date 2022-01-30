@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.checks;
 
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
@@ -30,6 +31,9 @@ public class PacketCheck {
         this.blacklist = plugin.getAntiBotManager().getBlackListService();
         this.whitelistService = plugin.getAntiBotManager().getWhitelistService();
         loadTask();
+        if(isEnabled()){
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
+        }
     }
 
     public void onUnLogin(String ip){
@@ -75,7 +79,7 @@ public class PacketCheck {
                 Utils.disconnectAll(new ArrayList<>(suspected), MessageManager.getSafeModeMessage());
                 for(String ip : suspected){
                     if(ConfigManger.getPacketCheckConfig().isBlacklist()) {
-                        blacklist.blacklist(ip, MessageManager.reasonStrangePlayer);
+                        blacklist.blacklist(ip, BlackListReason.STRANGE_PLAYER);
                     }
                 }
                 if(ConfigManger.getPacketCheckConfig().isEnableAntiBotMode()) {
@@ -84,6 +88,10 @@ public class PacketCheck {
                 suspected.clear();
             }
         }, false, 1000L);
+    }
+
+    private boolean isEnabled(){
+        return ConfigManger.getPacketCheckConfig().isEnabled();
     }
 
     private void loadTask(){
