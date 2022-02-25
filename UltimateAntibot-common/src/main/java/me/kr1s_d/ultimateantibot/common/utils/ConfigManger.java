@@ -1,14 +1,18 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
+import me.kr1s_d.ultimateantibot.common.objects.base.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.other.SlowJoinCheckConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.base.SlowJoinCheckConfiguration;
 
 public class ConfigManger {
     public static double version;
     public static boolean isDebugModeOnline;
     public static boolean detectServerPerformance;
+    public static boolean enableLatencyThread;
+    public static boolean enableBossBarAutomaticNotification;
     public static int antiBotModeKeep;
     public static int antiBotModeTrigger;
+    public static int slowAntiBotModeTrigger;
     public static int pingModeKeep;
     public static int pingModeTrigger;
     public static boolean pingModeSendInfo;
@@ -39,13 +43,17 @@ public class ConfigManger {
     private static SlowJoinCheckConfiguration similarNameCheck;
     private static SlowJoinCheckConfiguration lenghtCheck;
     private static SlowJoinCheckConfiguration accountCheck;
+    private static ProxyCheckConfig proxyCheckConfig;
 
     public static void init(IConfiguration cfg){
         version = cfg.getDouble("version");
         isDebugModeOnline = cfg.getBoolean("debug");
+        enableLatencyThread = cfg.getBoolean("enable-latency-thread");
+        enableBossBarAutomaticNotification = cfg.getBoolean("enable-bossbar-automatic-notification");
         detectServerPerformance = cfg.getBoolean("detect-server-performance");
         antiBotModeKeep = cfg.getInt("antibotmode.keep");
         antiBotModeTrigger = cfg.getInt("antibotmode.trigger");
+        slowAntiBotModeTrigger = cfg.getInt("antibotmode.keep-slow");
         pingModeKeep = cfg.getInt("pingmode.keep");
         pingModeTrigger = cfg.getInt("pingmode.trigger");
         pingModeSendInfo = cfg.getBoolean("pingmode.send_info");
@@ -76,6 +84,7 @@ public class ConfigManger {
         similarNameCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.similar");
         lenghtCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.lenght");
         accountCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.account");
+        proxyCheckConfig = new ProxyCheckConfig(cfg);
     }
 
     public static SlowJoinCheckConfiguration getAccountCheckConfig() {
@@ -92,5 +101,9 @@ public class ConfigManger {
 
     public static SlowJoinCheckConfiguration getPacketCheckConfig() {
         return packetSlowJoinCheckConfiguration;
+    }
+
+    public static ProxyCheckConfig getProxyCheckConfig() {
+        return proxyCheckConfig;
     }
 }

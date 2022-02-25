@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.other;
+package me.kr1s_d.ultimateantibot.common.objects.base;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 

@@ -39,7 +39,8 @@ public class LogFilter implements Filter {
                 "Took too long to log in",
                 "disconnected with",
                 "read time out",
-                "Connect reset by peer"
+                "Connect reset by peer",
+                "overflow in packet"
         ));
         blocked.addAll(antiBotPlugin.getConfig().getStringList("filter"));
     }

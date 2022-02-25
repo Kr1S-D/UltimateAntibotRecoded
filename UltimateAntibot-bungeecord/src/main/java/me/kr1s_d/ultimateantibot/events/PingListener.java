@@ -32,7 +32,6 @@ public class PingListener implements Listener {
     public void onPing(ProxyPingEvent e){
         String ip = Utils.getIP(e.getConnection());
         antiBotManager.increasePingPerSecond();
-        antiBotManager.increaseTotalPings();
         if(!blackListService.isBlackListed(ip) && antiBotManager.isPingModeEnabled()){
             antiBotManager.increaseChecksPerSecond();
         }

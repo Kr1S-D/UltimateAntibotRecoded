@@ -28,7 +28,11 @@ public class ToggleNotificationCommand implements SubCommand {
                 Notificator.toggleTitle((ProxiedPlayer) sender);
             } else {
                 if (args[1].equals("bossbar")) {
-                    Notificator.toggleBossBar((ProxiedPlayer) sender);
+                    if(((ProxiedPlayer) sender).getPendingConnection().getVersion() > 106){
+                        Notificator.toggleBossBar((ProxiedPlayer) sender);
+                    }else {
+                        sender.sendMessage(Utils.colora(MessageManager.prefix + "&dBossBar &fnotifications are not available in &c1.8.x!"));
+                    }
                 } else {
                     sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.commandWrongArgument));
                 }

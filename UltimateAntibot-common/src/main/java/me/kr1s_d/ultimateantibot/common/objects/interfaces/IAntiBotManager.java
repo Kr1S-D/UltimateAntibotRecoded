@@ -16,12 +16,6 @@ public interface IAntiBotManager {
 
     long getPacketPerSecond();
 
-    long getTotalPing();
-
-    long getTotalBotBlocked();
-
-    long getTotalPackedBlocked();
-
     BlackListService getBlackListService();
 
     QueueService getQueueService();
@@ -45,12 +39,6 @@ public interface IAntiBotManager {
     void increasePingPerSecond();
 
     void increasePacketPerSecond();
-
-    void increaseTotalBots();
-
-    void increaseTotalPings();
-
-    void increaseTotalPackets();
 
     boolean isAntiBotModeEnabled();
 

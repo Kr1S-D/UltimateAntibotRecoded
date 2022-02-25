@@ -3,13 +3,13 @@ package me.kr1s_d.ultimateantibot.common.helper;
 import me.kr1s_d.ultimateantibot.common.helper.enums.PerformanceMode;
 import me.kr1s_d.ultimateantibot.common.helper.enums.Running;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
-import me.kr1s_d.ultimateantibot.common.utils.GeneratedDefaultConfig;
+import me.kr1s_d.ultimateantibot.common.utils.PerformanceConfig;
 import me.kr1s_d.ultimateantibot.common.utils.Version;
 
 public class PerformanceHelper {
     private static PerformanceMode performanceMode;
     private static Running running;
-    private static GeneratedDefaultConfig generatedDefaultConfig;
+    private static PerformanceConfig performanceConfig;
 
     public static void init(Running running){
         int cores = Version.getCores();
@@ -33,11 +33,11 @@ public class PerformanceHelper {
         if(cores > 16){
             performanceMode = PerformanceMode.MAX;
         }
-        generatedDefaultConfig = new GeneratedDefaultConfig(performanceMode);
+        performanceConfig = new PerformanceConfig(performanceMode);
     }
 
-    public static GeneratedDefaultConfig getConfig() {
-        return generatedDefaultConfig;
+    public static PerformanceConfig getConfig() {
+        return performanceConfig;
     }
 
     public static PerformanceMode getPerformanceMode() {

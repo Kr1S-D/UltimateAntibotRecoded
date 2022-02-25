@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.other.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.objects.base.BlackListProfile;
 
 import java.util.List;
 
@@ -44,6 +44,8 @@ public class MessageManager {
     public static List<String> blacklistProfileString;
     public static String attackAnalyzerIncrease;
     public static String attackAnalyzerDecrease;
+    public static String bossBarIdleMessage;
+    public static String fastJoinQueueMessage;
 
     public static void init(IConfiguration messages){
         version = messages.getDouble("version");
@@ -84,6 +86,8 @@ public class MessageManager {
         blacklistProfileString = messages.getStringList("blacklist_info");
         attackAnalyzerIncrease = messages.getString("analyzer.increase");
         attackAnalyzerDecrease = messages.getString("analyzer.decrease");
+        bossBarIdleMessage = messages.getString("bossbar_idle_message");
+        fastJoinQueueMessage = convertToString(messages.getStringList("fastjoin-queue"));
     }
 
     public static String getCommandNoPerms() {

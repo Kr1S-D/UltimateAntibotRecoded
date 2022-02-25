@@ -18,12 +18,25 @@ debug: false
 #its performance have been created.
 detect-server-performance: true
 
+# (!) WARNING (!)
+# If set to true it will be able to calculate the time that the server takes to do all its operations!
+# This involves creating a thread that could burden low-powered servers!
+# It is recommended to use it only in dedicated servers or in vps with more than 8 cores!
+# Use it at your own risk!
+enable-latency-thread: false
+
+# (!) NOTIFICATION (!)
+#Enable bossbar notification on attack (1.9+)
+enable-bossbar-automatic-notification: true
+
 #Antibotmode has the utility of mitigating the attack, blacklisting + ip possible,
 antibotmode:
   #Duration of the anti-botmode when activated
   keep: 15 #seconds
   #If there are 15 connections in 1 second the antibot mode will be activated!
   trigger: 15
+  #Slowmode duration
+  keep-slow: 60
 
 #Pingmode allows player connections to your server!
 pingmode:
@@ -146,7 +159,15 @@ checks:
       antibotmode: true
       enabled: true
 
-
+#This check allows you to verify your users during bot attacks!
+#The site offers a free plan that you can access by signing up which gives you access to 1k requests per day.
+#Each check will cost you 1 request and at the end of the daily requests you will have to wait for the next day!
+proxycheck:
+  api-key: "enter-here-your-key"
+  #Do I have to check every time a player enters? (There are no double checks unless you restart the server)
+  check-slow-join: true
+  #This check is only done later when most of the attack has been blacklisted (There are no double checks unless you restart the server)
+  check-fast-join: false
 
 
 

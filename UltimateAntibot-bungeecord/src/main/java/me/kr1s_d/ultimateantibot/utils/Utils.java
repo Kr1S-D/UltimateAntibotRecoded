@@ -81,4 +81,10 @@ public class Utils {
         str.forEach(b -> a.add(colora(b)));
         return a;
     }
+
+    public static List<String> calculatePlayerNames(){
+        List<String> a = new ArrayList<>();
+        ProxyServer.getInstance().getPlayers().forEach(b -> a.add(b.getName()));
+        return a;
+    }
 }

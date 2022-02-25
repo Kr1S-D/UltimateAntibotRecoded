@@ -6,6 +6,7 @@ import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
+import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.thread.DynamicCounterThread;
@@ -21,9 +22,6 @@ public class AntiBotManager implements IAntiBotManager {
     private final DynamicCounterThread pingPerSecond;
     private final DynamicCounterThread packetPerSecond;
     private final DynamicCounterThread checkPerSecond;
-    private long totalPing;
-    private long totalBotBlocked;
-    private long totalPacketBlocked;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
     private final QueueService queueService;
@@ -34,6 +32,7 @@ public class AntiBotManager implements IAntiBotManager {
     private boolean isPingModeEnabled;
     private final LogHelper logHelper;
     private final JoinCache joinCache;
+    private ConnectionCheckerService connectionCheckerService;
 
     public AntiBotManager(IAntiBotPlugin plugin){
         this.iAntiBotPlugin = plugin;
@@ -42,9 +41,6 @@ public class AntiBotManager implements IAntiBotManager {
         this.joinPerSecond = new DynamicCounterThread(plugin);
         this.pingPerSecond = new DynamicCounterThread(plugin);
         this.packetPerSecond = new DynamicCounterThread(plugin);
-        this.totalPing = 0;
-        this.totalBotBlocked = 0;
-        this.totalPacketBlocked = 0;
         this.blackListService = new BlackListService(plugin.getBlackList(), logHelper);
         this.whitelistService = new WhitelistService(plugin.getWhitelist(), logHelper);
         this.queueService = new QueueService();
@@ -54,6 +50,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
         this.joinCache = new JoinCache(plugin);
+        this.connectionCheckerService = plugin.getConnectionCheckerService();
     }
 
     @Override
@@ -76,21 +73,6 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public long getPacketPerSecond() {
         return packetPerSecond.getCount();
-    }
-
-    @Override
-    public long getTotalPing() {
-        return totalPing;
-    }
-
-    @Override
-    public long getTotalBotBlocked() {
-        return totalBotBlocked;
-    }
-
-    @Override
-    public long getTotalPackedBlocked() {
-        return totalPacketBlocked;
     }
 
     @Override
@@ -167,21 +149,6 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public void increasePacketPerSecond() {
         packetPerSecond.increase();
-    }
-
-    @Override
-    public void increaseTotalBots() {
-        totalBotBlocked++;
-    }
-
-    @Override
-    public void increaseTotalPings() {
-        totalPing++;
-    }
-
-    @Override
-    public void increaseTotalPackets() {
-        totalPacketBlocked++;
     }
 
     @Override
@@ -301,11 +268,12 @@ public class AntiBotManager implements IAntiBotManager {
                 .replace("%blacklist%", String.valueOf(blackListService.size()))
                 .replace("%type%", String.valueOf(modeType.toString()))
                 .replace("%packets%", String.valueOf(packetPerSecond.getCount()))
-                .replace("%totalbots%", String.valueOf(totalBotBlocked))
-                .replace("%totalpings%", String.valueOf(totalPing))
-                .replace("%totalpackets%", String.valueOf(totalPacketBlocked))
+                .replace("%totalbots%", String.valueOf(this.joinPerSecond.getTotal()))
+                .replace("%totalpings%", String.valueOf(this.pingPerSecond.getTotal()))
+                .replace("%totalpackets%", String.valueOf(this.packetPerSecond.getTotal()))
                 .replace("%latency%", iAntiBotPlugin.getLatencyThread().getLatency())
                 .replace("%prefix%", iAntiBotPlugin.getAnimationThread().getEmote() + " " + MessageManager.prefix)
+                .replace("%underverification%", String.valueOf(connectionCheckerService.getUnderVerificationSize()))
                 ;
     }
 }

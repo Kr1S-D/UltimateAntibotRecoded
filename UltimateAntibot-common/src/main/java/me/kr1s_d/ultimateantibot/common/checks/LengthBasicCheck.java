@@ -3,28 +3,28 @@ package me.kr1s_d.ultimateantibot.common.checks;
 import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
-import me.kr1s_d.ultimateantibot.common.objects.other.SlowJoinCheckConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
+import me.kr1s_d.ultimateantibot.common.objects.base.SlowJoinCheckConfiguration;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class LengthBasicCheck implements IBasicCheck {
     private final IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
-    private final Map<String, List<String>> data;
-    private final List<String> suspects;
+    private final List<String> lastNicks;
+    private final Set<String> suspects;
     private final SlowJoinCheckConfiguration config;
 
     public LengthBasicCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
-        this.data = new HashMap<>();
-        this.suspects = new ArrayList<>();
+        this.lastNicks = new ArrayList<>();
+        this.suspects = new HashSet<>();
         this.config = ConfigManger.getLenghtCheckConfig();
         loadTask();
         if(isEnabled()){
@@ -35,14 +35,15 @@ public class LengthBasicCheck implements IBasicCheck {
     @Override
     public boolean needToDeny(String ip, String name) {
         if(!isEnabled()) return false;
-        List<String> joins = data.get(ip);
-        if(joins == null){
+        if(lastNicks == null){
             add(ip, name);
             return false;
         }
-        for(String str : joins) {
-           if(str.length() == name.length()){
-               suspects.add(ip);
+        for(String str : lastNicks) {
+           if(str.length() == name.length()) {
+               if (suspects.add(ip)) {
+                   plugin.getLogHelper().debug("LenghtCheck > Possible bot found: " + ip + " " + name);
+               }
            }
         }
         add(ip, name);
@@ -74,18 +75,17 @@ public class LengthBasicCheck implements IBasicCheck {
     public void loadTask() {
         plugin.scheduleRepeatingTask(() -> {
             suspects.clear();
-            data.clear();
+            lastNicks.clear();
         }, false, 1000L * config.getTime());
     }
 
     private void add(String ip, String name){
-        List<String> lastNicks = data.getOrDefault(ip, new ArrayList<>());
+        if(lastNicks.contains(name)) return;
         if(lastNicks.size() >= 3){
             lastNicks.remove(0);
             lastNicks.add(name);
         }else{
             lastNicks.add(name);
         }
-        data.put(ip, lastNicks);
     }
 }

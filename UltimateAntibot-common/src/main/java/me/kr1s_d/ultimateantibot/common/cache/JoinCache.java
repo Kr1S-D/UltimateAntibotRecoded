@@ -16,7 +16,7 @@ public class JoinCache {
 
     public void addJoined(String ip){
         lastIpJoined.add(ip);
-        iAntiBotPlugin.scheduleDelayedTask(() -> removeJoined(ip), false,1000L * 30L);
+        iAntiBotPlugin.scheduleDelayedTask(() -> removeJoined(ip),false,1000L * 30L);
     }
 
     public void removeJoined(String ip){

@@ -10,53 +10,46 @@ public class AttackAnalyzerThread {
     private final IAntiBotManager antiBotManager;
     private final INotificator notificator;
     private long lastAnalyzedBot;
-    private long currentBots;
+    private long connections;
 
 
     public AttackAnalyzerThread(IAntiBotPlugin plugin) {
         plugin.getLogHelper().debug("Enabled " + this.getClass().getSimpleName() + "!");
         lastAnalyzedBot = 1;
-        currentBots = 0;
+        connections = 0;
         this.notificator = plugin.getNotificator();
         this.antiBotManager = plugin.getAntiBotManager();
-        new Thread(() -> {
-            while (plugin.isRunning()) {
-                currentBots = antiBotManager.getJoinPerSecond();
-                if (antiBotManager.isSomeModeOnline()) {
-                        executeAlert();
-                        lastAnalyzedBot = currentBots;
-                }else{
-                    //BAR AFK DEFAULT MESSAGE
-                }
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        plugin.scheduleRepeatingTask(() -> {
+            connections = antiBotManager.getJoinPerSecond();
+            if (antiBotManager.isSomeModeOnline()) {
+                executeAlert();
+                lastAnalyzedBot = connections;
+            }else{
+               notificator.sendBossBarMessage(MessageManager.bossBarIdleMessage, 0);
             }
-        }, "UAB#AttackAnalyzer").start();
+        }, false, 1000L);
     }
 
 
     private void executeAlert() {
-        double botpercent = calculatePercentage(currentBots, lastAnalyzedBot);
+        double botpercent = calculatePercentage(connections, lastAnalyzedBot);
         float bt = (float) (botpercent / 100);
         if(bt >= 1){
             bt = 1;
         }
-        if (currentBots > lastAnalyzedBot) {
+        if (connections > lastAnalyzedBot) {
             notificator.sendBossBarMessage(MessageManager.attackAnalyzerIncrease
                     .replace("%perc%", String.valueOf(botpercent))
                     .replace("%old%", String.valueOf(lastAnalyzedBot))
-                    .replace("%new%", String.valueOf(currentBots))
+                    .replace("%new%", String.valueOf(connections))
             , bt);
             //increase
         } else {
-            if(currentBots < lastAnalyzedBot){
+            if(connections < lastAnalyzedBot){
                 notificator.sendBossBarMessage(MessageManager.attackAnalyzerDecrease
                         .replace("%perc%", String.valueOf(botpercent))
                         .replace("%old%", String.valueOf(lastAnalyzedBot))
-                        .replace("%new%", String.valueOf(currentBots))
+                        .replace("%new%", String.valueOf(connections))
                 , bt);
             }
             //decrease

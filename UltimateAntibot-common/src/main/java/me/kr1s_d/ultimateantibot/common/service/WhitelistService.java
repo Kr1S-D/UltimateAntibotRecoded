@@ -24,7 +24,7 @@ public class WhitelistService implements IService {
     @Override
     public void load() {
         whitelist.addAll(whitelistList.getConfigurationSection("data"));
-        logHelper.info("&f" + whitelist.size() + " &dIP added to whitelist!");
+        logHelper.info("&c" + whitelist.size() + " &fIP added to whitelist!");
     }
 
     @Override

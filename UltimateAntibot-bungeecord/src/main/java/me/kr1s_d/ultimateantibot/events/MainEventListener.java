@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.events;
 
-import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
+import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
 import me.kr1s_d.ultimateantibot.common.checks.*;
@@ -8,6 +8,7 @@ import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
+import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.tasks.AutoWhitelistTask;
@@ -20,8 +21,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-
-import java.util.UUID;
 
 public class MainEventListener implements Listener {
     private final IAntiBotPlugin plugin;
@@ -38,6 +37,7 @@ public class MainEventListener implements Listener {
     private final SimilarNameBasicCheck similarNameCheck;
     private final LengthBasicCheck lengthCheck;
     private int blacklistedPercentage;
+    private final ConnectionCheckerService connectionCheckerService;
 
     public MainEventListener(IAntiBotPlugin antiBotPlugin){
         this.plugin = antiBotPlugin;
@@ -54,11 +54,12 @@ public class MainEventListener implements Listener {
         this.similarNameCheck = new SimilarNameBasicCheck(antiBotPlugin);
         this.lengthCheck = new LengthBasicCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
+        this.connectionCheckerService = plugin.getConnectionCheckerService();
     }
 
     @EventHandler
     public void onPreLoginEvent(PreLoginEvent e){
-       // e.registerIntent(UltimateAntiBotBungeeCord.getInstance());
+        //e.registerIntent(UltimateAntiBotBungeeCord.getInstance());
         String ip = Utils.getIP(e.getConnection());
         String name = e.getConnection().getName();
         int totals = blackListService.size() + queueService.size();
@@ -78,9 +79,6 @@ public class MainEventListener implements Listener {
                 antiBotManager.increaseChecksPerSecond();
             }
         }
-        if(antiBotManager.isAntiBotModeEnabled()){
-            antiBotManager.increaseTotalBots();
-        }
         //
         //BlackList & Whitelist Checks
         //
@@ -90,14 +88,6 @@ public class MainEventListener implements Listener {
             return;
         }
         if(whitelistService.isWhitelisted(ip)){
-            return;
-        }
-        //
-        //FirstJoinCheck
-        //
-        if(firstJoinCheck.needToDeny(ip, name)){
-            e.setCancelReason(ComponentBuilder.buildColorized(MessageManager.firstJoinMessage));
-            e.setCancelled(true);
             return;
         }
         //
@@ -128,6 +118,14 @@ public class MainEventListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
+        }
+        //
+        //FirstJoinCheck
+        //
+        if(firstJoinCheck.needToDeny(ip, name)){
+            e.setCancelReason(ComponentBuilder.buildColorized(MessageManager.firstJoinMessage));
+            e.setCancelled(true);
+            return;
         }
         //
         //AntiBotMode Enable
@@ -188,6 +186,10 @@ public class MainEventListener implements Listener {
             plugin.getLogHelper().debug("Length Check Executed!");
             return;
         }
+        //
+        //Connection check (ProxyCheck.io)
+        //
+        connectionCheckerService.submit(ip, nickname);
         //If isn't whitelisted
         if(!antiBotManager.getWhitelistService().isWhitelisted(ip)){
             //Add to last join
@@ -196,6 +198,10 @@ public class MainEventListener implements Listener {
             plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
             //Remove from JoinCache after 30 Seconds
             plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip),false,1000L * 30);
+        }
+        //Notification
+        if(player.hasPermission("uab.notification.automatic")){
+            Notificator.automaticNotification(player);
         }
     }
 

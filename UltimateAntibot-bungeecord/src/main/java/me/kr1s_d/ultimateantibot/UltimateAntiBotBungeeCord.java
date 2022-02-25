@@ -7,6 +7,7 @@ import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.enums.Running;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilter;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
+import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
@@ -45,6 +46,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private AnimationThread animationThread;
     private LogHelper logHelper;
     private UserDataService userDataService;
+    private ConnectionCheckerService connectionCheckerService;
     private Notificator notificator;
     private ICore core;
     private boolean isRunning;
@@ -65,31 +67,33 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         Version.init(this);
         new Metrics(this, 11712);
         logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
-        logHelper.info("&fLoading &dUltimateAntiBot...");
+        logHelper.info("&fLoading &cUltimateAntiBot...");
+        connectionCheckerService = new ConnectionCheckerService(this);
+        connectionCheckerService.load();
         antiBotManager = new AntiBotManager(this);
+        antiBotManager.getQueueService().load();
+        antiBotManager.getWhitelistService().load();
+        antiBotManager.getBlackListService().load();
         latencyThread = new LatencyThread(this);
         animationThread = new AnimationThread(this);
         core = new UltimateAntiBotCore(this);
         core.load();
-        antiBotManager.getQueueService().load();
-        antiBotManager.getWhitelistService().load();
-        antiBotManager.getBlackListService().load();
         userDataService = new UserDataService(database, this);
         userDataService.load();
         ProxyServer.getInstance().getLogger().setFilter(new LogFilter(this));
         notificator = new Notificator();
         notificator.init(this);
         new AttackAnalyzerThread(this);
-        logHelper.info("&fLoaded &dUltimateAntiBot!");
+        logHelper.info("&fLoaded &cUltimateAntiBot!");
         logHelper.sendLogo();
         PerformanceHelper.init(Running.BUNGEECORD);
-        logHelper.info("&dVersion: &f$1 &5| &dAuthor: &f$2 &5| &dCores: &f$3 &5| &dMode: $4"
+        logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: $4"
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthor())
                 .replace("$3", String.valueOf(Version.getCores()))
                 .replace("$4", String.valueOf(PerformanceHelper.getPerformanceMode()))
         );
-        logHelper.info("&fThe &dabyss&f is ready to swallow all the bots!");
+        logHelper.info("&fThe &cabyss&f is ready to swallow all the bots!");
         CommandManager commandManager = new CommandManager(this, "uab", "", "ab");
         commandManager.register(new AddRemoveBlacklistCommand(this));
         commandManager.register(new AddRemoveWhitelistCommand(this));
@@ -104,20 +108,21 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CustomEventListener());
         long b = System.currentTimeMillis() - a;
-        logHelper.info("&7Took &d" + b + "ms&7 to load");
+        logHelper.info("&7Took &c" + b + "ms&7 to load");
     }
 
     @Override
     public void onDisable() {
         long a = System.currentTimeMillis();
-        logHelper.info("&7Unloading...");
+        logHelper.info("&cUnloading...");
         userDataService.unload();
+        connectionCheckerService.unload();
         antiBotManager.getBlackListService().unload();
         antiBotManager.getWhitelistService().unload();
-        logHelper.info("&dThanks for choosing us!");
+        logHelper.info("&cThanks for choosing us!");
         long b = System.currentTimeMillis() - a;
         this.isRunning = false;
-        logHelper.info("&7Took &d" + b + "ms&7 to unload");
+        logHelper.info("&7Took &c" + b + "ms&7 to unload");
     }
 
     @Override
@@ -200,6 +205,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     @Override
     public UserDataService getUserDataService() {
         return userDataService;
+    }
+
+    @Override
+    public ConnectionCheckerService getConnectionCheckerService() {
+        return connectionCheckerService;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class UltimateAntiBotCore implements ICore {
 
     @Override
     public void load() {
-        plugin.getLogHelper().info("&fLoading &dCore...");
+        plugin.getLogHelper().info("&fLoading &cCore...");
         plugin.scheduleRepeatingTask(this::refresh, false, 1000L);
         plugin.scheduleRepeatingTask(plugin.getAntiBotManager().getQueueService()::clear, false, ConfigManger.taskManagerClearCache * 1000L);
         plugin.scheduleRepeatingTask(() -> {

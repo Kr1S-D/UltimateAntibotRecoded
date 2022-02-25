@@ -27,7 +27,7 @@ public class UserDataService implements IService {
             String[] part = str.split(";");
             ipMap.put(part[0], Boolean.valueOf(part[1]));
         }
-        logHelper.info("&fLoaded &d" + ipMap.size() + " &fjoins!");
+        logHelper.info("&fLoaded &c" + ipMap.size() + " &fjoins!");
     }
 
     @Override

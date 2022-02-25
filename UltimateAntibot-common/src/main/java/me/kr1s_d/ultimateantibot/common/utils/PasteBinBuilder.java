@@ -45,7 +45,11 @@ public class PasteBinBuilder {
             arguments.put("api_dev_key", "2CF1IHfum6AaC7fnZdYf99k7ML5ZpWGW");
             arguments.put("api_option", "paste");
             arguments.put("api_paste_expire_date", "1W");
-            arguments.put("api_paste_code", "dioporco");
+            StringBuilder stringBuilder = new StringBuilder();
+            for(String toWr : toWrite){
+                stringBuilder.append(toWr).append("\n");
+            }
+            arguments.put("api_paste_code", stringBuilder.toString());
             StringJoiner sj = new StringJoiner("&");
             for(Map.Entry<String,String> entry : arguments.entrySet())
                 sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));

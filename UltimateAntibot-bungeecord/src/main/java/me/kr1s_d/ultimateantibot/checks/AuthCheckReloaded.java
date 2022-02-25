@@ -5,7 +5,8 @@ import me.kr1s_d.ultimateantibot.common.helper.enums.AuthCheckType;
 import me.kr1s_d.ultimateantibot.common.helper.enums.ColorHelper;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.other.IncreaseInteger;
+import me.kr1s_d.ultimateantibot.common.objects.base.IncreaseInteger;
+import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
@@ -31,6 +32,7 @@ public class AuthCheckReloaded {
     private final Map<String, IncreaseInteger> failure;
     private final TaskScheduler taskScheduler;
     private final Map<String, ScheduledTask> runningTasks;
+    private ConnectionCheckerService connectionCheckerService;
 
     public AuthCheckReloaded(IAntiBotPlugin plugin){
         this.plugin = plugin;
@@ -42,6 +44,7 @@ public class AuthCheckReloaded {
         this.failure = new HashMap<>();
         this.taskScheduler = ProxyServer.getInstance().getScheduler();
         this.runningTasks = new HashMap<>();
+        this.connectionCheckerService = plugin.getConnectionCheckerService();
         plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
     }
 
@@ -81,6 +84,10 @@ public class AuthCheckReloaded {
             int currentIPPings = pingMap.get(ip).get();
             int pingRequired = pingData.get(ip);
             if (currentIPPings == pingRequired) {
+                //checking connection
+                if(ConfigManger.getProxyCheckConfig().isCheckFastJoin() && ConfigManger.getProxyCheckConfig().isEnabled()) {
+                    connectionCheckerService.submit(ip, e.getConnection().getName());
+                }
                 addToPingCheckCompleted(ip);
                 checking.remove(ip);
             }
@@ -111,7 +118,6 @@ public class AuthCheckReloaded {
      */
     private boolean hasActiveTimerVerification(String ip){
         return runningTasks.containsKey(ip);
-
     }
 
     /**

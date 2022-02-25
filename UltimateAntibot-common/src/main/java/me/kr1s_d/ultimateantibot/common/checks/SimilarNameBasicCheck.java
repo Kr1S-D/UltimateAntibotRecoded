@@ -3,7 +3,7 @@ package me.kr1s_d.ultimateantibot.common.checks;
 import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
@@ -43,6 +43,7 @@ public class SimilarNameBasicCheck implements IBasicCheck {
         int similar = countChars(name);
         if(similar >= ConfigManger.getSimilarNameCheckConfig().getCondition()){
             suspects.add(ip);
+            plugin.getLogHelper().debug("SimilarNameCheck > Possible bot found: " + ip + " " + name);
         }else{
             checks++;
         }
@@ -88,7 +89,7 @@ public class SimilarNameBasicCheck implements IBasicCheck {
         //add the player in joinlist removing the last
         List<String> lastNicks = joins;
         if(lastNicks.size() >= 3){
-            lastNicks.remove(0);
+            lastNicks.remove(lastNicks.get(0));
             lastNicks.add(name);
         }else{
             lastNicks.add(name);
@@ -119,8 +120,8 @@ public class SimilarNameBasicCheck implements IBasicCheck {
                 }
             }
         }
-        plugin.getLogHelper().debug("VALUES : " + Arrays.toString(theI));
-        plugin.getLogHelper().debug("MAX VALUE: " + max(theI[0], theI[1], theI[2]));
+        plugin.getLogHelper().debug("SimilarNameCheck > VALUES : " + Arrays.toString(theI));
+        plugin.getLogHelper().debug("SimilarNameCheck > MAX VALUE: " + max(theI[0], theI[1], theI[2]));
         return max(theI[0], theI[1], theI[2]);
     }
 

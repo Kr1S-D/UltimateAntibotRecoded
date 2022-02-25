@@ -2,8 +2,8 @@ package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IBasicCheck;
-import me.kr1s_d.ultimateantibot.common.objects.other.SlowJoinCheckConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
+import me.kr1s_d.ultimateantibot.common.objects.base.SlowJoinCheckConfiguration;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 

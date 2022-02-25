@@ -4,7 +4,7 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
-import me.kr1s_d.ultimateantibot.common.objects.other.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.objects.base.BlackListProfile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class BlackListService implements IService {
             String name = blacklistConfig.getString("data." + a + ".name");
             blacklist.put(ip, new BlackListProfile(ip, reason, id, name));
         }
-        logHelper.info("&f" + blacklist.size() + " &dIP added to blacklist!");
+        logHelper.info("&c" + blacklist.size() + " &fIP added to blacklist!");
     }
 
     @Override
@@ -103,6 +103,19 @@ public class BlackListService implements IService {
             return;
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason()));
+    }
+
+    /**
+     *
+     * @param ip The IP to BlackList
+     * @param reason The Reason for BlackList
+     */
+    public BlackListProfile blacklistAndGet(String ip, BlackListReason reason, String name){
+        if(blacklist.containsKey(ip)){
+            return getProfile(ip);
+        }
+        blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
+        return getProfile(ip);
     }
 
     public void clear(){

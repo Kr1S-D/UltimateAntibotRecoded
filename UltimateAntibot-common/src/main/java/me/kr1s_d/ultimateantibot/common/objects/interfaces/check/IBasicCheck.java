@@ -1,6 +1,6 @@
-package me.kr1s_d.ultimateantibot.common.objects.interfaces;
+package me.kr1s_d.ultimateantibot.common.objects.interfaces.check;
 
-public interface IBasicCheck {
+public interface IBasicCheck{
     boolean needToDeny(String ip, String name);
 
     boolean isEnabled();

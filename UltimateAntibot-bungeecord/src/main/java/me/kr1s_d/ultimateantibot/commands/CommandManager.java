@@ -59,16 +59,16 @@ public class CommandManager extends Command implements TabExecutor {
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
         SubCommand subCommand = getSubCommandFromArgs(args[0]);
         if (subCommand != null && args[0].equals(subCommand.getSubCommandId())) {
-            if (subCommand.getTabCompleter() != null) {
+            if (subCommand.getTabCompleter() != null && subCommand.getTabCompleter().get(args.length - 1) != null) {
                 return subCommand.getTabCompleter().get(args.length - 1);
             }else{
-                return new ArrayList<>();
+                return Utils.calculatePlayerNames();
             }
         }
         if (args.length == 1) {
             return tabComplete;
         }
-        return new ArrayList<>();
+        return Utils.calculatePlayerNames();
     }
 
     public void setDefaultCommandWrongArgumentMessage(String defaultCommandWrongArgumentMessage) {

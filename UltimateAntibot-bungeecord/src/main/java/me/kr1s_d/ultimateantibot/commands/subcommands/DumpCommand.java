@@ -45,6 +45,7 @@ public class DumpCommand implements SubCommand {
         pasteBinBuilder.addLine("Whitelist Size: " + plugin.getAntiBotManager().getWhitelistService().size());
         pasteBinBuilder.addLine("Blacklist Size: " + plugin.getAntiBotManager().getBlackListService().size());
         pasteBinBuilder.addLine("Users: " + plugin.getUserDataService().size());
+        plugin.runTask(pasteBinBuilder::pasteAsync, true);
         pasteBinBuilder.pasteAsync();
         sender.sendMessage(Utils.colora(MessageManager.prefix + "&fsending request to server, wait please..."));
         plugin.scheduleDelayedTask(() -> {

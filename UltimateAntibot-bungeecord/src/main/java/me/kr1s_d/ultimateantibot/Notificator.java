@@ -6,6 +6,7 @@ import me.kr1s_d.ultimateantibot.common.objects.enums.BarColor;
 import me.kr1s_d.ultimateantibot.common.objects.enums.BarStyle;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.INotificator;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.objects.DynamicBar;
 import net.md_5.bungee.api.ChatMessageType;
@@ -24,12 +25,20 @@ public class Notificator implements INotificator {
 
     private static final List<ProxiedPlayer> actionbars = new ArrayList<>();
     private static final List<ProxiedPlayer> titles = new ArrayList<>();
-    private static final DynamicBar bar = new DynamicBar("&fWaiting for a new attack!", BarColor.PINK, BarStyle.SOLID);
+    private static final DynamicBar bar = new DynamicBar("&fWaiting for a new attack!", BarColor.RED, BarStyle.SOLID);
 
 
     public static void automaticNotification(ProxiedPlayer player){
         if(actionbars.contains(player)){
             return;
+        }
+        if(player.getPendingConnection().getVersion() > 106){
+            if(bar.hasPlayer(player)){
+                return;
+            }
+            if(ConfigManger.enableBossBarAutomaticNotification){
+                bar.addPlayer(player);
+            }
         }
         actionbars.add(player);
     }
@@ -93,6 +102,6 @@ public class Notificator implements INotificator {
             }else{
                 sendActionbar(plugin.getAntiBotManager().replaceInfo(MessageManager.actionbarOffline));
             }
-        }, false, 100L);
+        }, false, 125L);
     }
 }
