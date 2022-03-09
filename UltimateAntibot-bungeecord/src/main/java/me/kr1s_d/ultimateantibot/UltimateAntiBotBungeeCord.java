@@ -4,9 +4,10 @@ import me.kr1s_d.ultimateantibot.commands.CommandManager;
 import me.kr1s_d.ultimateantibot.commands.subcommands.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
-import me.kr1s_d.ultimateantibot.common.helper.enums.Running;
-import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilter;
+import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.filter.LogFilter;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
+import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
@@ -49,6 +50,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private ConnectionCheckerService connectionCheckerService;
     private Notificator notificator;
     private ICore core;
+    private SatelliteServer satelliteServer;
     private boolean isRunning;
 
     @Override
@@ -78,15 +80,17 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         animationThread = new AnimationThread(this);
         core = new UltimateAntiBotCore(this);
         core.load();
+        satelliteServer = new SatelliteServer(this);
         userDataService = new UserDataService(database, this);
         userDataService.load();
         ProxyServer.getInstance().getLogger().setFilter(new LogFilter(this));
         notificator = new Notificator();
         notificator.init(this);
         new AttackAnalyzerThread(this);
+        new SatelliteServer(this);
         logHelper.info("&fLoaded &cUltimateAntiBot!");
         logHelper.sendLogo();
-        PerformanceHelper.init(Running.BUNGEECORD);
+        PerformanceHelper.init(ServerType.BUNGEECORD);
         logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: $4"
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthor())
@@ -103,6 +107,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         commandManager.register(new StatsCommand(this));
         commandManager.register(new ToggleNotificationCommand());
         commandManager.register(new CheckIDCommand(this));
+        commandManager.register(new SatelliteCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
@@ -241,6 +246,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
                 player.disconnect(new TextComponent(Utils.colora(reasonNoColor)));
             }
         }
+    }
+
+    @Override
+    public SatelliteServer getSatellite() {
+        return satelliteServer;
     }
 
     @Override

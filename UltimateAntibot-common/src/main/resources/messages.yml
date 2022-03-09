@@ -47,6 +47,17 @@ stats:
   - '&4Bot &cBlocked &f%totalbots%'
   - '&4Total &cPing &f%totalpings%'
   - '&4Total &cPackets &f&%totalpackets%'
+satellitestats:
+  - ''
+  - '&cStatus: %status%'
+  - '&cAvg Requests: &f%avg%'
+  - '&cLast Minute Requests: &f%lastmin%'
+  - '&cCurrent Requests: &f%currentreq%'
+  - '&cLast UAB Servers Restart: &f%lastreboot%'
+  - '&cMessage: &f%message%'
+  - '&cResponse time: &f%time%ms'
+  - ''
+  - '&fThere are &c%currentserver%&f out of &c%maxservers%&f servers connected'
 title:
   title: '&f%totalbots% &cBlocked Bots'
   subtitle: '&f%ippercent%% &cBlackListed IP'
@@ -60,13 +71,15 @@ reason:
   check: 'Too many check fails!'
 help:
   - '&4/uab &chelp'
-  - '&4/uab &ctoggle &factionbar/title'
+  - '&4/uab &ctoggle &factionbar/title/bossbar'
   - '&4/uab &cstats'
   - '&4/uab &cclear &fblacklist/whitelist'
   - '&4/uab &cwhitelist &fadd/remove &f<ip>'
   - '&4/uab &cblacklist &fadd/remove &f<ip>'
   - '&4/uab &ccheck &f<id>'
   - '&4/uab &cdump'
+  - '&4/uab &csatellite'
+  -
 antibotmode:
   - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
   - ''

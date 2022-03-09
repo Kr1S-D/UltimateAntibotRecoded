@@ -1,5 +1,5 @@
 package me.kr1s_d.ultimateantibot.common.helper.enums;
 
-public enum Running {
+public enum ServerType {
     VELOCITY, BUNGEECORD, SPIGOT
 }

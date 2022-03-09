@@ -163,13 +163,12 @@ checks:
 #The site offers a free plan that you can access by signing up which gives you access to 1k requests per day.
 #Each check will cost you 1 request and at the end of the daily requests you will have to wait for the next day!
 proxycheck:
+  #if key is not valid proxycheck is disabled (without errors in console (unless you have active debugging!))
   api-key: "enter-here-your-key"
   #Do I have to check every time a player enters? (There are no double checks unless you restart the server)
   check-slow-join: true
   #This check is only done later when most of the attack has been blacklisted (There are no double checks unless you restart the server)
   check-fast-join: false
-
-
 
 #Custom Message filter only during bot / packet / ping attack
 filter:

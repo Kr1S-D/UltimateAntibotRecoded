@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.filter;
+package me.kr1s_d.ultimateantibot.common.objects.interfaces.check.filter;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
