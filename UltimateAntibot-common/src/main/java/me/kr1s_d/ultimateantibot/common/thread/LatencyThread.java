@@ -1,5 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.thread;
 
+import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
+import me.kr1s_d.ultimateantibot.common.helper.enums.PerformanceMode;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
@@ -14,6 +16,10 @@ public class LatencyThread {
         this.result = "§cdisabled (see config)";
         this.count = 0;
         long nsv = 1250000000;
+        if(PerformanceHelper.isEnabled() && !PerformanceHelper.getPerformanceMode().isLatencyThreadEnabled()){
+            this.result = "§c(disabled (detect-server-performance: true))";
+            return;
+        }
         if(ConfigManger.enableLatencyThread) {
             new Thread(() -> {
                 while (iAntiBotPlugin.isRunning()) {

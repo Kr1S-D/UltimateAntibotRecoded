@@ -200,7 +200,7 @@ public class MainEventListener implements Listener {
             plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip),false,1000L * 30);
         }
         //Notification
-        if(player.hasPermission("uab.notification.automatic")){
+        if(player.hasPermission("uab.notification.automatic") && antiBotManager.isAntiBotModeEnabled()){
             Notificator.automaticNotification(player);
         }
     }

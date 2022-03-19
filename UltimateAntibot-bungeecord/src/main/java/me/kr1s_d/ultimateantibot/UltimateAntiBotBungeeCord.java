@@ -87,7 +87,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         notificator = new Notificator();
         notificator.init(this);
         new AttackAnalyzerThread(this);
-        new SatelliteServer(this);
         logHelper.info("&fLoaded &cUltimateAntiBot!");
         logHelper.sendLogo();
         PerformanceHelper.init(ServerType.BUNGEECORD);

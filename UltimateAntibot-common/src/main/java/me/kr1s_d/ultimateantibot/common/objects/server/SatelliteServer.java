@@ -21,7 +21,6 @@ public class SatelliteServer {
     public SatelliteServer(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.sessionID = UUID.randomUUID().toString();
-        pingUABServers(sessionID);
         plugin.scheduleRepeatingTask(() -> {
             lastPingLatency = pingUABServers(sessionID);
             plugin.getLogHelper().debug(String.format("Sending update request to UAB servers! (Took %sms)", lastPingLatency));
