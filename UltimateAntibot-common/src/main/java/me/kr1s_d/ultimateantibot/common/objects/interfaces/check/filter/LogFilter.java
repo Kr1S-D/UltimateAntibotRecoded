@@ -42,7 +42,7 @@ public class LogFilter implements Filter {
                 "Connect reset by peer",
                 "overflow in packet"
         ));
-        blocked.addAll(antiBotPlugin.getConfig().getStringList("filter"));
+        blocked.addAll(antiBotPlugin.getConfigYml().getStringList("filter"));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class LogFilter implements Filter {
 
     public boolean isFiltered(String record){
         for(String str : blocked){
-            if(record.toLowerCase().contains(str.toLowerCase())){
+            if(record.contains(str)){
                 antiBotManager.increasePacketPerSecond();
                 return false;
             }

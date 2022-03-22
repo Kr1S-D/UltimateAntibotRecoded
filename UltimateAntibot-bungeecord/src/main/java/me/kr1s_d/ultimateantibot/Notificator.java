@@ -77,8 +77,9 @@ public class Notificator implements INotificator {
 
     public void sendTitle(String title, String subtitle){
         Title t = ProxyServer.getInstance().createTitle();
-        t.title(new TextComponent(ColorHelper.colorize(title)));
-        t.subTitle(new TextComponent(ColorHelper.colorize(subtitle)));
+        t.title(new TextComponent(ColorHelper.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(title))));
+        t.subTitle(new TextComponent(ColorHelper.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(subtitle))));
+        t.stay(10);
         titles.forEach(t::send);
     }
 

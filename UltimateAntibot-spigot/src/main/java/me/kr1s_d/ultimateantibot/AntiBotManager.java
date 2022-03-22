@@ -17,6 +17,7 @@ import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
 
 public class AntiBotManager implements IAntiBotManager {
+
     private final IAntiBotPlugin iAntiBotPlugin;
     private final DynamicCounterThread joinPerSecond;
     private final DynamicCounterThread pingPerSecond;
@@ -178,6 +179,8 @@ public class AntiBotManager implements IAntiBotManager {
         isSlowAntiBotModeOnline = false;
         isPingModeEnabled = false;
         isPacketModeEnabled = false;
+
+
         iAntiBotPlugin.scheduleDelayedTask(
                 new ModeDisableTask(iAntiBotPlugin, ModeType.ANTIBOT),
                 false, 1000L * ConfigManger.antiBotModeKeep

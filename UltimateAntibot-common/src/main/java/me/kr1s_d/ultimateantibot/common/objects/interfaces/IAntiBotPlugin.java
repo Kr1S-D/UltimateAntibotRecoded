@@ -14,7 +14,7 @@ public interface IAntiBotPlugin {
 
     void scheduleRepeatingTask(Runnable runnable, boolean async, long repeatMilliseconds);
 
-    IConfiguration getConfig();
+    IConfiguration getConfigYml();
 
     IConfiguration getMessages();
 

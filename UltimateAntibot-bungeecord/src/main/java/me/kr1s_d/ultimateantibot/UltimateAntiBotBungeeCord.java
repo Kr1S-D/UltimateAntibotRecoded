@@ -13,9 +13,7 @@ import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
-import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
-import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
-import me.kr1s_d.ultimateantibot.common.utils.Version;
+import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.events.CustomEventListener;
 import me.kr1s_d.ultimateantibot.events.MainEventListener;
@@ -64,10 +62,16 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         this.database = new Config(this, "%datafolder%/database.yml");
-        ConfigManger.init(config);
-        MessageManager.init(messages);
+        FilesUpdater.checkFiles(this, 4.0, config, messages);
+        new Updater(this);
+        try {
+            ConfigManger.init(config);
+            MessageManager.init(messages);
+        }catch (Exception e){
+            logHelper.error("Error during config.yml & messages.yml loading!");
+        }
         Version.init(this);
-        new Metrics(this, 11712);
+        Metrics metrics = new Metrics(this, 11712);
         logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
         logHelper.info("&fLoading &cUltimateAntiBot...");
         connectionCheckerService = new ConnectionCheckerService(this);
@@ -97,7 +101,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
                 .replace("$4", String.valueOf(PerformanceHelper.getPerformanceMode()))
         );
         logHelper.info("&fThe &cabyss&f is ready to swallow all the bots!");
-        CommandManager commandManager = new CommandManager(this, "uab", "", "ab");
+        CommandManager commandManager = new CommandManager(this, "ultimateantibot", "", "ab", "uab");
         commandManager.register(new AddRemoveBlacklistCommand(this));
         commandManager.register(new AddRemoveWhitelistCommand(this));
         commandManager.register(new ClearCommand(this));
@@ -157,7 +161,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
-    public IConfiguration getConfig() {
+    public IConfiguration getConfigYml() {
         return config;
     }
 

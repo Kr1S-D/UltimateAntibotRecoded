@@ -1,4 +1,4 @@
-version: 3.3
+version: 4.0
 prefix: '&4&LU&c&LA&4&LB&r &7» '
 onping: #<-- works only on bungeecord!
   normal: '&c&l◆ &f&l$1&7/&c&l$2'
@@ -20,7 +20,6 @@ notifications:
 #actionbar/title/stats allowed values
 #%bots% - return botpersecond
 #%pings% - return pingpersecond
-#%queue% - return queue
 #%whitelist% - return whitelist size
 #%blacklist% - return blacklist size
 #%type% - return current attacktype
@@ -35,32 +34,20 @@ notifications:
 #%underverification% - returns player under verification
 actionbar:
   offline: '%prefix%&cJoin/Ping &f%bots%&7/&f%pings% &4- &cVerification &f%underverification% &4- &cWhitelist &f%whitelist% » &c&l%type%'
-  antibot: '%prefix%&cBot/Ping &f%bots%&7/&f%pings% &4- &cBlacklist/Queue &f%blacklist%&7/&f%queue% &4- &cVerification &f%underverification% » &c&l%type%'
+  antibot: '%prefix%&cBot/Ping &f%bots%&7/&f%pings% &4- &cBlacklist &f%blacklist%&7 &4- &cVerification &f%underverification% » &c&l%type%'
   packets: '%prefix%&cPackets &f%packets%/sec &4- &cBlocked &f%totalpackets% &4- &cVerification &f%underverification% » &c&l%type%'
+title:
+  title: '&f%totalbots% &cBlocked Bots'
+  subtitle: '&f%blacklist% &cCurrent Blacklist'
 stats:
-  - '&4Service Stats'
-  - '&cQueue &f%queue%'
+  - '&cService Stats'
   - '&cWhitelist &f%whitelist%'
   - '&cBlacklist &f%blacklist%'
   - ''
-  - '&4AntibotManager stats'
-  - '&4Bot &cBlocked &f%totalbots%'
-  - '&4Total &cPing &f%totalpings%'
-  - '&4Total &cPackets &f&%totalpackets%'
-satellitestats:
-  - ''
-  - '&cStatus: %status%'
-  - '&cAvg Requests: &f%avg%'
-  - '&cLast Minute Requests: &f%lastmin%'
-  - '&cCurrent Requests: &f%currentreq%'
-  - '&cLast UAB Servers Restart: &f%lastreboot%'
-  - '&cMessage: &f%message%'
-  - '&cResponse time: &f%time%ms'
-  - ''
-  - '&fThere are &c%currentserver%&f out of &c%maxservers%&f servers connected'
-title:
-  title: '&f%totalbots% &cBlocked Bots'
-  subtitle: '&f%ippercent%% &cBlackListed IP'
+  - '&cAntibotManager stats'
+  - '&c4Bot &cBlocked &f%totalbots%'
+  - '&cTotal &cPing &f%totalpings%'
+  - '&cTotal &cPackets &f%totalpackets%'
 reason:
   names: 'Too many nicks on your IP'
   joins: 'Too many joins from your IP'
@@ -79,7 +66,17 @@ help:
   - '&4/uab &ccheck &f<id>'
   - '&4/uab &cdump'
   - '&4/uab &csatellite'
-  -
+satellitestats:
+  - ''
+  - '&cStatus: %status%'
+  - '&cAvg Requests: &f%avg%'
+  - '&cLast Minute Requests: &f%lastmin%'
+  - '&cCurrent Requests: &f%currentreq%'
+  - '&cLast UAB Servers Restart: &f%lastreboot%'
+  - '&cMessage: &f%message%'
+  - '&cResponse time: &f%time%ms'
+  - ''
+  - '&fThere are &c%currentserver%&f out of &c%maxservers%&f servers connected'
 antibotmode:
   - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
   - ''

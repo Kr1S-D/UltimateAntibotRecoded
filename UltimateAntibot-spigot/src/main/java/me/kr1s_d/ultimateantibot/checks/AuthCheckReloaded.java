@@ -1,75 +1,71 @@
 package me.kr1s_d.ultimateantibot.checks;
 
-import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
+import me.kr1s_d.ultimateantibot.UltimateAntiBotSpigot;
 import me.kr1s_d.ultimateantibot.common.helper.enums.AuthCheckType;
 import me.kr1s_d.ultimateantibot.common.helper.enums.ColorHelper;
+import me.kr1s_d.ultimateantibot.common.objects.base.IncreaseInteger;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.base.IncreaseInteger;
 import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
-import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.event.PreLoginEvent;
-import net.md_5.bungee.api.event.ProxyPingEvent;
-import net.md_5.bungee.api.scheduler.ScheduledTask;
-import net.md_5.bungee.api.scheduler.TaskScheduler;
+import me.kr1s_d.ultimateantibot.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class AuthCheckReloaded {
+
     private final IAntiBotPlugin plugin;
-    private final IAntiBotManager antibotManager;
+    private final IAntiBotManager antiBotManager;
     private final Map<String, AuthCheckType> checking;
     private final Map<String, AuthCheckType> completedCheck;
     private final Map<String, IncreaseInteger> pingMap;
     private final Map<String, Integer> pingData;
     private final Map<String, IncreaseInteger> failure;
-    private final TaskScheduler taskScheduler;
-    private final Map<String, ScheduledTask> runningTasks;
+    private final BukkitScheduler taskScheduler;
+    private final Map<String, BukkitTask> runningTasks;
     private final ConnectionCheckerService connectionCheckerService;
 
     public AuthCheckReloaded(IAntiBotPlugin plugin){
         this.plugin = plugin;
-        this.antibotManager = plugin.getAntiBotManager();
+        this.antiBotManager = plugin.getAntiBotManager();
         this.checking = new HashMap<>();
         this.completedCheck = new HashMap<>();
         this.pingMap = new HashMap<>();
         this.pingData = new HashMap<>();
         this.failure = new HashMap<>();
-        this.taskScheduler = ProxyServer.getInstance().getScheduler();
+        this.taskScheduler = Bukkit.getScheduler();
         this.runningTasks = new HashMap<>();
         this.connectionCheckerService = plugin.getConnectionCheckerService();
         plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
     }
 
 
-    public void onPing(ProxyPingEvent e, String ip){
+    public void onPing(ServerListPingEvent e, String ip){
         //Se sta eseguendo il ping check allora registra il ping
         if(isCompletingPingCheck(ip)){
             registerPing(ip);
             //Durante L'antibotMode:
-            if(antibotManager.isAntiBotModeEnabled()){
+            if(antiBotManager.isAntiBotModeEnabled()){
                 int currentIPPings = pingMap.get(ip).get();
                 int pingRequired = pingData.get(ip);
-                ServerPing ping = e.getResponse();
-                ping.getVersion().setProtocol(0);
                 //Impostazion e Dell'interfaccia per il conteggio dei ping
                 if(currentIPPings == pingRequired){
-                    ping.getVersion().setName(ColorHelper.colorize(MessageManager.verifiedPingInterface));
+                    e.setMotd(ColorHelper.colorize(MessageManager.verifiedPingInterface));
+                    //ping.getVersion().setName(ColorHelper.colorize(MessageManager.verifiedPingInterface));
                 }else{
-                    ping.getVersion().setName(ColorHelper.colorize(MessageManager.normalPingInterface
+                    e.setMotd(ColorHelper.colorize(MessageManager.normalPingInterface
                             .replace("$1", String.valueOf(currentIPPings))
                             .replace("$2", String.valueOf(pingRequired))
                     ));
                 }
-                //Imposto la risposta al ping
-                e.setResponse(ping);
             }
         }
         //se ha superato il numero massimo di ping allora lo aggiunge nei fails
@@ -79,14 +75,14 @@ public class AuthCheckReloaded {
         }
     }
 
-    public void onJoin(PreLoginEvent e, String ip) {
+    public void onJoin(AsyncPlayerPreLoginEvent e, String ip) {
         if (isCompletingPingCheck(ip)) {
             int currentIPPings = pingMap.getOrDefault(ip, new IncreaseInteger(0)).get();
             int pingRequired = pingData.getOrDefault(ip, 0);
             if (currentIPPings == pingRequired) {
                 //checking connection
                 if(ConfigManger.getProxyCheckConfig().isCheckFastJoin() && ConfigManger.getProxyCheckConfig().isEnabled()) {
-                    connectionCheckerService.submit(ip, e.getConnection().getName());
+                    connectionCheckerService.submit(ip, e.getName());
                 }
                 addToPingCheckCompleted(ip);
                 checking.remove(ip);
@@ -99,16 +95,12 @@ public class AuthCheckReloaded {
         int checkTimer = ThreadLocalRandom.current().nextInt(ConfigManger.authMinMaxTimer[0], ConfigManger.authMinMaxTimer[1]);
         if (hasCompletedPingCheck(ip)) {
             submitTimerTask(ip, checkTimer);
-            e.setCancelReason(ComponentBuilder.buildColorized(MessageManager.getTimerMessage(String.valueOf(checkTimer + 1))));
-            e.setCancelled(true);
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ColorHelper.colorize(MessageManager.getTimerMessage(String.valueOf(checkTimer + 1))));
             return;
         }
         int pingTimer = ThreadLocalRandom.current().nextInt(ConfigManger.authMinMaxPing[0], ConfigManger.authMinMaxPing[1]);
         addToCompletingPingCheck(ip, pingTimer);
-        e.setCancelReason(ComponentBuilder.buildColorized(
-                MessageManager.getPingMessage(String.valueOf(pingTimer)))
-        );
-        e.setCancelled(true);
+        e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ColorHelper.colorize(MessageManager.getPingMessage(String.valueOf(pingTimer))));
     }
 
     /**
@@ -131,14 +123,13 @@ public class AuthCheckReloaded {
         if(runningTasks.containsKey(ip)){
             runningTasks.get(ip).cancel();
         }
-        ScheduledTask task = taskScheduler.schedule(
-                UltimateAntiBotBungeeCord.getInstance(),
+        BukkitTask task = taskScheduler.runTaskLater(
+                UltimateAntiBotSpigot.getInstance(),
                 () -> {
                     addToWaiting(ip);
                     runningTasks.remove(ip);
                 },
-                1000L * timer,
-                TimeUnit.MILLISECONDS
+                Utils.convertToTicks(1000L * timer)
         );
         runningTasks.put(ip, task);
     }

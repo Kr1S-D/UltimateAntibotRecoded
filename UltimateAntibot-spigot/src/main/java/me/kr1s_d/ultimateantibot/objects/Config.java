@@ -2,11 +2,13 @@ package me.kr1s_d.ultimateantibot.objects;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -89,6 +91,8 @@ public class Config implements IConfiguration {
 
     @Override
     public Set<String> getConfigurationSection(String path) {
+        ConfigurationSection sect = config.getConfigurationSection(path);
+        if(sect == null) return new HashSet<>();
         return config.getConfigurationSection(path).getKeys(false);
     }
 
