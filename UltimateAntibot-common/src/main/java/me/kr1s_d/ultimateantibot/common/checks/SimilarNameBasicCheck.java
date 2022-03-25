@@ -30,7 +30,7 @@ public class SimilarNameBasicCheck implements IBasicCheck {
     }
 
     @Override
-    public boolean needToDeny(String ip, String name) {
+    public boolean isDenied(String ip, String name) {
         if(!isEnabled()) return false;
         if(joins.size() == 0){
             add(ip, name);
@@ -70,6 +70,11 @@ public class SimilarNameBasicCheck implements IBasicCheck {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onDisconnect(String ip, String name) {
+
     }
 
     @Override

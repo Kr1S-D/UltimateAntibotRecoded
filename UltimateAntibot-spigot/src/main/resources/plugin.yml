@@ -1,8 +1,9 @@
-name: UltimateAntibot
+name: UltimateAntiBot
 version: ${project.version}
 main: me.kr1s_d.ultimateantibot.UltimateAntiBotSpigot
 authors: [ Kr1S_D ]
 description: Good antibot plugin!
+load: STARTUP
 commands:
   ultimateantibot:
     aliases: [ab, uab]

@@ -1,9 +1,12 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckListenedEvent;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckPriority;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.objects.base.SlowJoinCheckConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IManagedCheck;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
@@ -12,7 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class AccountBasicCheck implements IBasicCheck {
+public class AccountBasicCheck extends IManagedCheck {
 
     private final IAntiBotPlugin plugin;
     private final Map<String, Set<String>> map;
@@ -29,7 +32,7 @@ public class AccountBasicCheck implements IBasicCheck {
     }
 
     @Override
-    public boolean needToDeny(String ip, String name) {
+    public boolean isDenied(String ip, String name) {
         if(!isEnabled()) return false;
         Set<String> a = map.getOrDefault(ip, new HashSet<>());
         a.add(name);
@@ -64,8 +67,16 @@ public class AccountBasicCheck implements IBasicCheck {
     }
 
     public void onDisconnect(String ip, String name){
-        Set<String> a = map.getOrDefault(ip, new HashSet<>());
-        a.remove(name);
-        map.put(ip, a);
+        map.remove(ip);
+    }
+
+    @Override
+    public CheckPriority getCheckPriority() {
+        return null;
+    }
+
+    @Override
+    public CheckListenedEvent getListenedEvent() {
+        return null;
     }
 }

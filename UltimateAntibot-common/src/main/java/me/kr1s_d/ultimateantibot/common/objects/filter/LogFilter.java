@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.interfaces.check.filter;
+package me.kr1s_d.ultimateantibot.common.objects.filter;
 
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
@@ -23,7 +23,6 @@ public class LogFilter implements Filter {
                 "Connection reset by peer",
                 "Unexpected packet received",
                 "read timed out",
-                "to process!",
                 "to process",
                 "Empty Packet!",
                 "corrupted",
@@ -70,5 +69,14 @@ public class LogFilter implements Filter {
             }
         }
         return true;
+    }
+
+    public boolean isDenied(String record) {
+        for(String str : blocked){
+            if(record.contains(str)){
+                return true;
+            }
+        }
+        return false;
     }
 }

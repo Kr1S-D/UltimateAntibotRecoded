@@ -24,11 +24,16 @@ public class FirstJoinBasicCheck implements IBasicCheck {
      * @param name - name of the player
      * @return - false if player can join or true if is first join
      */
-    public boolean needToDeny(String ip, String name) {
+    public boolean isDenied(String ip, String name) {
         if(!isEnabled()){
             return false;
         }
         return isFirstJoin(ip);
+    }
+
+    @Override
+    public void onDisconnect(String ip, String name) {
+
     }
 
     public boolean isEnabled() {

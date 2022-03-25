@@ -21,16 +21,13 @@ public class Notificator implements INotificator {
     //private static final BossBar bar = Bukkit.createBossBar("&fWaiting for a new attack!", BarColor.RED, BarStyle.SOLID);
 
     public static void automaticNotification(Player player) {
-    //    if (actionbars.contains(player)) {
-    //        return;
-    //    }
-    //    if (bar.getPlayers().contains(player)) {
-     //       return;
-    //    }
-     //   if (ConfigManger.enableBossBarAutomaticNotification) {
-     //       bar.addPlayer(player);
-     //   }
-    //    actionbars.add(player);
+        actionbars.remove(player);
+        //bar.removePlayer(player);
+
+        //if (ConfigManger.enableBossBarAutomaticNotification) {
+        //    bar.addPlayer(player);
+        //}
+        actionbars.add(player);
     }
 
     public static void toggleBossBar(Player player){

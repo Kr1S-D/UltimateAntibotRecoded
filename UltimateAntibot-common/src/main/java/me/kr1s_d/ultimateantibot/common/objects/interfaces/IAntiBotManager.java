@@ -2,11 +2,9 @@ package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
 import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
 import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
-import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
-import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 
 public interface IAntiBotManager {
     long getChecksPerSecond();
@@ -16,6 +14,8 @@ public interface IAntiBotManager {
     long getPingPerSecond();
 
     long getPacketPerSecond();
+
+    long getConnectionPerSecond();
 
     BlackListService getBlackListService();
 
@@ -40,6 +40,8 @@ public interface IAntiBotManager {
     void increasePingPerSecond();
 
     void increasePacketPerSecond();
+
+    void increaseConnectionPerSecond();
 
     boolean isAntiBotModeEnabled();
 

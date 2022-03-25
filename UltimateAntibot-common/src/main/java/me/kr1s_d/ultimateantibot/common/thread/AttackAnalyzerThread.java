@@ -20,7 +20,7 @@ public class AttackAnalyzerThread {
         this.notificator = plugin.getNotificator();
         this.antiBotManager = plugin.getAntiBotManager();
         plugin.scheduleRepeatingTask(() -> {
-            connections = antiBotManager.getJoinPerSecond();
+            connections = antiBotManager.getConnectionPerSecond();
             if (antiBotManager.isSomeModeOnline()) {
                 executeAlert();
                 lastAnalyzedBot = connections;

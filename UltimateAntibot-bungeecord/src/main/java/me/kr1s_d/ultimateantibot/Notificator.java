@@ -29,9 +29,8 @@ public class Notificator implements INotificator {
 
 
     public static void automaticNotification(ProxiedPlayer player){
-        if(actionbars.contains(player)){
-            return;
-        }
+        actionbars.remove(player);
+        bar.removePlayer(player);
         if(player.getPendingConnection().getVersion() > 106){
             if(bar.hasPlayer(player)){
                 return;
@@ -79,7 +78,9 @@ public class Notificator implements INotificator {
         Title t = ProxyServer.getInstance().createTitle();
         t.title(new TextComponent(ColorHelper.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(title))));
         t.subTitle(new TextComponent(ColorHelper.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(subtitle))));
-        t.stay(10);
+        t.stay(20);
+        t.fadeIn(0);
+        t.fadeOut(0);
         titles.forEach(t::send);
     }
 

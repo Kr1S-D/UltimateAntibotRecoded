@@ -22,6 +22,7 @@ public class AntiBotManager implements IAntiBotManager {
     private final DynamicCounterThread pingPerSecond;
     private final DynamicCounterThread packetPerSecond;
     private final DynamicCounterThread checkPerSecond;
+    private final DynamicCounterThread connectionPerSecond;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
     private final QueueService queueService;
@@ -41,6 +42,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.joinPerSecond = new DynamicCounterThread(plugin);
         this.pingPerSecond = new DynamicCounterThread(plugin);
         this.packetPerSecond = new DynamicCounterThread(plugin);
+        this.connectionPerSecond = new DynamicCounterThread(plugin);
         this.blackListService = new BlackListService(plugin.getBlackList(), logHelper);
         this.whitelistService = new WhitelistService(plugin.getWhitelist(), logHelper);
         this.queueService = new QueueService();
@@ -58,7 +60,6 @@ public class AntiBotManager implements IAntiBotManager {
         return checkPerSecond.getCount();
     }
 
-
     @Override
     @Deprecated
     public long getJoinPerSecond() {
@@ -73,6 +74,11 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public long getPacketPerSecond() {
         return packetPerSecond.getCount();
+    }
+
+    @Override
+    public long getConnectionPerSecond() {
+        return connectionPerSecond.getCount();
     }
 
     @Override
@@ -134,21 +140,30 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public void increaseChecksPerSecond() {
         checkPerSecond.increase();
+        increaseConnectionPerSecond();
     }
 
     @Override
     public void increaseJoinPerSecond() {
         joinPerSecond.increase();
+        increaseConnectionPerSecond();
     }
 
     @Override
     public void increasePingPerSecond() {
         pingPerSecond.increase();
+        increaseConnectionPerSecond();
     }
 
     @Override
     public void increasePacketPerSecond() {
         packetPerSecond.increase();
+        increaseConnectionPerSecond();
+    }
+
+    @Override
+    public void increaseConnectionPerSecond(){
+        connectionPerSecond.increase();
     }
 
     @Override

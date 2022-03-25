@@ -5,9 +5,7 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
 import sun.rmi.runtime.Log;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class WhitelistService implements IService {
 
@@ -29,7 +27,8 @@ public class WhitelistService implements IService {
 
     @Override
     public void unload() {
-        whitelistList.set("data", whitelist);
+        whitelistList.set("data", new ArrayList<>(whitelist));
+        whitelistList.save();
     }
 
     public int size(){
@@ -58,5 +57,9 @@ public class WhitelistService implements IService {
 
     public void removeAll(String... ip){
         Arrays.asList(ip).forEach(whitelist::remove);
+    }
+
+    public Collection<String> getWhitelistedIPS() {
+        return whitelist;
     }
 }

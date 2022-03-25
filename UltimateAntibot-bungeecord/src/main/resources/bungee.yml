@@ -1,4 +1,4 @@
-name: UltimateAntibot
+name: UltimateAntiBot
 version: '${project.version}'
 author: Kr1S_D
 main: me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord

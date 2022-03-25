@@ -5,17 +5,18 @@ import me.kr1s_d.ultimateantibot.commands.subcommands.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.filter.LogFilter;
+import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilterV2;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
 import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
+import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
-import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.events.CustomEventListener;
+import me.kr1s_d.ultimateantibot.events.HandShakeListener;
 import me.kr1s_d.ultimateantibot.events.MainEventListener;
 import me.kr1s_d.ultimateantibot.events.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
@@ -30,6 +31,7 @@ import net.md_5.bungee.api.scheduler.TaskScheduler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Filter;
 
 public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotPlugin {
 
@@ -63,7 +65,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         this.database = new Config(this, "%datafolder%/database.yml");
         FilesUpdater.checkFiles(this, 4.0, config, messages);
-        new Updater(this);
         try {
             ConfigManger.init(config);
             MessageManager.init(messages);
@@ -87,7 +88,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         satelliteServer = new SatelliteServer(this);
         userDataService = new UserDataService(database, this);
         userDataService.load();
-        ProxyServer.getInstance().getLogger().setFilter(new LogFilter(this));
+        ProxyServer.getInstance().getLogger().setFilter(new LogFilterV2(this));
         notificator = new Notificator();
         notificator.init(this);
         new AttackAnalyzerThread(this);
@@ -115,8 +116,10 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CustomEventListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new HandShakeListener(this));
         long b = System.currentTimeMillis() - a;
         logHelper.info("&7Took &c" + b + "ms&7 to load");
+        new Updater(this);
     }
 
     @Override

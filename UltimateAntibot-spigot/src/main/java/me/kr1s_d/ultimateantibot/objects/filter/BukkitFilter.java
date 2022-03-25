@@ -27,7 +27,6 @@ public class BukkitFilter implements Filter {
                 "Connection reset by peer",
                 "Unexpected packet received",
                 "read timed out",
-                "to process!",
                 "to process",
                 "Empty Packet!",
                 "corrupted",
@@ -44,7 +43,8 @@ public class BukkitFilter implements Filter {
                 "disconnected with",
                 "read time out",
                 "Connect reset by peer",
-                "overflow in packet"
+                "overflow in packet",
+                "pipeline"
         ));
         blocked.addAll(antiBotPlugin.getConfigYml().getStringList("filter"));
     }

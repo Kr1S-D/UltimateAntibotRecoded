@@ -28,7 +28,7 @@ public class NameChangerBasicCheck implements IBasicCheck {
      * @param name name of the player
      * @return if player neeed to be disconnected from the check
      */
-    public boolean needToDeny(String ip, String name){
+    public boolean isDenied(String ip, String name){
         if(!isEnabled()){
             return false;
         }
@@ -40,6 +40,11 @@ public class NameChangerBasicCheck implements IBasicCheck {
             data.put(ip, new HashSet<>());
         }
         return false;
+    }
+
+    @Override
+    public void onDisconnect(String ip, String name) {
+
     }
 
     @Override

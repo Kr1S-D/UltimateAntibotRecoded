@@ -22,7 +22,7 @@ public class SuperJoinBasicCheck implements IBasicCheck {
     }
 
     @Override
-    public boolean needToDeny(String ip, String name) {
+    public boolean isDenied(String ip, String name) {
         if(!isEnabled()){
             return false;
         }
@@ -36,6 +36,11 @@ public class SuperJoinBasicCheck implements IBasicCheck {
             data.put(ip, 0);
         }
         return false;
+    }
+
+    @Override
+    public void onDisconnect(String ip, String name) {
+
     }
 
     @Override

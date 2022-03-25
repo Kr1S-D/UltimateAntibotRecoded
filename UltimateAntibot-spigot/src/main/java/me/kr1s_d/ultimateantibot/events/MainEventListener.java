@@ -65,28 +65,27 @@ public class MainEventListener implements Listener {
         if(blackListService.size() != 0 && totals != 0) {
             blacklistedPercentage = Math.round((float) blackListService.size() / totals * 100);
         }
-        //
-        //AntiBotInfo Update & Queue clear
-        //
-        if(whitelistService.isWhitelisted(ip) || blackListService.isBlackListed(ip)){
-            queueService.removeQueue(ip);
-        }
+        antiBotManager.increaseJoinPerSecond();
 
-        if(!whitelistService.isWhitelisted(ip)){
-            antiBotManager.increaseJoinPerSecond();
-            if(!blackListService.isBlackListed(ip)){
-                antiBotManager.increaseChecksPerSecond();
-            }
-        }
         //
         //BlackList & Whitelist Checks
         //
         if(blackListService.isBlackListed(ip)){
+            antiBotManager.increaseChecksPerSecond();
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
             return;
         }
         if(whitelistService.isWhitelisted(ip)){
             return;
+        }
+        //
+        //AntiBotMode Enable
+        //
+        if(antiBotManager.getJoinPerSecond() > ConfigManger.antiBotModeTrigger){
+            if(!antiBotManager.isAntiBotModeEnabled()){
+                antiBotManager.enableAntiBotMode();
+                return;
+            }
         }
         //
         //Queue Service
@@ -101,7 +100,7 @@ public class MainEventListener implements Listener {
             //
             // NameChangerCheck
             //
-            if(nameChangerCheck.needToDeny(ip, name)){
+            if(nameChangerCheck.isDenied(ip, name)){
                 blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
                 e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
                 return;
@@ -109,7 +108,7 @@ public class MainEventListener implements Listener {
             //
             // SuperJoinCheck
             //
-            if(superJoinCheck.needToDeny(ip, name)){
+            if(superJoinCheck.isDenied(ip, name)){
                 blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
                 e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
                 return;
@@ -118,17 +117,9 @@ public class MainEventListener implements Listener {
         //
         //FirstJoinCheck
         //
-        if(firstJoinCheck.needToDeny(ip, name)){
+        if(firstJoinCheck.isDenied(ip, name)){
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.firstJoinMessage));
             return;
-        }
-        //
-        //AntiBotMode Enable
-        //
-        if(antiBotManager.getJoinPerSecond() > ConfigManger.antiBotModeTrigger){
-            if(!antiBotManager.isAntiBotModeEnabled()){
-                antiBotManager.enableAntiBotMode();
-            }
         }
         //
         //Auth Check
@@ -153,7 +144,7 @@ public class MainEventListener implements Listener {
         //
         //Account Check
         //
-        if(accountCheck.needToDeny(ip, nickname)){
+        if(accountCheck.isDenied(ip, nickname)){
             plugin.disconnect(ip, Utils.colora(MessageManager.getAccountOnlineMessage()));
             plugin.getLogHelper().debug("Account Check Executed!");
             return;
@@ -161,7 +152,7 @@ public class MainEventListener implements Listener {
         //
         //Similar Name Check
         //
-        if(similarNameCheck.needToDeny(ip, nickname)){
+        if(similarNameCheck.isDenied(ip, nickname)){
             plugin.disconnect(ip, Utils.colora(MessageManager.getSafeModeMessage()));
             plugin.getLogHelper().debug("Similar Name Check!");
             return;
@@ -169,7 +160,7 @@ public class MainEventListener implements Listener {
         //
         //Length Check
         //
-        if(lengthCheck.needToDeny(ip, nickname)){
+        if(lengthCheck.isDenied(ip, nickname)){
             plugin.disconnect(ip, Utils.colora(MessageManager.getSafeModeMessage()));
             plugin.getLogHelper().debug("Length Check Executed!");
             return;
@@ -205,7 +196,7 @@ public class MainEventListener implements Listener {
     }
 
     @EventHandler
-    public void onUnlogin(PlayerQuitEvent e){
+    public void onUnLogin(PlayerQuitEvent e){
         String ip = Utils.getPlayerIP(e.getPlayer());
         //
         //Account Check

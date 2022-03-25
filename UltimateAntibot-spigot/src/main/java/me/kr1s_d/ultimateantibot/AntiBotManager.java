@@ -15,6 +15,7 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.events.custom.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class AntiBotManager implements IAntiBotManager {
 
@@ -23,6 +24,7 @@ public class AntiBotManager implements IAntiBotManager {
     private final DynamicCounterThread pingPerSecond;
     private final DynamicCounterThread packetPerSecond;
     private final DynamicCounterThread checkPerSecond;
+    private final DynamicCounterThread connectionPerSecond;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
     private final QueueService queueService;
@@ -42,6 +44,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.joinPerSecond = new DynamicCounterThread(plugin);
         this.pingPerSecond = new DynamicCounterThread(plugin);
         this.packetPerSecond = new DynamicCounterThread(plugin);
+        this.connectionPerSecond = new DynamicCounterThread(plugin);
         this.blackListService = new BlackListService(plugin.getBlackList(), logHelper);
         this.whitelistService = new WhitelistService(plugin.getWhitelist(), logHelper);
         this.queueService = new QueueService();
@@ -74,6 +77,11 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public long getPacketPerSecond() {
         return packetPerSecond.getCount();
+    }
+
+    @Override
+    public long getConnectionPerSecond() {
+        return connectionPerSecond.getCount();
     }
 
     @Override
@@ -135,21 +143,30 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public void increaseChecksPerSecond() {
         checkPerSecond.increase();
+        increaseConnectionPerSecond();
     }
 
     @Override
     public void increaseJoinPerSecond() {
         joinPerSecond.increase();
+        increaseConnectionPerSecond();
     }
 
     @Override
     public void increasePingPerSecond() {
         pingPerSecond.increase();
+        increaseConnectionPerSecond();
     }
 
     @Override
     public void increasePacketPerSecond() {
         packetPerSecond.increase();
+        increaseChecksPerSecond();
+    }
+
+    @Override
+    public void increaseConnectionPerSecond() {
+        connectionPerSecond.increase();
     }
 
     @Override
@@ -185,7 +202,9 @@ public class AntiBotManager implements IAntiBotManager {
                 new ModeDisableTask(iAntiBotPlugin, ModeType.ANTIBOT),
                 false, 1000L * ConfigManger.antiBotModeKeep
         );
-        EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.ANTIBOT));
+        iAntiBotPlugin.scheduleDelayedTask(() -> {
+            EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.ANTIBOT));
+        }, false, 50L);
     }
 
     @Override

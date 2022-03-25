@@ -53,7 +53,7 @@ packetmode:
   #Duration of handshakemode
   keep: 15
   #How many blocked packets in 1 second for enable?
-  trigger: 60
+  trigger: 15
   #if the handshake has an invalid protocol do I have to blacklist it?
   blacklist-invalid-protocol: true
 
@@ -168,7 +168,7 @@ proxycheck:
   #Do I have to check every time a player enters? (There are no double checks unless you restart the server)
   check-slow-join: true
   #This check is only done later when most of the attack has been blacklisted (There are no double checks unless you restart the server)
-  check-fast-join: false
+  check-fast-join: true
 
 #Custom Message filter only during bot / packet / ping attack
 filter:

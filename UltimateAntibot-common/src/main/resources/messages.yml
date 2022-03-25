@@ -19,6 +19,7 @@ notifications:
   bossbar: '&aToggled BossBar notifications'
 #actionbar/title/stats allowed values
 #%bots% - return botpersecond
+#%queue% - return queue
 #%pings% - return pingpersecond
 #%whitelist% - return whitelist size
 #%blacklist% - return blacklist size
@@ -33,21 +34,20 @@ notifications:
 #%ippercent% - return blacklist percent
 #%underverification% - returns player under verification
 actionbar:
-  offline: '%prefix%&cJoin/Ping &f%bots%&7/&f%pings% &4- &cVerification &f%underverification% &4- &cWhitelist &f%whitelist% » &c&l%type%'
-  antibot: '%prefix%&cBot/Ping &f%bots%&7/&f%pings% &4- &cBlacklist &f%blacklist%&7 &4- &cVerification &f%underverification% » &c&l%type%'
+  offline: '%prefix%&cJoin&7/&cPing &f%bots%&7/&f%pings% &4- &cVerification &f%underverification% &4- &cWhitelist &f%whitelist% » &c&l%type%'
+  antibot: '%prefix%&cBot&7/&cPing &f%bots%&7/&f%pings% &4- &cBlacklist&7/&cQueue &f%blacklist%&7/&f%queue% &4- &cVerification &f%underverification% » &c&l%type%'
   packets: '%prefix%&cPackets &f%packets%/sec &4- &cBlocked &f%totalpackets% &4- &cVerification &f%underverification% » &c&l%type%'
 title:
   title: '&f%totalbots% &cBlocked Bots'
   subtitle: '&f%blacklist% &cCurrent Blacklist'
 stats:
-  - '&cService Stats'
-  - '&cWhitelist &f%whitelist%'
-  - '&cBlacklist &f%blacklist%'
+  - '&cCurrent Session Stats:'
   - ''
-  - '&cAntibotManager stats'
-  - '&c4Bot &cBlocked &f%totalbots%'
+  - '&cBot &cBlocked &f%totalbots%'
   - '&cTotal &cPing &f%totalpings%'
   - '&cTotal &cPackets &f%totalpackets%'
+  - ''
+  - '&cCurrent server latency is &f%latency% &cms'
 reason:
   names: 'Too many nicks on your IP'
   joins: 'Too many joins from your IP'

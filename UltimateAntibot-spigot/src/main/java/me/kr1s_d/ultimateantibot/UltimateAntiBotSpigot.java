@@ -59,7 +59,6 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.blacklist = new Config(this, "blacklist");
         this.database = new Config(this, "database");
         FilesUpdater.checkFiles(this, 4.0, config, messages);
-        new Updater(this);
         try {
             ConfigManger.init(config);
             MessageManager.init(messages);
@@ -113,6 +112,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         Bukkit.getPluginManager().registerEvents(new CustomEventListener(), this);
         long b = System.currentTimeMillis() - a;
         logHelper.info("&7Took &c" + b + "ms&7 to load");
+        new Updater(this);
     }
 
     @Override
