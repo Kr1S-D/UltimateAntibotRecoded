@@ -47,7 +47,7 @@ stats:
   - '&cTotal &cPing &f%totalpings%'
   - '&cTotal &cPackets &f%totalpackets%'
   - ''
-  - '&cCurrent server latency is &f%latency% &cms'
+  - '&cCurrent server latency is &f%latency%'
 reason:
   names: 'Too many nicks on your IP'
   joins: 'Too many joins from your IP'

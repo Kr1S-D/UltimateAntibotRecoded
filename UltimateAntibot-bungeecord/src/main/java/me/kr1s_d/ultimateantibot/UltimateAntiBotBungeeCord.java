@@ -57,6 +57,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     public void onEnable() {
         instance = this;
         this.isRunning = true;
+        PerformanceHelper.init(ServerType.BUNGEECORD);
         long a = System.currentTimeMillis();
         this.scheduler = ProxyServer.getInstance().getScheduler();
         this.config = new Config(this, "%datafolder%/config.yml");
@@ -96,7 +97,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         new AttackAnalyzerThread(this);
         logHelper.info("&fLoaded &cUltimateAntiBot!");
         logHelper.sendLogo();
-        PerformanceHelper.init(ServerType.BUNGEECORD);
         logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: $4"
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthor())

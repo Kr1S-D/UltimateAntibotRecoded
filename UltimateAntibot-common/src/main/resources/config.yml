@@ -73,7 +73,7 @@ taskmanager:
   auth: 300 #seconds
   packet: 300 #seconds
   register: 300 #seconds
-  update: 5 #seconds
+  update: 15 #seconds
 
 checks:
   firstjoin:
