@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
+import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
@@ -39,6 +40,8 @@ public interface IAntiBotPlugin {
     ConnectionCheckerService getConnectionCheckerService();
 
     INotificator getNotificator();
+
+    CheckService getCheckService();
 
     ICore getCore();
 

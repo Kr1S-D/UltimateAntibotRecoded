@@ -21,13 +21,24 @@ public class WhitelistService implements IService {
 
     @Override
     public void load() {
-        whitelist.addAll(whitelistList.getConfigurationSection("data"));
-        logHelper.info("&c" + whitelist.size() + " &fIP added to whitelist!");
+        try {
+            whitelist.addAll(whitelistList.getConfigurationSection("data"));
+            logHelper.info("&c" + whitelist.size() + " &fIP added to whitelist!");
+        }
+        catch (Exception ignored){
+
+        }
     }
 
     @Override
     public void unload() {
-        whitelistList.set("data", new ArrayList<>(whitelist));
+        try {
+            whitelistList.set("data", new ArrayList<>(whitelist));
+        }
+        catch (Exception ignored){
+            logHelper.error("Error while saving whitelist...");
+        }
+
         whitelistList.save();
     }
 

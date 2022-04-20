@@ -8,6 +8,7 @@ import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilterV2;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
 import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
+import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
@@ -15,10 +16,7 @@ import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.core.UltimateAntiBotCore;
-import me.kr1s_d.ultimateantibot.events.CustomEventListener;
-import me.kr1s_d.ultimateantibot.events.HandShakeListener;
-import me.kr1s_d.ultimateantibot.events.MainEventListener;
-import me.kr1s_d.ultimateantibot.events.PingListener;
+import me.kr1s_d.ultimateantibot.events.*;
 import me.kr1s_d.ultimateantibot.objects.Config;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.Utils;
@@ -49,6 +47,8 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private UserDataService userDataService;
     private ConnectionCheckerService connectionCheckerService;
     private Notificator notificator;
+    //not present on spigot version (4.0.0)
+    private CheckService checkService;
     private ICore core;
     private SatelliteServer satelliteServer;
     private boolean isRunning;
@@ -91,6 +91,8 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         ProxyServer.getInstance().getLogger().setFilter(new LogFilterV2(this));
         notificator = new Notificator();
         notificator.init(this);
+        checkService = new CheckService(this);
+        checkService.load();
         new AttackAnalyzerThread(this);
         logHelper.info("&fLoaded &cUltimateAntiBot!");
         logHelper.sendLogo();
@@ -226,6 +228,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     @Override
     public INotificator getNotificator() {
         return notificator;
+    }
+
+    @Override
+    public CheckService getCheckService() {
+        return checkService;
     }
 
     @Override

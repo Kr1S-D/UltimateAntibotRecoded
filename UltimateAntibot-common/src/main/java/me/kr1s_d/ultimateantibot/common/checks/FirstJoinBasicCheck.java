@@ -1,13 +1,15 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckListenedEvent;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckPriority;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IManagedCheck;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.Map;
 
-public class FirstJoinBasicCheck implements IBasicCheck {
+public class FirstJoinBasicCheck extends IManagedCheck {
 
     private final Map<String, Boolean> data;
 
@@ -36,6 +38,16 @@ public class FirstJoinBasicCheck implements IBasicCheck {
 
     }
 
+    @Override
+    public String getCheckName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public double getCheckVersion() {
+        return 4.0;
+    }
+
     public boolean isEnabled() {
         return ConfigManger.isFirstJoinEnabled;
     }
@@ -51,5 +63,25 @@ public class FirstJoinBasicCheck implements IBasicCheck {
         }
         data.put(ip, false);
         return true;
+    }
+
+    @Override
+    public CheckPriority getCheckPriority() {
+        return CheckPriority.HIGH;
+    }
+
+    @Override
+    public CheckListenedEvent getCheckListenedEvent() {
+        return CheckListenedEvent.PRELOGIN;
+    }
+
+    @Override
+    public void onCancel(String ip, String name) {
+
+    }
+
+    @Override
+    public boolean requireAntiBotMode() {
+        return false;
     }
 }

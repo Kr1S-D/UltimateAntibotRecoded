@@ -22,6 +22,7 @@ public class SatelliteServer {
         this.plugin = plugin;
         this.sessionID = UUID.randomUUID().toString();
         plugin.scheduleRepeatingTask(() -> {
+            if(plugin.getAntiBotManager().isSomeModeOnline()) return;
             lastPingLatency = pingUABServers(sessionID);
             plugin.getLogHelper().debug(String.format("Sending update request to UAB servers! (Took %sms)", lastPingLatency));
         }, true, 1000L * 60L * 10L);

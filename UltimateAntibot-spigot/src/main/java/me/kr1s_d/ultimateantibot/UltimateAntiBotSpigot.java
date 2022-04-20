@@ -6,6 +6,7 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
+import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.objects.filter.BukkitFilter;
 import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
@@ -26,6 +27,7 @@ import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotPlugin {
@@ -223,6 +225,11 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
+    public CheckService getCheckService() {
+        return null;
+    }
+
+    @Override
     public ICore getCore() {
         return core;
     }
@@ -239,11 +246,16 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
 
     @Override
     public void disconnect(String ip, String reasonNoColor) {
-        for(Player player : Bukkit.getOnlinePlayers()){
-            if(Utils.getPlayerIP(player).equals(ip)){
-                player.kickPlayer(Utils.colora(reasonNoColor));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(Player player : Bukkit.getOnlinePlayers()){
+                    if(Utils.getPlayerIP(player).equals(ip)){
+                        player.kickPlayer(Utils.colora(reasonNoColor));
+                    }
+                }
             }
-        }
+        }.runTaskLater(this, 1);
     }
 
     @Override

@@ -10,6 +10,7 @@ public class ConfigManger {
     public static boolean detectServerPerformance;
     public static boolean enableLatencyThread;
     public static boolean enableBossBarAutomaticNotification;
+    public static boolean isConsoleAttackMessageDisabled;
     public static int antiBotModeKeep;
     public static int antiBotModeTrigger;
     public static int slowAntiBotModeTrigger;
@@ -39,6 +40,7 @@ public class ConfigManger {
     public static int authPercent;
     public static int authMaxFails;
     public static boolean authPingInterface;
+    public static long taskManagerUpdate;
     private static SlowJoinCheckConfiguration packetSlowJoinCheckConfiguration;
     private static SlowJoinCheckConfiguration similarNameCheck;
     private static SlowJoinCheckConfiguration lenghtCheck;
@@ -50,6 +52,7 @@ public class ConfigManger {
         isDebugModeOnline = cfg.getBoolean("debug");
         enableLatencyThread = cfg.getBoolean("enable-latency-thread");
         enableBossBarAutomaticNotification = cfg.getBoolean("enable-bossbar-automatic-notification");
+        isConsoleAttackMessageDisabled = cfg.getBoolean("disable-console-attack-message");
         detectServerPerformance = cfg.getBoolean("detect-server-performance");
         antiBotModeKeep = cfg.getInt("antibotmode.keep");
         antiBotModeTrigger = cfg.getInt("antibotmode.trigger");
@@ -80,6 +83,7 @@ public class ConfigManger {
         authPercent = cfg.getInt("checks.auth.percent");
         authMaxFails = cfg.getInt("checks.auth.maxfails");
         authPingInterface = cfg.getBoolean("checks.auth.ping_interface");
+        taskManagerUpdate = cfg.getLong("taskmanager.update");
         packetSlowJoinCheckConfiguration = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.packet");
         similarNameCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.similar");
         lenghtCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.lenght");

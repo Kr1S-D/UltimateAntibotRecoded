@@ -71,12 +71,33 @@ public class AccountBasicCheck extends IManagedCheck {
     }
 
     @Override
-    public CheckPriority getCheckPriority() {
-        return null;
+    public String getCheckName() {
+        return this.getClass().getSimpleName();
     }
 
     @Override
-    public CheckListenedEvent getListenedEvent() {
-        return null;
+    public double getCheckVersion() {
+        return 4.0;
+    }
+
+    @Override
+    public CheckPriority getCheckPriority() {
+        return CheckPriority.HIGHEST;
+    }
+
+    @Override
+    public CheckListenedEvent getCheckListenedEvent() {
+        return CheckListenedEvent.POSTLOGIN;
+    }
+
+    @Override
+    public void onCancel(String ip, String name) {
+        plugin.disconnect(ip, MessageManager.getAccountOnlineMessage());
+        plugin.getLogHelper().debug("Account Check Executed!");
+    }
+
+    @Override
+    public boolean requireAntiBotMode() {
+        return false;
     }
 }

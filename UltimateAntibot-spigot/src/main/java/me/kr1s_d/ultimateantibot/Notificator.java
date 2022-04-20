@@ -5,6 +5,7 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.INotificator;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.utils.KBossBar;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -18,25 +19,26 @@ import java.util.List;
 public class Notificator implements INotificator {
     private static final List<Player> actionbars = new ArrayList<>();
     private static final List<Player> titles = new ArrayList<>();
-    //private static final BossBar bar = Bukkit.createBossBar("&fWaiting for a new attack!", BarColor.RED, BarStyle.SOLID);
+    private static KBossBar bar = new KBossBar();
 
     public static void automaticNotification(Player player) {
         actionbars.remove(player);
-        //bar.removePlayer(player);
+        bar.removePlayer(player);
 
-        //if (ConfigManger.enableBossBarAutomaticNotification) {
-        //    bar.addPlayer(player);
-        //}
+        if (ConfigManger.enableBossBarAutomaticNotification) {
+            bar.addPlayer(player);
+        }
         actionbars.add(player);
     }
 
     public static void toggleBossBar(Player player){
-    //    if(bar.getPlayers().contains(player)){
-    //        bar.removePlayer(player);
-    //    }else{
-    //        bar.addPlayer(player);
-    //     }
-    //    player.sendMessage((ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledBossBar)));
+        if(!bar.isCreated()) return;
+        if(bar.getPlayers().contains(player)){
+            bar.removePlayer(player);
+        }else{
+            bar.addPlayer(player);
+         }
+        player.sendMessage((ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledBossBar)));
     }
 
     public static void toggleActionBar(Player player){
@@ -74,8 +76,9 @@ public class Notificator implements INotificator {
 
     @Override
     public void sendBossBarMessage(String str, float health) {
-        //bar.setTitle(ColorHelper.colorize(str));
-        //bar.setProgress(health);
+        if(!bar.isCreated()) return;
+        bar.setTitle(ColorHelper.colorize(str));
+        bar.setProgress(health);
     }
 
     public void init(IAntiBotPlugin plugin){

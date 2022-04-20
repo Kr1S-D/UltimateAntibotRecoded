@@ -25,7 +25,9 @@ public class UltimateAntiBotCore implements ICore {
     @Override
     public void load() {
         plugin.getLogHelper().info("&fLoading &cCore...");
-        plugin.scheduleRepeatingTask(this::refresh, false, 1000L);
+        if(!ConfigManger.isConsoleAttackMessageDisabled) {
+            plugin.scheduleRepeatingTask(this::refresh, false, 1000L);
+        }
         plugin.scheduleRepeatingTask(plugin.getAntiBotManager().getQueueService()::clear, false, ConfigManger.taskManagerClearCache * 1000L);
         plugin.scheduleRepeatingTask(() -> {
             if(plugin.getAntiBotManager().isAntiBotModeEnabled()){
@@ -48,7 +50,7 @@ public class UltimateAntiBotCore implements ICore {
                     antiBotManager.getQueueService().removeQueue(usd);
                 }
             }
-        }, false, 30000L);
+        }, false, 1000L * ConfigManger.taskManagerUpdate);
     }
 
     @Override

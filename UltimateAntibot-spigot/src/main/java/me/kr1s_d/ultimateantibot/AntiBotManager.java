@@ -202,9 +202,7 @@ public class AntiBotManager implements IAntiBotManager {
                 new ModeDisableTask(iAntiBotPlugin, ModeType.ANTIBOT),
                 false, 1000L * ConfigManger.antiBotModeKeep
         );
-        iAntiBotPlugin.scheduleDelayedTask(() -> {
-            EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.ANTIBOT));
-        }, false, 50L);
+        EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.ANTIBOT));
     }
 
     @Override

@@ -1,15 +1,18 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckListenedEvent;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckPriority;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IManagedCheck;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
 import java.util.*;
 
-public class SimilarNameBasicCheck implements IBasicCheck {
+public class SimilarNameBasicCheck extends IManagedCheck {
 
     private final IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
@@ -78,6 +81,16 @@ public class SimilarNameBasicCheck implements IBasicCheck {
     }
 
     @Override
+    public String getCheckName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public double getCheckVersion() {
+        return 4.0;
+    }
+
+    @Override
     public boolean isEnabled() {
         return ConfigManger.getSimilarNameCheckConfig().isEnabled();
     }
@@ -88,6 +101,27 @@ public class SimilarNameBasicCheck implements IBasicCheck {
            suspects.clear();
            joins.clear();
        }, false, 1000L * ConfigManger.getSimilarNameCheckConfig().getTime());
+    }
+
+    @Override
+    public CheckPriority getCheckPriority() {
+        return CheckPriority.HIGH;
+    }
+
+    @Override
+    public CheckListenedEvent getCheckListenedEvent() {
+        return CheckListenedEvent.POSTLOGIN;
+    }
+
+    @Override
+    public void onCancel(String ip, String name) {
+        plugin.disconnect(ip, MessageManager.getSafeModeMessage());
+        plugin.getLogHelper().debug("Similar Name Check!");
+    }
+
+    @Override
+    public boolean requireAntiBotMode() {
+        return false;
     }
 
     private void add(String ip, String name){

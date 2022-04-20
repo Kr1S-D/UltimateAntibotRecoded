@@ -9,7 +9,9 @@ version: 4.0
 #For any question / problem please open a ticket on my discord server,
 #here is the link: https://discord.gg/vgsjmbXez3
 
-#debug mode
+# (!) DEBUG MODE (!)
+#Setting it to true will allow me to help you better during the assistance however
+#it results in a spam of useless messages in the console :(
 debug: false
 
 #UltimateAntibot V4 brings with it great
@@ -28,6 +30,12 @@ enable-latency-thread: false
 # (!) NOTIFICATION (!)
 #Enable bossbar notification on attack (1.9+)
 enable-bossbar-automatic-notification: true
+
+# (!) DISABLE CONSOLE ATTACK MESSAGE (!)
+#
+#If set to true, when you receive an attack on your server the
+#console will not write any warning messages (referring only to UAB messages)
+disable-console-attack-message: false
 
 #Antibotmode has the utility of mitigating the attack, blacklisting + ip possible,
 antibotmode:
@@ -65,6 +73,7 @@ taskmanager:
   auth: 300 #seconds
   packet: 300 #seconds
   register: 300 #seconds
+  update: 5 #seconds
 
 checks:
   firstjoin:

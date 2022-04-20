@@ -13,6 +13,7 @@ public class Updater {
     private final IAntiBotPlugin plugin;
     private final String localVersion;
     private String newVersion;
+    private boolean isAvailable;
 
     public Updater(IAntiBotPlugin plugin){
         this.plugin = plugin;
@@ -21,8 +22,6 @@ public class Updater {
         check();
         checkNotification();
     }
-
-    private boolean isAvailable;
 
     public boolean isAvailable() {
         return isAvailable;

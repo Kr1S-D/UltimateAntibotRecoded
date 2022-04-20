@@ -77,8 +77,8 @@ public class AuthCheckReloaded {
 
     public void onJoin(AsyncPlayerPreLoginEvent e, String ip) {
         if (isCompletingPingCheck(ip)) {
-            int currentIPPings = pingMap.getOrDefault(ip, new IncreaseInteger(0)).get();
-            int pingRequired = pingData.getOrDefault(ip, 0);
+            int currentIPPings = pingMap.get(ip).get();
+            int pingRequired = pingData.get(ip);
             if (currentIPPings == pingRequired) {
                 //checking connection
                 if(ConfigManger.getProxyCheckConfig().isCheckFastJoin() && ConfigManger.getProxyCheckConfig().isEnabled()) {

@@ -65,7 +65,7 @@ public class ConnectionCheckerService implements IService {
                     plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
                 }
             }
-        }, true,  2500L);
+        }, true,  500L);
     }
 
     public boolean isReady(String ip){

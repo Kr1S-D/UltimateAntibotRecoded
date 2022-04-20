@@ -1,10 +1,13 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckListenedEvent;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckPriority;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
 import me.kr1s_d.ultimateantibot.common.objects.base.SlowJoinCheckConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IManagedCheck;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
@@ -13,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LengthBasicCheck implements IBasicCheck {
+public class LengthBasicCheck extends IManagedCheck {
     private final IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
     private final List<String> lastNicks;
@@ -72,6 +75,16 @@ public class LengthBasicCheck implements IBasicCheck {
     }
 
     @Override
+    public String getCheckName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public double getCheckVersion() {
+        return 4.0;
+    }
+
+    @Override
     public boolean isEnabled() {
         return config.isEnabled();
     }
@@ -92,5 +105,26 @@ public class LengthBasicCheck implements IBasicCheck {
         }else{
             lastNicks.add(name);
         }
+    }
+
+    @Override
+    public CheckPriority getCheckPriority() {
+        return CheckPriority.NORMAL;
+    }
+
+    @Override
+    public CheckListenedEvent getCheckListenedEvent() {
+        return CheckListenedEvent.POSTLOGIN;
+    }
+
+    @Override
+    public void onCancel(String ip, String name) {
+        plugin.disconnect(ip, MessageManager.getSafeModeMessage());
+        plugin.getLogHelper().debug("Length Check Executed!");
+    }
+
+    @Override
+    public boolean requireAntiBotMode() {
+        return false;
     }
 }

@@ -1,7 +1,12 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
+import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckListenedEvent;
+import me.kr1s_d.ultimateantibot.common.objects.enums.CheckPriority;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IBasicCheck;
+import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IManagedCheck;
+import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.HashMap;
@@ -9,13 +14,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class NameChangerBasicCheck implements IBasicCheck {
+public class NameChangerBasicCheck extends IManagedCheck {
 
     private final IAntiBotPlugin plugin;
+    private final BlackListService blackListService;
     private final Map<String, Set<String>> data;
 
     public NameChangerBasicCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
+        this.blackListService = plugin.getAntiBotManager().getBlackListService();
         this.data = new HashMap<>();
         loadTask();
         if(isEnabled()){
@@ -48,6 +55,16 @@ public class NameChangerBasicCheck implements IBasicCheck {
     }
 
     @Override
+    public String getCheckName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public double getCheckVersion() {
+        return 4.0;
+    }
+
+    @Override
     public boolean isEnabled() {
         return ConfigManger.isNameChangerEnabled;
     }
@@ -58,4 +75,23 @@ public class NameChangerBasicCheck implements IBasicCheck {
     }
 
 
+    @Override
+    public CheckPriority getCheckPriority() {
+        return CheckPriority.HIGHEST;
+    }
+
+    @Override
+    public CheckListenedEvent getCheckListenedEvent() {
+        return CheckListenedEvent.PRELOGIN;
+    }
+
+    @Override
+    public void onCancel(String ip, String name) {
+        blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
+    }
+
+    @Override
+    public boolean requireAntiBotMode() {
+        return true;
+    }
 }
