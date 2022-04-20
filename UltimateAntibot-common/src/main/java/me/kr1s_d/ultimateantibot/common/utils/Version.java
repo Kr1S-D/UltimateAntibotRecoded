@@ -9,7 +9,11 @@ public class Version {
 
     public static void init(IAntiBotPlugin plugin){
         cores = Runtime.getRuntime().availableProcessors();
-        //versionStr = plugin.getClassInstance().getPackage().getName().replace(".", ",").split(",")[3];
+        try {
+            versionStr = plugin.getClassInstance().getPackage().getName().replace(".", ",").split(",")[3];
+        }catch (Exception ignored){
+
+        }
     }
 
     public static int getCores() {

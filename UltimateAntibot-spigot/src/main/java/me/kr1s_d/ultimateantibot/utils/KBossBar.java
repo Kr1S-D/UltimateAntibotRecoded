@@ -7,7 +7,6 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
 import java.util.List;
 
 public class KBossBar {
@@ -26,10 +25,12 @@ public class KBossBar {
 
 
     public void addPlayer(Player player) {
+        if(!isCreated) return;
         bar.addPlayer(player);
     }
 
     public void removePlayer(Player player) {
+        if(!isCreated) return;
         bar.removePlayer(player);
     }
 

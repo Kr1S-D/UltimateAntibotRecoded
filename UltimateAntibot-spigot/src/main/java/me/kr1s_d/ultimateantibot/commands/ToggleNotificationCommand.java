@@ -30,7 +30,7 @@ public class ToggleNotificationCommand implements SubCommand {
             } else {
                 if (args[1].equals("bossbar")) {
                     if(Version.getBukkitServerVersion() < 19){
-                        sender.sendMessage(Utils.colora(MessageManager.prefix + "&cBossbar&f notifications are not yet supported on &cspigot!"));
+                        sender.sendMessage(Utils.colora(MessageManager.prefix + "&cBossbar&f notifications are not supported on &c1.8.x!"));
                         return;
                     }
                     Notificator.toggleBossBar((Player) sender);

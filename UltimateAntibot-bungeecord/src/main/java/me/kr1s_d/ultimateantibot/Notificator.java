@@ -29,6 +29,7 @@ public class Notificator implements INotificator {
 
 
     public static void automaticNotification(ProxiedPlayer player){
+        if(actionbars.contains(player)) return;
         actionbars.remove(player);
         bar.removePlayer(player);
         if(player.getPendingConnection().getVersion() > 106){

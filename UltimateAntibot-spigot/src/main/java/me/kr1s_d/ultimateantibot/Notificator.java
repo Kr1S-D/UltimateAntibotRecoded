@@ -19,9 +19,10 @@ import java.util.List;
 public class Notificator implements INotificator {
     private static final List<Player> actionbars = new ArrayList<>();
     private static final List<Player> titles = new ArrayList<>();
-    private static KBossBar bar = new KBossBar();
+    private static final KBossBar bar = new KBossBar();
 
     public static void automaticNotification(Player player) {
+        if(actionbars.contains(player)) return;
         actionbars.remove(player);
         bar.removePlayer(player);
 
