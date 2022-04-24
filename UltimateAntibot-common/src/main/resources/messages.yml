@@ -31,7 +31,6 @@ notifications:
 #%totalbots% - return totalbots
 #%totalpings% - return totalpings
 #%prefix% - return prefix
-#%ippercent% - return blacklist percent
 #%underverification% - returns player under verification
 actionbar:
   offline: '%prefix%&cJoin&7/&cPing &f%bots%&7/&f%pings% &4- &cVerification &f%underverification% &4- &cWhitelist &f%whitelist% » &c&l%type%'

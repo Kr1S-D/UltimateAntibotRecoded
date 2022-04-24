@@ -59,7 +59,7 @@ public class SimilarNameBasicCheck extends IManagedCheck {
         //blacklist actions
         if(suspects.size() >= ConfigManger.getSimilarNameCheckConfig().getTrigger()){
             if (ConfigManger.getSimilarNameCheckConfig().isKick()) {
-                suspects.forEach(a -> {
+                new ArrayList<>(suspects).forEach(a -> {
                     plugin.disconnect(a, MessageManager.getSafeModeMessage());
                 });
             }

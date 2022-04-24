@@ -52,7 +52,7 @@ public class LengthBasicCheck extends IManagedCheck {
         add(ip, name);
         if(suspects.size() >= config.getTrigger()){
             if (config.isKick()) {
-                suspects.forEach(a -> {
+                new ArrayList<>(suspects).forEach(a -> {
                     plugin.disconnect(a, MessageManager.getSafeModeMessage());
                 });
             }
