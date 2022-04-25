@@ -3,43 +3,43 @@ package me.kr1s_d.ultimateantibot.common.service;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 
 public class WhitelistService implements IService {
 
     private final Set<String> whitelist;
-    private final IConfiguration whitelistList;
+    private final IConfiguration whitelistConfig;
     private final LogHelper logHelper;
 
-    public WhitelistService(IConfiguration whitelistList, LogHelper logHelper){
+    public WhitelistService(IConfiguration whitelistConfig, LogHelper logHelper){
         this.whitelist = new HashSet<>();
-        this.whitelistList = whitelistList;
+        this.whitelistConfig = whitelistConfig;
         this.logHelper = logHelper;
     }
 
     @Override
     public void load() {
         try {
-            whitelist.addAll(whitelistList.getConfigurationSection("data"));
+            whitelist.addAll(whitelistConfig.getStringList("data"));
             logHelper.info("&c" + whitelist.size() + " &fIP added to whitelist!");
         }
-        catch (Exception ignored){
-
+        catch (Exception e){
+            logHelper.error("Error while loading whitelist...");
+            e.printStackTrace();
         }
     }
 
     @Override
     public void unload() {
         try {
-            whitelistList.set("data", new ArrayList<>(whitelist));
+            whitelistConfig.set("data", new ArrayList<>(whitelist));
         }
         catch (Exception ignored){
             logHelper.error("Error while saving whitelist...");
         }
 
-        whitelistList.save();
+        whitelistConfig.save();
     }
 
     public int size(){

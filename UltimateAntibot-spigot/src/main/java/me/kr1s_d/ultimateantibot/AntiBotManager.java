@@ -214,7 +214,7 @@ public class AntiBotManager implements IAntiBotManager {
         isPacketModeEnabled = false;
         iAntiBotPlugin.scheduleDelayedTask(
                 new ModeDisableTask(iAntiBotPlugin, ModeType.SLOW),
-                false, 1000L * ConfigManger.antiBotModeKeep
+                false, 1000L * ConfigManger.slowAntibotModeKeep
         );
         EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.SLOW));
     }

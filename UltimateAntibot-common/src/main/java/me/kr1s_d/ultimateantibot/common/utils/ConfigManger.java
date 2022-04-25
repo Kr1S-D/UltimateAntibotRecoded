@@ -4,6 +4,8 @@ import me.kr1s_d.ultimateantibot.common.objects.base.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.base.SlowJoinCheckConfiguration;
 
+import java.util.List;
+
 public class ConfigManger {
     public static double version;
     public static boolean isDebugModeOnline;
@@ -13,7 +15,7 @@ public class ConfigManger {
     public static boolean isConsoleAttackMessageDisabled;
     public static int antiBotModeKeep;
     public static int antiBotModeTrigger;
-    public static int slowAntiBotModeTrigger;
+    public static long slowAntibotModeKeep;
     public static int pingModeKeep;
     public static int pingModeTrigger;
     public static boolean pingModeSendInfo;
@@ -56,7 +58,7 @@ public class ConfigManger {
         detectServerPerformance = cfg.getBoolean("detect-server-performance");
         antiBotModeKeep = cfg.getInt("antibotmode.keep");
         antiBotModeTrigger = cfg.getInt("antibotmode.trigger");
-        slowAntiBotModeTrigger = cfg.getInt("antibotmode.keep-slow");
+        slowAntibotModeKeep = cfg.getInt("antibotmode.keep-slow");
         pingModeKeep = cfg.getInt("pingmode.keep");
         pingModeTrigger = cfg.getInt("pingmode.trigger");
         pingModeSendInfo = cfg.getBoolean("pingmode.send_info");

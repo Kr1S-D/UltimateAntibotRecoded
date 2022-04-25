@@ -96,7 +96,7 @@ public class MainEventListener implements Listener {
         //
         //Some Checks
         //
-        if(antiBotManager.isAntiBotModeEnabled()) {
+        if(antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()) {
             //
             // NameChangerCheck
             //
@@ -131,7 +131,7 @@ public class MainEventListener implements Listener {
         //
         //AntiBotMode Normal
         //
-        if(antiBotManager.isAntiBotModeEnabled()){
+        if(antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()){
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(blacklistedPercentage))));
         }
     }

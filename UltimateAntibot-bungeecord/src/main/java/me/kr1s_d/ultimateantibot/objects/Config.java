@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -134,7 +135,9 @@ public class Config implements IConfiguration {
 
     @Override
     public Set<String> getConfigurationSection(String path) {
-        return (Set<String>) config.getSection(path).getKeys();
+        Set<String> p = new HashSet<>();
+        config.getSection(path).getKeys().forEach(p::add);
+        return p;
     }
 
     @Override

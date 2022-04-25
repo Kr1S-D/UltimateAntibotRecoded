@@ -27,6 +27,7 @@ public class BukkitFilter implements Filter {
                 "Connection reset by peer",
                 "Unexpected packet received",
                 "read timed out",
+                "could not decode packet",
                 "to process",
                 "Empty Packet!",
                 "corrupted",

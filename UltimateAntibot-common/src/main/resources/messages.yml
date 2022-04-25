@@ -45,6 +45,8 @@ stats:
   - '&cBot &cBlocked &f%totalbots%'
   - '&cTotal &cPing &f%totalpings%'
   - '&cTotal &cPackets &f%totalpackets%'
+  - 'Whitelisted IP &f%whitelist%'
+  - 'Blacklisted IP &f%blacklist%'
   - ''
   - '&cCurrent server latency is &f%latency%'
 reason:
