@@ -51,7 +51,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.isSlowAntiBotModeOnline = false;
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
-        this.joinCache = new JoinCache(plugin);
+        this.joinCache = new JoinCache();
         this.connectionCheckerService = plugin.getConnectionCheckerService();
     }
 
