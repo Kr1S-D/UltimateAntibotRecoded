@@ -42,11 +42,11 @@ title:
 stats:
   - '&cCurrent Session Stats:'
   - ''
-  - '&cBot &cBlocked &f%totalbots%'
-  - '&cTotal &cPing &f%totalpings%'
-  - '&cTotal &cPackets &f%totalpackets%'
-  - 'Whitelisted IP &f%whitelist%'
-  - 'Blacklisted IP &f%blacklist%'
+  - '&cBot Blocked &f%totalbots%'
+  - '&cTotal Ping &f%totalpings%'
+  - '&cTotal Packets &f%totalpackets%'
+  - '&cWhitelisted IP &f%whitelist%'
+  - '&cBlacklisted IP &f%blacklist%'
   - ''
   - '&cCurrent server latency is &f%latency%'
 reason:

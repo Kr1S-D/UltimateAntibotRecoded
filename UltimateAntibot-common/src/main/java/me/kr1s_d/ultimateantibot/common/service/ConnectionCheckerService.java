@@ -56,6 +56,10 @@ public class ConnectionCheckerService implements IService {
             underVerification.remove(ip);
             ConnectionCheck connectionCheck = new ConnectionCheck();
             ProxyResults results = connectionCheck.getAndMapResults(ip.replace("/", ""));
+            if(results == null){
+                logHelper.warn("Your API key has reached the daily limit or is not valid!");
+                return;
+            }
             logHelper.debug("ConnectionCheckerService --> checked " + ip + " result " + results.getProxy());
             if(results.getProxy().equals("yes")){
                 BlackListProfile profile = plugin.getAntiBotManager().getBlackListService().blacklistAndGet(ip, BlackListReason.VPN, name);
