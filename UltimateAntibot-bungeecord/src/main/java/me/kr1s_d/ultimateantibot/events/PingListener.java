@@ -28,7 +28,7 @@ public class PingListener implements Listener {
         whitelistService = antiBotManager.getWhitelistService();
     }
 
-    @EventHandler
+    @EventHandler(priority = -128)
     public void onPing(ProxyPingEvent e){
         String ip = Utils.getIP(e.getConnection());
         antiBotManager.increasePingPerSecond();
@@ -36,7 +36,7 @@ public class PingListener implements Listener {
             antiBotManager.increaseChecksPerSecond();
         }
         //PingMode checks
-        if(antiBotManager.isPingModeEnabled()){
+        if(antiBotManager.isSomeModeOnline()){
             if(!ConfigManger.pingModeSendInfo){
                 ServerPing ping = e.getResponse();
                 ping.setFavicon("");

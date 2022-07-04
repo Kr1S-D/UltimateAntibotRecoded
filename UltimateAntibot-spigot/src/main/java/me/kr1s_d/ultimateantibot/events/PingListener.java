@@ -35,7 +35,7 @@ public class PingListener implements Listener {
             antiBotManager.increaseChecksPerSecond();
         }
         //PingMode checks
-        if(antiBotManager.isPingModeEnabled()){
+        if(antiBotManager.isSomeModeOnline()){
             if(!ConfigManger.pingModeSendInfo){
                 e.setServerIcon(null);
             }
