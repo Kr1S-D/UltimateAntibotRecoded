@@ -90,6 +90,7 @@ public class MessageManager {
         bossBarIdleMessage = messages.getString("bossbar_idle_message");
         fastJoinQueueMessage = convertToString(messages.getStringList("fastjoin-queue"));
         satelliteStatus = messages.getStringList("satellitestats");
+
     }
 
     public static String getCommandNoPerms() {

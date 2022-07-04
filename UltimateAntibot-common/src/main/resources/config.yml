@@ -134,29 +134,6 @@ checks:
       kick: true
       antibotmode: true
       enabled: true
-    #Check if bots have similar names
-    #when 4 bots have similar names containing 5 similar
-    #characters it will activate the antibot mode
-    similar:
-      time: 300 #seconds
-      trigger: 4
-      condition: 5
-      blacklist: false
-      kick: true
-      antibotmode: true
-      enabled: true
-    #If 6 bots enter the server within 1 minute
-    #having the same name length it will perform
-    #the various actions
-    lenght:
-      time: 60 #seconds
-      trigger: 6
-      #Dev only
-      condition: 15
-      blacklist: false
-      kick: true
-      antibotmode: true
-      enabled: true
     #if from same ip 4 accounts are online
     #will perform the various actions
     account:
@@ -168,16 +145,23 @@ checks:
       antibotmode: true
       enabled: true
 
+
+#######################################
+#                 VPN                 #
+#######################################
+
+#Another anti vpn check (free) provided by: https://ip-api.com/
+#Disable this check if you are using proxycheck.io
+ip-api:
+  enabled: true
+
 #This check allows you to verify your users during bot attacks!
 #The site offers a free plan that you can access by signing up which gives you access to 1k requests per day.
-#Each check will cost you 1 request and at the end of the daily requests you will have to wait for the next day!
+#Each check will cost you 1 request and at the end of the daily requests you will have to wait for the next day
+#provided by: https://proxycheck.io/
 proxycheck:
   #if key is not valid proxycheck is disabled (without errors in console (unless you have active debugging!))
   api-key: "enter-here-your-key"
-  #Do I have to check every time a player enters? (There are no double checks unless you restart the server)
-  check-slow-join: true
-  #This check is only done later when most of the attack has been blacklisted (There are no double checks unless you restart the server)
-  check-fast-join: true
 
 #Custom Message filter only during bot / packet / ping attack
 filter:

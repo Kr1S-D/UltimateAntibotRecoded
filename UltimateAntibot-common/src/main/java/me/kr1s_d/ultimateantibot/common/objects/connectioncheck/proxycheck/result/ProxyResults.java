@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.result;
+package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.result;
 
 import java.util.HashMap;
 
@@ -259,36 +259,34 @@ public class ProxyResults {
         this.forumSpam = forumSpam;
     }
 
-
-
+    @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer("ProxyResults{");
-        sb.append("status='").append(this.status).append('\'');
-        sb.append(", node='").append(this.node).append('\'');
-        sb.append(", ip='").append(this.ip).append('\'');
-        sb.append(", asn='").append(this.asn).append('\'');
-        sb.append(", provider='").append(this.provider).append('\'');
-        sb.append(", continent='").append(this.continent).append('\'');
-        sb.append(", country='").append(this.country).append('\'');
-        sb.append(", city='").append(this.city).append('\'');
-        sb.append(", region='").append(this.region).append('\'');
-        sb.append(", regionCode='").append(this.regionCode).append('\'');
-        sb.append(", latitude='").append(this.latitude).append('\'');
-        sb.append(", longitude='").append(this.longitude).append('\'');
-        sb.append(", isoCode='").append(this.isoCode).append('\'');
-        sb.append(", proxy='").append(this.proxy).append('\'');
-        sb.append(", type='").append(this.type).append('\'');
-        sb.append(", port='").append(this.port).append('\'');
-        sb.append(", risk='").append(this.risk).append('\'');
-        sb.append(", total='").append(this.total).append('\'');
-        sb.append(", vulnerabilityProbing='").append(this.vulnerabilityProbing).append('\'');
-        sb.append(", loginAttempt='").append(this.loginAttempt).append('\'');
-        sb.append(", registrationAttempt='").append(this.registrationAttempt).append('\'');
-        sb.append(", forumSpam='").append(this.forumSpam).append('\'');
-        sb.append(", lastSeenHuman='").append(this.lastSeenHuman).append('\'');
-        sb.append(", lastSeenUnix='").append(this.lastSeenUnix).append('\'');
-        sb.append(", queryTime='").append(this.queryTime).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "ProxyResults{" +
+                "status='" + status + '\'' +
+                ", node='" + node + '\'' +
+                ", ip='" + ip + '\'' +
+                ", asn='" + asn + '\'' +
+                ", provider='" + provider + '\'' +
+                ", continent='" + continent + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", region='" + region + '\'' +
+                ", regionCode='" + regionCode + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", isoCode='" + isoCode + '\'' +
+                ", proxy='" + proxy + '\'' +
+                ", type='" + type + '\'' +
+                ", port='" + port + '\'' +
+                ", risk='" + risk + '\'' +
+                ", total='" + total + '\'' +
+                ", vulnerabilityProbing='" + vulnerabilityProbing + '\'' +
+                ", loginAttempt='" + loginAttempt + '\'' +
+                ", registrationAttempt='" + registrationAttempt + '\'' +
+                ", forumSpam='" + forumSpam + '\'' +
+                ", lastSeenHuman='" + lastSeenHuman + '\'' +
+                ", lastSeenUnix='" + lastSeenUnix + '\'' +
+                ", queryTime='" + queryTime + '\'' +
+                '}';
     }
 }

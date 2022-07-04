@@ -8,12 +8,12 @@ import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.objects.server.json.StatusResponseJSON;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
-import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Map;
 
+/*
 public class SatelliteCommand implements SubCommand {
 
     private final IAntiBotPlugin iAntiBotPlugin;
@@ -71,3 +71,4 @@ public class SatelliteCommand implements SubCommand {
         return true;
     }
 }
+*/

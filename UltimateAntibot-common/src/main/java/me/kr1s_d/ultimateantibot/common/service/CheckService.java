@@ -26,8 +26,6 @@ public class CheckService implements IService {
         register(new NameChangerBasicCheck(plugin));
         register(new SuperJoinBasicCheck(plugin));
         register(new AccountBasicCheck(plugin));
-        register(new SimilarNameBasicCheck(plugin));
-        register(new LengthBasicCheck(plugin));
         logger.debug("Initializing " + loadedChecks.size() + " blocks of checks!");
         for(CheckListenedEvent e : CheckListenedEvent.values()){
             List<IManagedCheck> checkRegistry = getCheckListByEvent(e);

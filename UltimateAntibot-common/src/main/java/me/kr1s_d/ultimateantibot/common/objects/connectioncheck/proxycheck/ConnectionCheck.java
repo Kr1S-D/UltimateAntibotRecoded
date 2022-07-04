@@ -1,9 +1,10 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck;
+package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.query.HTTPQuery;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.result.ProxyResults;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.ProxyCheckSettings;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.query.HTTPQuery;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.result.ProxyResults;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.io.IOException;

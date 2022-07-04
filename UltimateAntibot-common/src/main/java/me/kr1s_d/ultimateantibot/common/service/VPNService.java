@@ -1,25 +1,23 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.objects.base.BlackListProfile;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.ConnectionCheck;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.result.ProxyResults;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.ipapi.IPAPIProvider;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.ProxyCheckProvider;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.result.ProxyResults;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
-import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
 import java.util.*;
 
-public class ConnectionCheckerService implements IService {
+public class VPNService implements IService {
 
     private final IAntiBotPlugin plugin;
     private final Map<String, ProxyResults> checkedResults;
     private final LogHelper logHelper;
     private final List<String> underVerification;
 
-    public ConnectionCheckerService(IAntiBotPlugin plugin){
+    public VPNService(IAntiBotPlugin plugin){
         this.plugin = plugin;
         checkedResults = new HashMap<>();
         logHelper = plugin.getLogHelper();
@@ -43,6 +41,10 @@ public class ConnectionCheckerService implements IService {
         underVerification.add(ip);
         checkedResults.remove(ip);
         plugin.scheduleDelayedTask(() -> {
+            if(ConfigManger.isIPApiVerificationEnabled){
+                new IPAPIProvider(plugin).process(ip, name);
+                underVerification.remove(ip);
+            }
             if(!ConfigManger.getProxyCheckConfig().isEnabled()){
                 underVerification.remove(ip);
                 logHelper.debug("API key not set! - ProxyCheck is offline!");
@@ -54,22 +56,8 @@ public class ConnectionCheckerService implements IService {
                 return;
             }
             underVerification.remove(ip);
-            ConnectionCheck connectionCheck = new ConnectionCheck();
-            ProxyResults results = connectionCheck.getAndMapResults(ip.replace("/", ""));
-            if(results == null){
-                logHelper.warn("Your API key has reached the daily limit or is not valid!");
-                return;
-            }
-            logHelper.debug("ConnectionCheckerService --> checked " + ip + " result " + results.getProxy());
-            if(results.getProxy().equals("yes")){
-                BlackListProfile profile = plugin.getAntiBotManager().getBlackListService().blacklistAndGet(ip, BlackListReason.VPN, name);
-                plugin.disconnect(ip, MessageManager.getBlacklistedMessage(profile));
-            }else{
-                if(results.getProxy().equals("no")){
-                    plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
-                }
-            }
-        }, true,  500L);
+            new ProxyCheckProvider(plugin).process(ip, name);
+        }, true,  0L);
     }
 
     public boolean isReady(String ip){

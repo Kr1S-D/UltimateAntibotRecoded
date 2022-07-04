@@ -1,5 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.query;
-
+package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.query;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;

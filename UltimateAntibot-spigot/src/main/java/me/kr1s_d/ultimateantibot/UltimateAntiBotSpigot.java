@@ -9,8 +9,7 @@ import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.objects.filter.BukkitFilter;
-import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
-import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
@@ -44,10 +43,10 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     private AnimationThread animationThread;
     private LogHelper logHelper;
     private UserDataService userDataService;
-    private ConnectionCheckerService connectionCheckerService;
+    private VPNService VPNService;
     private Notificator notificator;
     private ICore core;
-    private SatelliteServer satelliteServer;
+    //private SatelliteServer satelliteServer;
     private boolean isRunning;
 
     @Override
@@ -73,8 +72,8 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         Metrics metrics = new Metrics(this, 11777);
         logHelper = new LogHelper(Bukkit.getLogger());
         logHelper.info("&fLoading &cUltimateAntiBot...");
-        connectionCheckerService = new ConnectionCheckerService(this);
-        connectionCheckerService.load();
+        VPNService = new VPNService(this);
+        VPNService.load();
         antiBotManager = new AntiBotManager(this);
         antiBotManager.getQueueService().load();
         antiBotManager.getWhitelistService().load();
@@ -83,7 +82,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         animationThread = new AnimationThread(this);
         core = new UltimateAntiBotCore(this);
         core.load();
-        satelliteServer = new SatelliteServer(this);
+        //satelliteServer = new SatelliteServer(this);
         userDataService = new UserDataService(database, this);
         userDataService.load();
         ((Logger) LogManager.getRootLogger()).addFilter(new BukkitFilter(this));
@@ -109,7 +108,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         commandManager.register(new StatsCommand(this));
         commandManager.register(new ToggleNotificationCommand());
         commandManager.register(new CheckIDCommand(this));
-        commandManager.register(new SatelliteCommand(this));
+        //commandManager.register(new SatelliteCommand(this));
         Bukkit.getPluginManager().registerEvents(new PingListener(this), this);
         Bukkit.getPluginManager().registerEvents(new MainEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new CustomEventListener(), this);
@@ -123,7 +122,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         long a = System.currentTimeMillis();
         logHelper.info("&cUnloading...");
         userDataService.unload();
-        connectionCheckerService.unload();
+        VPNService.unload();
         antiBotManager.getBlackListService().unload();
         antiBotManager.getWhitelistService().unload();
         logHelper.info("&cThanks for choosing us!");
@@ -216,8 +215,8 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
-    public ConnectionCheckerService getConnectionCheckerService() {
-        return connectionCheckerService;
+    public VPNService getConnectionCheckerService() {
+        return VPNService;
     }
 
     @Override
@@ -259,10 +258,10 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         }.runTaskLater(this, 1);
     }
 
-    @Override
-    public SatelliteServer getSatellite() {
-        return satelliteServer;
-    }
+    //@Override
+    //public SatelliteServer getSatellite() {
+    //    return satelliteServer;
+    //}
 
     @Override
     public boolean isRunning() {

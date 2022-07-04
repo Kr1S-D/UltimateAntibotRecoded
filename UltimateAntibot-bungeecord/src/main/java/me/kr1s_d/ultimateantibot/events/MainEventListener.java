@@ -8,7 +8,7 @@ import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
-import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.tasks.AutoWhitelistTask;
@@ -34,10 +34,8 @@ public class MainEventListener implements Listener {
     private final AuthCheckReloaded authCheck;
     private final PacketCheck packetCheck;
     private final AccountBasicCheck accountCheck;
-    private final SimilarNameBasicCheck similarNameCheck;
-    private final LengthBasicCheck lengthCheck;
     private int blacklistedPercentage;
-    private final ConnectionCheckerService connectionCheckerService;
+    private final VPNService VPNService;
 
     public MainEventListener(IAntiBotPlugin antiBotPlugin){
         this.plugin = antiBotPlugin;
@@ -51,10 +49,8 @@ public class MainEventListener implements Listener {
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.packetCheck = new PacketCheck(antiBotPlugin);
         this.accountCheck = new AccountBasicCheck(antiBotPlugin);
-        this.similarNameCheck = new SimilarNameBasicCheck(antiBotPlugin);
-        this.lengthCheck = new LengthBasicCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
-        this.connectionCheckerService = plugin.getConnectionCheckerService();
+        this.VPNService = plugin.getConnectionCheckerService();
     }
 
     @EventHandler(priority = -128)
@@ -161,25 +157,9 @@ public class MainEventListener implements Listener {
             return;
         }
         //
-        //Similar Name Check
+        //Connection check (ProxyCheck.io or ip-api.com)
         //
-        if(similarNameCheck.isDenied(ip, nickname)){
-            plugin.disconnect(ip, MessageManager.getSafeModeMessage());
-            plugin.getLogHelper().debug("Similar Name Check!");
-            return;
-        }
-        //
-        //Length Check
-        //
-        if(lengthCheck.isDenied(ip, nickname)){
-            plugin.disconnect(ip, MessageManager.getSafeModeMessage());
-            plugin.getLogHelper().debug("Length Check Executed!");
-            return;
-        }
-        //
-        //Connection check (ProxyCheck.io)
-        //
-        connectionCheckerService.submit(ip, nickname);
+        VPNService.submit(ip, nickname);
         //If isn't whitelisted
         if(!antiBotManager.getWhitelistService().isWhitelisted(ip)){
             //Add to last join

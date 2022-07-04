@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck;
+package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck;
 
 public class ProxyCheckSettings {
     private String api_key = "";

@@ -14,13 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class SatelliteCommand implements SubCommand {
+/*public class SatelliteCommand implements SubCommand {
 
     private final IAntiBotPlugin iAntiBotPlugin;
     private final SatelliteServer satelliteServer;
 
     public SatelliteCommand(IAntiBotPlugin iAntiBotPlugin){
         this.iAntiBotPlugin = iAntiBotPlugin;
+
         this.satelliteServer = iAntiBotPlugin.getSatellite();
     }
 
@@ -70,4 +71,4 @@ public class SatelliteCommand implements SubCommand {
     public boolean allowedConsole() {
         return true;
     }
-}
+}*/

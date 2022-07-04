@@ -59,7 +59,7 @@ public interface IAntiBotManager {
 
     void enablePingMode();
 
-    void updateTasks();
+    void dispatchConsoleAttackMessage();
 
     boolean canDisable(ModeType modeType);
 

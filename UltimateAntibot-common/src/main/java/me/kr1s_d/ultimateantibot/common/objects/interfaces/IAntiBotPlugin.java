@@ -1,9 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.objects.interfaces;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
-import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
@@ -37,7 +36,7 @@ public interface IAntiBotPlugin {
 
     UserDataService getUserDataService();
 
-    ConnectionCheckerService getConnectionCheckerService();
+    VPNService getConnectionCheckerService();
 
     INotificator getNotificator();
 
@@ -51,7 +50,7 @@ public interface IAntiBotPlugin {
 
     void disconnect(String ip, String reasonNoColor);
 
-    SatelliteServer getSatellite();
+    //SatelliteServer getSatellite();
 
     boolean isRunning();
 }

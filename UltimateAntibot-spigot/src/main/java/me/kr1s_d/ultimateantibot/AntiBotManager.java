@@ -6,7 +6,7 @@ import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
-import me.kr1s_d.ultimateantibot.common.service.ConnectionCheckerService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.thread.DynamicCounterThread;
@@ -15,7 +15,6 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.events.custom.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class AntiBotManager implements IAntiBotManager {
 
@@ -35,7 +34,7 @@ public class AntiBotManager implements IAntiBotManager {
     private boolean isPingModeEnabled;
     private final LogHelper logHelper;
     private final JoinCache joinCache;
-    private final ConnectionCheckerService connectionCheckerService;
+    private final VPNService VPNService;
 
     public AntiBotManager(IAntiBotPlugin plugin){
         this.iAntiBotPlugin = plugin;
@@ -54,7 +53,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
         this.joinCache = new JoinCache();
-        this.connectionCheckerService = plugin.getConnectionCheckerService();
+        this.VPNService = plugin.getConnectionCheckerService();
     }
 
     @Override
@@ -248,7 +247,7 @@ public class AntiBotManager implements IAntiBotManager {
     }
 
     @Override
-    public void updateTasks() {
+    public void dispatchConsoleAttackMessage() {
         if (isAntiBotModeOnline || isPingModeEnabled || isSlowAntiBotModeOnline) {
             logHelper.info(replaceInfo(MessageManager.actionbarAntiBotMode.replace("%prefix%", "")));
         }else{
@@ -293,7 +292,7 @@ public class AntiBotManager implements IAntiBotManager {
                 .replace("%totalpackets%", String.valueOf(this.packetPerSecond.getTotal()))
                 .replace("%latency%", iAntiBotPlugin.getLatencyThread().getLatency())
                 .replace("%prefix%", iAntiBotPlugin.getAnimationThread().getEmote() + " " + MessageManager.prefix)
-                .replace("%underverification%", String.valueOf(connectionCheckerService.getUnderVerificationSize()))
+                .replace("%underverification%", String.valueOf(VPNService.getUnderVerificationSize()))
                 ;
     }
 }

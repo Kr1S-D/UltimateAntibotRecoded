@@ -43,6 +43,7 @@ public class ConfigManger {
     public static int authMaxFails;
     public static boolean authPingInterface;
     public static long taskManagerUpdate;
+    public static boolean isIPApiVerificationEnabled;
     private static SlowJoinCheckConfiguration packetSlowJoinCheckConfiguration;
     private static SlowJoinCheckConfiguration similarNameCheck;
     private static SlowJoinCheckConfiguration lenghtCheck;
@@ -54,6 +55,7 @@ public class ConfigManger {
         isDebugModeOnline = cfg.getBoolean("debug");
         enableLatencyThread = cfg.getBoolean("enable-latency-thread");
         enableBossBarAutomaticNotification = cfg.getBoolean("enable-bossbar-automatic-notification");
+        isIPApiVerificationEnabled = cfg.getBoolean("ip-api.enabled");
         isConsoleAttackMessageDisabled = cfg.getBoolean("disable-console-attack-message");
         detectServerPerformance = cfg.getBoolean("detect-server-performance");
         antiBotModeKeep = cfg.getInt("antibotmode.keep");
