@@ -15,11 +15,11 @@ import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
 import me.kr1s_d.ultimateantibot.common.utils.*;
-import me.kr1s_d.ultimateantibot.core.UltimateAntiBotCore;
-import me.kr1s_d.ultimateantibot.events.CustomEventListener;
-import me.kr1s_d.ultimateantibot.events.HandShakeListener;
-import me.kr1s_d.ultimateantibot.events.MainEventListener;
-import me.kr1s_d.ultimateantibot.events.PingListener;
+import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
+import me.kr1s_d.ultimateantibot.listener.CustomEventListener;
+import me.kr1s_d.ultimateantibot.listener.HandShakeListener;
+import me.kr1s_d.ultimateantibot.listener.MainEventListener;
+import me.kr1s_d.ultimateantibot.listener.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.Utils;
@@ -50,7 +50,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private VPNService VPNService;
     private Notificator notificator;
     private CheckService checkService;
-    private ICore core;
+    private UltimateAntiBotCore core;
     //private SatelliteServer satelliteServer;
     private boolean isRunning;
 
@@ -65,15 +65,18 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         this.database = new Config(this, "%datafolder%/database.yml");
-        FilesUpdater.checkFiles(this, 4.0D, this.config, this.messages);
+        if(FilesUpdater.checkFiles(this, 4.0D, this.config, this.messages)){
+            return;
+        }
         try {
             ConfigManger.init(this.config);
             MessageManager.init(this.messages);
         } catch (Exception e) {
             this.logHelper.error("Error during config.yml & messages.yml loading!");
+            return;
         }
         Version.init(this);
-        Metrics metrics = new Metrics(this, 11712);
+        new Metrics(this, 11712);
         this.logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
         this.logHelper.info("&fLoading &cUltimateAntiBot...");
         this.VPNService = new VPNService(this);
@@ -112,6 +115,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         commandManager.register(new StatsCommand(this));
         commandManager.register(new ToggleNotificationCommand());
         commandManager.register(new CheckIDCommand(this));
+        commandManager.register(new ReloadCommand(this));
         //commandManager.register(new SatelliteCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));
@@ -134,6 +138,15 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         long b = System.currentTimeMillis() - a;
         this.isRunning = false;
         this.logHelper.info("&7Took &c" + b + "ms&7 to unload");
+    }
+
+    @Override
+    public void reload() {
+        this.config = new Config(this, "%datafolder%/config.yml");
+        this.messages = new Config(this, "%datafolder%/messages.yml");
+
+        ConfigManger.init(config);
+        MessageManager.init(messages);
     }
 
     public void runTask(Runnable task, boolean isAsync) {
@@ -232,7 +245,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         return this.checkService;
     }
 
-    public ICore getCore() {
+    public UltimateAntiBotCore getCore() {
         return this.core;
     }
 

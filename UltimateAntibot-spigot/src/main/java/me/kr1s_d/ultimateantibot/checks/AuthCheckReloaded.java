@@ -6,6 +6,7 @@ import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
 import me.kr1s_d.ultimateantibot.common.objects.IncreaseInteger;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -17,7 +18,9 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class AuthCheckReloaded {
@@ -70,7 +73,7 @@ public class AuthCheckReloaded {
         }
         //se ha superato il numero massimo di ping allora lo aggiunge nei fails
         if(hasExceededPingLimit(ip)){
-            increaseFails(ip);
+            increaseFails(ip, "_unable_to_retrive_");
             resetData(ip);
         }
     }
@@ -81,11 +84,16 @@ public class AuthCheckReloaded {
             int pingRequired = pingData.getOrDefault(ip, 0);
             if (pingRequired != 0 && currentIPPings == pingRequired) {
                 //checking connection
-                if(ConfigManger.getProxyCheckConfig().isCheckFastJoin()) {
+                if(ConfigManger.getProxyCheckConfig().isCheckFastJoin() && !hasFailedThisCheck(ip, 2)) {
                     VPNService.submitIP(ip, e.getName());
                 }
                 addToPingCheckCompleted(ip);
                 checking.remove(ip);
+            }
+
+            //se i ping sono inferiori quando entra ha fallito
+            if(pingRequired != 0 && currentIPPings < pingRequired){
+                increaseFails(ip, e.getName());
             }
         }
         if(isWaitingResponse(ip)){
@@ -159,6 +167,16 @@ public class AuthCheckReloaded {
         runningTasks.remove(ip);
         pingData.remove(ip);
         //failure.remove(ip);
+    }
+
+    /**
+     *
+     * @param ip The ip to check
+     * @param min The min amount of times required to fail this check
+     * @return if the ip has failed at least x min times this check
+     */
+    private boolean hasFailedThisCheck(String ip, int min){
+        return failure.getOrDefault(ip, new IncreaseInteger(0)).get() >= min;
     }
 
     /**
@@ -248,8 +266,15 @@ public class AuthCheckReloaded {
      * il check
      * @param ip IP a cui si deve aumentare i fails
      */
-    public void increaseFails(String ip){
-        failure.getOrDefault(ip, new IncreaseInteger(0)).increase();
+    public void increaseFails(String ip, String name) {
+        IncreaseInteger current = failure.getOrDefault(ip, new IncreaseInteger(0));
+        current.increase();
+        failure.put(ip, current);
+
+        if(current.get() >= ConfigManger.authMaxFails) {
+            antiBotManager.getBlackListService().blacklist(ip, BlackListReason.CHECK_FAILS, name);
+            resetTotal(ip);
+        }
     }
 
 }

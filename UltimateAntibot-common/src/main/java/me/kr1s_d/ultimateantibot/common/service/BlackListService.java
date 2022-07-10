@@ -86,7 +86,7 @@ public class BlackListService implements IService {
                 blacklistConfig.set("data." + ip + ".id", id);
                 blacklistConfig.set("data." + ip + ".name", map.getValue().getName());
             }catch (Exception e){
-                System.out.println();
+                System.out.println(e.getMessage());
             }
         }
         blacklistConfig.save();

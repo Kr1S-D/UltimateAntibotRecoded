@@ -19,12 +19,8 @@ import java.util.logging.Logger;
 
 public class Config implements IConfiguration {
     private final Plugin plugin;
-
     private final Configuration config;
-
     private final Logger logger;
-
-    private final TaskScheduler scheduler;
 
     private final String file;
 
@@ -32,7 +28,6 @@ public class Config implements IConfiguration {
         this.file = file;
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-        this.scheduler = plugin.getProxy().getScheduler();
         createConfiguration(file);
         this.config = getConfiguration(file);
     }
@@ -70,13 +65,11 @@ public class Config implements IConfiguration {
 
     public void saveConfiguration(Configuration configuration, String file) {
         String replacedFile = replaceDataFolder(file);
-        this.scheduler.runAsync(this.plugin, () -> {
-            try {
-                ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, new File(replacedFile));
-            } catch (IOException e) {
-                this.logger.info("Unable to save configuration file '" + replacedFile + "'!");
-            }
-        });
+        try {
+            YamlConfiguration.getProvider(YamlConfiguration.class).save(configuration, new File(replacedFile));
+        } catch (IOException e) {
+            this.logger.info("Unable to save configuration file '" + replacedFile + "'!");
+        }
     }
 
     public void deleteConfiguration(String file) {

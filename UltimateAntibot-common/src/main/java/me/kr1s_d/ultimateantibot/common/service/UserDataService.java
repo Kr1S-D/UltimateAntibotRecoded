@@ -11,11 +11,13 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDataService implements IService {
+    private IAntiBotPlugin plugin;
     private final IConfiguration database;
     private final LogHelper logHelper;
     private final Map<String, Boolean> ipMap;
 
     public UserDataService(IConfiguration database, IAntiBotPlugin plugin){
+        this.plugin = plugin;
         this.logHelper = plugin.getLogHelper();
         this.ipMap = new HashMap<>();
         this.database = database;
@@ -25,7 +27,9 @@ public class UserDataService implements IService {
     public void load() {
         for(String str : database.getStringList("data")){
             String[] part = str.split(";");
-            ipMap.put(part[0], Boolean.valueOf(part[1]));
+            if(plugin.getAntiBotManager().getWhitelistService().isWhitelisted(part[0])) {
+                ipMap.put(part[0], Boolean.valueOf(part[1]));
+            }
         }
         logHelper.info("&fLoaded &c" + ipMap.size() + " &fjoins!");
     }
@@ -34,7 +38,9 @@ public class UserDataService implements IService {
     public void unload() {
         List<String> list = new ArrayList<>();
         for(Map.Entry<String, Boolean> map : ipMap.entrySet()){
-            list.add(map.getKey() + ";" + map.getValue());
+            if(plugin.getAntiBotManager().getWhitelistService().isWhitelisted(map.getKey())) {
+                list.add(map.getKey() + ";" + map.getValue());
+            }
         }
         database.set("data", list);
         database.save();
@@ -43,10 +49,19 @@ public class UserDataService implements IService {
     public void save(){
         List<String> list = new ArrayList<>();
         for(Map.Entry<String, Boolean> map : ipMap.entrySet()){
-            list.add(map.getKey() + ";" + map.getValue());
+            if(plugin.getAntiBotManager().getWhitelistService().isWhitelisted(map.getKey())) {
+                list.add(map.getKey() + ";" + map.getValue());
+            }
         }
         database.set("data", list);
         database.save();
+        ipMap.clear();
+        for(String str : database.getStringList("data")){
+            String[] part = str.split(";");
+            if(plugin.getAntiBotManager().getWhitelistService().isWhitelisted(part[0])) {
+                ipMap.put(part[0], Boolean.valueOf(part[1]));
+            }
+        }
     }
 
     public Map<String, Boolean> getFirstJoinMap() {

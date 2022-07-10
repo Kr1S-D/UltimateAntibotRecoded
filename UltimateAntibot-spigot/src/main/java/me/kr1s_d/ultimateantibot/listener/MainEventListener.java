@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.events;
+package me.kr1s_d.ultimateantibot.listener;
 
 import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;

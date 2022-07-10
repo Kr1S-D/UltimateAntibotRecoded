@@ -28,7 +28,7 @@ public class TimedWhitelistTask implements UABRunnable {
 
             @Override
             public long getPeriod() {
-                return TimeUnit.SECONDS.toMillis(20);
+                return 1000L * 20L;
             }
 
             @Override
@@ -47,6 +47,6 @@ public class TimedWhitelistTask implements UABRunnable {
 
     @Override
     public long getPeriod(){
-        return TimeUnit.SECONDS.toMillis(3);
+        return 1250L * 2;
     }
 }

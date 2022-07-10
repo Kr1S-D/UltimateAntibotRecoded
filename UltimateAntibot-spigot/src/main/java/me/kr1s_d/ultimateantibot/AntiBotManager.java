@@ -12,7 +12,7 @@ import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.thread.DynamicCounterThread;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
-import me.kr1s_d.ultimateantibot.events.custom.ModeEnableEvent;
+import me.kr1s_d.ultimateantibot.event.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
 

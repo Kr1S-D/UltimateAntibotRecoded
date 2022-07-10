@@ -1,12 +1,14 @@
-package me.kr1s_d.ultimateantibot.core;
+package me.kr1s_d.ultimateantibot.common.core;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.ICore;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
+import me.kr1s_d.ultimateantibot.common.service.DetectorService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
-public class UltimateAntiBotCore implements ICore {
+import javax.print.DocFlavor;
+
+public class UltimateAntiBotCore {
     private final IAntiBotPlugin plugin;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
@@ -17,12 +19,12 @@ public class UltimateAntiBotCore implements ICore {
         this.whitelistService = plugin.getAntiBotManager().getWhitelistService();
     }
 
-    @Override
     public void load() {
         plugin.getLogHelper().info("&fLoading &cCore...");
-        if(!ConfigManger.isConsoleAttackMessageDisabled) {
-            plugin.scheduleRepeatingTask(this::refresh, false, 1000L);
-        }
+        plugin.scheduleRepeatingTask(() -> {
+            refresh();
+            DetectorService.tickDetectors();
+        }, false, 1000L);
         plugin.scheduleRepeatingTask(plugin.getAntiBotManager().getQueueService()::clear, false, ConfigManger.taskManagerClearCache * 1000L);
         plugin.scheduleRepeatingTask(() -> {
             if(plugin.getAntiBotManager().isAntiBotModeEnabled()){
@@ -34,10 +36,10 @@ public class UltimateAntiBotCore implements ICore {
         }, false, 1000L * ConfigManger.taskManagerClearCache);
     }
 
-    @Override
     public void refresh() {
+        if(ConfigManger.isConsoleAttackMessageDisabled) {
+            return;
+        }
         plugin.getAntiBotManager().dispatchConsoleAttackMessage();
     }
-
-    // TODO: 19/11/2021 AUTOPURGER 
 }

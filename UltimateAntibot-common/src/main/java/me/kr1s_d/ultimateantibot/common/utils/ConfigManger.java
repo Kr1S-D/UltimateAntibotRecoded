@@ -4,7 +4,12 @@ import me.kr1s_d.ultimateantibot.common.objects.config.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.config.SlowJoinCheckConfiguration;
 
+import java.util.SplittableRandom;
+
 public class ConfigManger {
+
+    private static IConfiguration CONFIG;
+
     public static double version;
     public static boolean isDebugModeOnline;
     public static boolean detectServerPerformance;
@@ -49,6 +54,8 @@ public class ConfigManger {
     private static ProxyCheckConfig proxyCheckConfig;
 
     public static void init(IConfiguration cfg){
+        CONFIG = cfg;
+
         version = cfg.getDouble("version");
         isDebugModeOnline = cfg.getBoolean("debug");
         enableLatencyThread = cfg.getBoolean("enable-latency-thread");
@@ -111,5 +118,30 @@ public class ConfigManger {
 
     public static ProxyCheckConfig getProxyCheckConfig() {
         return proxyCheckConfig;
+    }
+
+    public static void incrementAuthCheckDifficulty(){
+        SplittableRandom d = new SplittableRandom();
+
+        int[] a = authMinMaxPing;
+        int[] b = authMinMaxTimer;
+
+        for(int j = 0; j < a.length; j++){
+            int c = d.nextInt(1, 5);
+            a[j] += c;
+        }
+
+        for(int j = 0; j < b.length; j++){
+            int f = d.nextInt(1, 5);
+            a[j] += f;
+        }
+
+        authMinMaxPing = a;
+        authMinMaxTimer = b;
+    }
+
+    public static void restoreAuthCheck() {
+        authMinMaxPing = Parser.toIntArray(Parser.toArray(CONFIG.getString("checks.auth.ping"), "-"));
+        authMinMaxTimer = Parser.toIntArray(Parser.toArray(CONFIG.getString("checks.auth.ping"), "-"));
     }
 }

@@ -1,9 +1,12 @@
-package me.kr1s_d.ultimateantibot.events;
+package me.kr1s_d.ultimateantibot.listener;
 
 import me.kr1s_d.ultimateantibot.common.AttackState;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.events.custom.AttackStateEvent;
-import me.kr1s_d.ultimateantibot.events.custom.ModeEnableEvent;
+import me.kr1s_d.ultimateantibot.common.detectors.FastJoinBypassDetector;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+import me.kr1s_d.ultimateantibot.event.AttackStateEvent;
+import me.kr1s_d.ultimateantibot.event.DuringAttackIPJoinEvent;
+import me.kr1s_d.ultimateantibot.event.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.Notificator;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -13,9 +16,11 @@ import net.md_5.bungee.event.EventHandler;
 public class CustomEventListener implements Listener {
 
     private final IAntiBotPlugin plugin;
+    private final FastJoinBypassDetector bypassDetector;
 
     public CustomEventListener(IAntiBotPlugin plugin) {
         this.plugin = plugin;
+        this.bypassDetector = new FastJoinBypassDetector(plugin);
     }
 
     @EventHandler
@@ -37,6 +42,12 @@ public class CustomEventListener implements Listener {
             plugin.getAntiBotManager().getBlackListService().save();
             plugin.getUserDataService().save();
             plugin.getWhitelist().save();
-        }, false, 1000L);
+            ConfigManger.restoreAuthCheck();
+        }, true, 1000L);
+    }
+
+    @EventHandler
+    public void onIPJoinDuringAttack(DuringAttackIPJoinEvent e){
+        bypassDetector.registerJoin();
     }
 }

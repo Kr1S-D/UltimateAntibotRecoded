@@ -1,22 +1,23 @@
 version: 4.0
-prefix: '&4&LU&c&LA&4&LB&r &7» '
+prefix: "&4&LU&c&LA&4&LB&r &7» "
 onping: #<-- works only on bungeecord!
-  normal: '&c&l◆ &f&l$1&7/&c&l$2'
-  ready: '&f&l◆ &c&lVERIFIED!'
+  normal: "&c&l◆ &f&l$1&7/&c&l$2"
+  ready: "&f&l◆ &c&lVERIFIED!"
 commands:
-  perms: '&fYou dont have &cpermission&f to do this!'
-  cleared: '&c$1&f has been &ccleared! '
-  added: '&c$1&f has been added in the &c$2'
-  removed: '&c$1&f has been removed from the &c$2'
-  wrong-args: '&fInvalid argument! Use &c/uab help!'
-  no-blacklist: '&cThis ID does not appear to be associated with anything!'
+  perms: "&fYou dont have &cpermission&f to do this!"
+  cleared: "&c$1&f has been &ccleared! "
+  added: "&c$1&f has been added in the &c$2"
+  removed: "&c$1&f has been removed from the &c$2"
+  wrong-args: "&fInvalid argument! Use &c/uab help!"
+  no-blacklist: "&cThis ID does not appear to be associated with anything!"
+  reload: "&fThe config and messages have been reloaded! This command is not recommended and could cause problems, a server restart is suggested!"
 analyzer:
   increase: "&a↑ &7- &f%old% &c➜ &f%new% &7- &c%perc%%"
   decrease: "&c↓ &7- &f%old% &c➜ &f%new% &7- &c%perc%%"
 notifications:
-  action: '&aToggled ActionBar notifications!'
-  title: '&aToggled Title notifications!'
-  bossbar: '&aToggled BossBar notifications'
+  action: "&aToggled ActionBar notifications!"
+  title: "&aToggled Title notifications!"
+  bossbar: "&aToggled BossBar notifications"
 #actionbar/title/stats allowed values
 #%bots% - return botpersecond
 #%queue% - return queue
@@ -33,127 +34,131 @@ notifications:
 #%prefix% - return prefix
 #%underverification% - returns player under verification
 actionbar:
-  offline: '%prefix%&cJoin&7/&cPing &f%bots%&7/&f%pings% &4- &cVerify &f%underverification% &4- &cWhitelist &f%whitelist% » &c&l%type%'
-  antibot: '%prefix%&cBot&7/&cPing &f%bots%&7/&f%pings% &4- &cBlacklist&7/&cQueue&7/&cWhitelist &f%blacklist%&7/&f%queue%&7/&f%whitelist% &4- &cVerify &f%underverification% » &c&l%type%'
-  packets: '%prefix%&cPackets &f%packets%/sec &4- &cBlocked &f%totalpackets% &4- &cVerify &f%underverification% » &c&l%type%'
+  offline: "%prefix%&cJoin&7/&cPing &f%bots%&7/&f%pings% &4- &cVerify &f%underverification% &4- &cWhitelist &f%whitelist% » &c&l%type%"
+  antibot: "%prefix%&cBot&7/&cPing &f%bots%&7/&f%pings% &4- &cBlacklist&7/&cQueue&7/&cWhitelist &f%blacklist%&7/&f%queue%&7/&f%whitelist% &4- &cVerify &f%underverification% » &c&l%type%"
+  packets: "%prefix%&cPackets &f%packets%/sec &4- &cBlocked &f%totalpackets% &4- &cVerify &f%underverification% » &c&l%type%"
 title:
-  title: '&f%totalbots% &cBlocked Bots'
-  subtitle: '&f%blacklist% &cCurrent Blacklist'
+  title: "&f%totalbots% &cBlocked Bots"
+  subtitle: "&f%blacklist% &cCurrent Blacklist"
 stats:
-  - '&cCurrent Session Stats:'
-  - ''
-  - '&cBot Blocked &f%totalbots%'
-  - '&cTotal Ping &f%totalpings%'
-  - '&cTotal Packets &f%totalpackets%'
-  - '&cWhitelisted IP &f%whitelist%'
-  - '&cBlacklisted IP &f%blacklist%'
-  - ''
-  - '&cCurrent server latency is &f%latency%'
+  - "&cCurrent Session Stats:"
+  - ""
+  - "&cBot Blocked &f%totalbots%"
+  - "&cTotal Ping &f%totalpings%"
+  - "&cTotal Packets &f%totalpackets%"
+  - "&cWhitelisted IP &f%whitelist%"
+  - "&cBlacklisted IP &f%blacklist%"
+  - ""
+  - "&cCurrent server latency is &f%latency%"
 reason:
-  names: 'Too many nicks on your IP'
-  joins: 'Too many joins from your IP'
-  pings: 'Too many pings from your IP'
-  strange: 'Strange Player'
-  vpn: 'You are using a VPN/PROXY'
-  admin: 'An administrator blacklisted you'
-  check: 'Too many check fails!'
+  names: "Too many nicks on your IP"
+  joins: "Too many joins from your IP"
+  pings: "Too many pings from your IP"
+  strange: "Strange Player"
+  vpn: "You are using a VPN/PROXY"
+  admin: "An administrator blacklisted you"
+  check: "Too many check fails!"
 help:
-  - '&4/uab &chelp'
-  - '&4/uab &ctoggle &factionbar/title/bossbar'
-  - '&4/uab &cstats'
-  - '&4/uab &cclear &fblacklist/whitelist'
-  - '&4/uab &cwhitelist &fadd/remove &f<ip>'
-  - '&4/uab &cblacklist &fadd/remove &f<ip>'
-  - '&4/uab &ccheck &f<id>'
-  - '&4/uab &cdump'
+  - ""
+  - "&c/uab &chelp"
+  - "&c/uab &ctoggle &factionbar/title/bossbar"
+  - "&c/uab &cstats"
+  - "&c/uab &cclear &fblacklist/whitelist"
+  - "&c/uab &cwhitelist &fadd/remove &f<ip>"
+  - "&c/uab &cblacklist &fadd/remove &f<ip>"
+  - "&c/uab &ccheck &f<id>"
+  - "&c/uab &creload"
+  - "&c/uab &cdump"
 satellitestats:
-  - ''
-  - '&cStatus: %status%'
-  - '&cAvg Requests: &f%avg%'
-  - '&cLast Minute Requests: &f%lastmin%'
-  - '&cCurrent Requests: &f%currentreq%'
-  - '&cLast UAB Servers Restart: &f%lastreboot%'
-  - '&cMessage: &f%message%'
-  - '&cResponse time: &f%time%ms'
-  - ''
-  - '&fThere are &c%currentserver%&f out of &c%maxservers%&f servers connected'
+  - ""
+  - "&cStatus: %status%"
+  - "&cAvg Requests: &f%avg%"
+  - "&cLast Minute Requests: &f%lastmin%"
+  - "&cCurrent Requests: &f%currentreq%"
+  - "&cLast UAB Servers Restart: &f%lastreboot%"
+  - "&cMessage: &f%message%"
+  - "&cResponse time: &f%time%ms"
+  - ""
+  - "&fThere are &c%currentserver%&f out of &c%maxservers%&f servers connected"
 antibotmode:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7The antibot protection is now active!'
-  - '&7It will remain active until &c$1%&7 of IPs are blacklisted'
-  - '&7Current BlackList is &c$2%'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7The antibot protection is now active!"
+  - "&7It will remain active until &c$1%&7 of IPs are blacklisted"
+  - "&7Current BlackList is &c$2%"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 first_join:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&cWe are analyzing your connection!'
-  - '&cNow you can re-join'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&cWe are analyzing your connection!"
+  - "&cNow you can re-join"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 safe_mode:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7We were unable to verify &cyou&7 in time!'
-  - '&7The server has received a &cbot attack&7 and you have been disconnected'
-  - '&c&nCome back in a few moments'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7We were unable to verify &cyou&7 in time!"
+  - "&7The server has received a &cbot attack&7 and you have been disconnected"
+  - "&c&nCome back in a few moments"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 account-online:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7You have too many accounts connected at &cthe same time&7 on the server!'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7You have too many accounts connected at &cthe same time&7 on the server!"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 ping:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7Ping the server exactly &c$1&7 times and join'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7Ping the server exactly &c$1&7 times and join"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 timer:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7Re-enter the server in exactly in &c$1&7 seconds'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7Re-enter the server in exactly in &c$1&7 seconds"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 blacklisted:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7You have been blacklisted by the &cAntibot System'
-  - '&7Contact us on discord providing your &cid&7 to be able to &cplay!'
-  - ''
-  - '&4Reason &7» &c$1'
-  - '&4Id &7» &c$2'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7You have been blacklisted by the &cAntibot System"
+  - "&7Contact us on discord providing your &cid&7 to be able to &cplay!"
+  - ""
+  - "&cReason &7» &c$1"
+  - "&cID &7» &c$2"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 wait:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7You are making too many attempts! Wait &c10 &7seconds'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7You are making too many attempts! Wait &c10 &7seconds"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 fastjoin-queue:
-  - '&fᛃ &4&LU&c&LA&4&LB &fᛃ'
-  - ''
-  - '&7You have been queued for verification! The estimated time is &c3/5&7 seconds!'
-  - ''
-  - '&cDiscord &7» &c&ndiscord.myserver.com'
-  - '&c&nmc.yourserver.net'
+  - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
+  - ""
+  - "&7You have been queued for verification! The estimated time is &c3/5&7 seconds!"
+  - ""
+  - "&cDiscord &7» &c&ndiscord.myserver.com"
+  - "&c&nmc.yourserver.net"
 
-bossbar_idle_message: '&fWaiting for attack'
+bossbar_idle_message: "&fWaiting for attack"
 blacklist_info:
-  - '&c&lBLACKLIST INFO:'
-  - '&4Reason &7»  &c$reason'
-  - '&4IP &7»  &c$ip'
-  - '&4NickName &7»  &c$nick'
-  - '&4ID &7»  &c$id'
+  - "&c&lBLACKLIST INFO:"
+  - ""
+  - "&cReason &7» &c$reason"
+  - "&cIP &7» &c$ip"
+  - "&cNickName &7» &c$nick"
+  - "&cID &7» &c$id"
+  - ""

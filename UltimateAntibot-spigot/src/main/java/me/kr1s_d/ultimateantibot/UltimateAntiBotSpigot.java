@@ -3,6 +3,7 @@ package me.kr1s_d.ultimateantibot;
 import me.kr1s_d.commandframework.CommandManager;
 import me.kr1s_d.ultimateantibot.commands.*;
 import me.kr1s_d.ultimateantibot.common.*;
+import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
@@ -14,10 +15,9 @@ import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
-import me.kr1s_d.ultimateantibot.core.UltimateAntiBotCore;
-import me.kr1s_d.ultimateantibot.events.CustomEventListener;
-import me.kr1s_d.ultimateantibot.events.MainEventListener;
-import me.kr1s_d.ultimateantibot.events.PingListener;
+import me.kr1s_d.ultimateantibot.listener.CustomEventListener;
+import me.kr1s_d.ultimateantibot.listener.MainEventListener;
+import me.kr1s_d.ultimateantibot.listener.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
 import me.kr1s_d.ultimateantibot.common.UABRunnable;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
@@ -46,7 +46,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     private UserDataService userDataService;
     private VPNService VPNService;
     private Notificator notificator;
-    private ICore core;
+    private UltimateAntiBotCore core;
     //private SatelliteServer satelliteServer;
     private boolean isRunning;
 
@@ -62,15 +62,18 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.whitelist = new Config(this, "whitelist");
         this.blacklist = new Config(this, "blacklist");
         this.database = new Config(this, "database");
-        FilesUpdater.checkFiles(this, 4.0, config, messages);
+        if(FilesUpdater.checkFiles(this, 4.0, config, messages)){
+            return;
+        }
         try {
             ConfigManger.init(config);
             MessageManager.init(messages);
         }catch (Exception e){
             logHelper.error("Error during config.yml & messages.yml loading!");
+            return;
         }
         Version.init(this);
-        Metrics metrics = new Metrics(this, 11777);
+        new Metrics(this, 11777);
         logHelper = new LogHelper(Bukkit.getLogger());
         logHelper.info("&fLoading &cUltimateAntiBot...");
         VPNService = new VPNService(this);
@@ -109,6 +112,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         commandManager.register(new StatsCommand(this));
         commandManager.register(new ToggleNotificationCommand());
         commandManager.register(new CheckIDCommand(this));
+        commandManager.register(new ReloadCommand(this));
         //commandManager.register(new SatelliteCommand(this));
         Bukkit.getPluginManager().registerEvents(new PingListener(this), this);
         Bukkit.getPluginManager().registerEvents(new MainEventListener(this), this);
@@ -130,6 +134,15 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         long b = System.currentTimeMillis() - a;
         this.isRunning = false;
         logHelper.info("&7Took &c" + b + "ms&7 to unload");
+    }
+
+    @Override
+    public void reload() {
+        this.config = new Config(this, "%datafolder%/config.yml");
+        this.messages = new Config(this, "%datafolder%/messages.yml");
+
+        ConfigManger.init(config);
+        MessageManager.init(messages);
     }
 
     @Override
@@ -245,7 +258,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
-    public ICore getCore() {
+    public UltimateAntiBotCore getCore() {
         return core;
     }
 

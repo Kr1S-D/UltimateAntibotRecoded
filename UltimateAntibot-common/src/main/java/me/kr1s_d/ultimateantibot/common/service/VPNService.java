@@ -47,7 +47,7 @@ public class VPNService implements IService {
 
         underVerification.add(ip);
         plugin.scheduleDelayedTask(() -> {
-            if(underVerification.size() > 7){
+            if(underVerification.size() > 4){
                 logHelper.debug("Too many verification requests! - Clearing...");
                 underVerification.clear();
                 return;
@@ -69,7 +69,7 @@ public class VPNService implements IService {
             }
             underVerification.remove(ip);
             new ProxyCheckProvider(plugin).process(ip, name);
-        }, true,  antiBotManager.isSomeModeOnline() ? 3000L : 0L);
+        }, true,  antiBotManager.isSomeModeOnline() ? 1000L : 0L);
     }
 
     public int getUnderVerificationSize(){

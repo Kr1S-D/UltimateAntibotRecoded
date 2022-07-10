@@ -69,7 +69,7 @@ packetmode:
 playtime_for_whitelist: 10 #minutes
 
 taskmanager:
-  clearcache: 300 #seconds
+  clearcache: 60 #seconds
   auth: 300 #seconds
   packet: 300 #seconds
   register: 300 #seconds
@@ -82,7 +82,7 @@ checks:
   #This check checks the number of accounts entered by the same ip within 60 seconds
   namechanger:
     #Clear cache time
-    time: 60
+    time: 200
     #max accounts to blackist
     limit: 3
     #enable?
@@ -91,7 +91,7 @@ checks:
   superjoin:
     #Clear cache time
     time: 300
-    #max joins in 60 seconds to get blacklisted
+    #max joins in 300 seconds to get blacklisted
     limit: 35
     #enable?
     enabled: true
@@ -100,7 +100,7 @@ checks:
     time: 300
     #Allows users to whitelist
     #Through min-max ping
-    ping: 3-5
+    ping: 4-7
     #Min max TimerCheck
     timer: 3-7
     #When the time for verification runs out,
@@ -108,8 +108,8 @@ checks:
     between: 1300 #milliseconds
     #BlackList enable condition
     percent: 95
-    #If player fail this check 15 times will be blacklisted
-    maxfails: 15
+    #If player fail this check 6 times will be blacklisted
+    maxfails: 6
     #If a player has to ping the verification,
     #the non-verifying players will have a counter of the times they pinged the
     #server to enter!

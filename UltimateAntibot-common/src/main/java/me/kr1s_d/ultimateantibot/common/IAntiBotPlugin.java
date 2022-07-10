@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common;
 
+import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
@@ -8,6 +9,8 @@ import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 
 public interface IAntiBotPlugin {
+    void reload();
+
     void runTask(Runnable task, boolean isAsync);
 
     void runTask(UABRunnable runnable);
@@ -48,7 +51,7 @@ public interface IAntiBotPlugin {
 
     CheckService getCheckService();
 
-    ICore getCore();
+    UltimateAntiBotCore getCore();
 
     boolean isConnected(String ip);
 

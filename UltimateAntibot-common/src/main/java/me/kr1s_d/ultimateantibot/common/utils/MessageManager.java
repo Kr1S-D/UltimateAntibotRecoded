@@ -8,6 +8,7 @@ import java.util.List;
 public class MessageManager {
     public static double version;
     public static String prefix;
+    public static String reloadMessage;
     public static String normalPingInterface;
     public static String verifiedPingInterface;
     public static String titleTitle;
@@ -51,6 +52,7 @@ public class MessageManager {
     public static void init(IConfiguration messages){
         version = messages.getDouble("version");
         prefix = messages.getString("prefix");
+        reloadMessage = messages.getString("commands.reload");
         normalPingInterface = messages.getString("onping.normal");
         verifiedPingInterface = messages.getString("onping.ready");
         titleTitle = messages.getString("title.title");

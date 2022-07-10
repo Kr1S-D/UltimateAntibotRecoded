@@ -77,7 +77,7 @@ public class PacketCheck {
             if(suspected.size() >= ConfigManger.getPacketCheckConfig().getTrigger()){
                 iAntiBotPlugin.getLogHelper().debug("Packet Check Executed!");
                 Utils.disconnectAll(new ArrayList<>(suspected), MessageManager.getSafeModeMessage());
-                for(String ip : suspected){
+                for(String ip : new ArrayList<>(suspected)){
                     if(ConfigManger.getPacketCheckConfig().isBlacklist()) {
                         blacklist.blacklist(ip, BlackListReason.STRANGE_PLAYER);
                     }
