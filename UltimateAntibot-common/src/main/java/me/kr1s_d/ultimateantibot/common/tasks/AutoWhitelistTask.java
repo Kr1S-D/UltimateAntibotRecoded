@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.tasks;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 
 public class AutoWhitelistTask implements Runnable{
 

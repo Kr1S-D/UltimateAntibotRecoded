@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.thread;
 
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
-import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.helper.ServerType;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 public class LatencyThread {
@@ -42,14 +42,6 @@ public class LatencyThread {
     public String getLatency() {
         return result + " ms";
     }
-
-    /**
-    public void divide(double f1, double f2) {
-        BigDecimal a1 = BigDecimal.valueOf(f1);
-        BigDecimal a2 = BigDecimal.valueOf(f2);
-        result = String.valueOf(a1.divide(a2).doubleValue());
-    }
-    */
 
 }
 

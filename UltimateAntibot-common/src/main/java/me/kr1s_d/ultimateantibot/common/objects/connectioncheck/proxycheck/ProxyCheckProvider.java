@@ -1,10 +1,11 @@
 package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck;
 
-import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.objects.base.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.VPNProvider;
 import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.result.ProxyResults;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.tasks.TimedWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
 public class ProxyCheckProvider implements VPNProvider {
@@ -34,6 +35,7 @@ public class ProxyCheckProvider implements VPNProvider {
         }else{
             if(results.getProxy().equals("no")){
                 plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
+                plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip));
             }
         }
     }

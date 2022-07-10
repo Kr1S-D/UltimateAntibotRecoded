@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.base.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 
 import java.util.List;
 

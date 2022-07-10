@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.events;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;

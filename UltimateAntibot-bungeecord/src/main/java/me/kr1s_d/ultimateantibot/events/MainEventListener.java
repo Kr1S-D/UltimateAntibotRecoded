@@ -4,9 +4,9 @@ import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
 import me.kr1s_d.ultimateantibot.common.checks.*;
-import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
@@ -50,8 +50,16 @@ public class MainEventListener implements Listener {
         this.packetCheck = new PacketCheck(antiBotPlugin);
         this.accountCheck = new AccountBasicCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
-        this.VPNService = plugin.getConnectionCheckerService();
+        this.VPNService = plugin.getVPNService();
     }
+
+    //@EventHandler
+    //public void onClientConnection(ClientConnectEvent e){
+    //    SocketAddress encodedIP = e.getSocketAddress();
+    //    InetSocketAddress socketAddress = (InetSocketAddress) encodedIP;
+    //    String ip = socketAddress.getAddress().toString();
+    //    e.setCancelled(true);
+    //}
 
     @EventHandler(priority = -128)
     public void onPreLoginEvent(PreLoginEvent e){
@@ -75,6 +83,7 @@ public class MainEventListener implements Listener {
         if(whitelistService.isWhitelisted(ip)){
             return;
         }
+
         //
         //AntiBotMode Enable
         //
@@ -159,7 +168,7 @@ public class MainEventListener implements Listener {
         //
         //Connection check (ProxyCheck.io or ip-api.com)
         //
-        VPNService.submit(ip, nickname);
+        VPNService.submitIP(ip, nickname);
         //If isn't whitelisted
         if(!antiBotManager.getWhitelistService().isWhitelisted(ip)){
             //Add to last join

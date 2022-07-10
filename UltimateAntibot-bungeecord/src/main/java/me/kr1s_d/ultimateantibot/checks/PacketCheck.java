@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.checks;
 
-import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
@@ -75,7 +75,7 @@ public class PacketCheck {
                 }
             });
             if(suspected.size() >= ConfigManger.getPacketCheckConfig().getTrigger()){
-                iAntiBotPlugin.getLogHelper().info("Packet Check Executed!");
+                iAntiBotPlugin.getLogHelper().debug("Packet Check Executed!");
                 Utils.disconnectAll(new ArrayList<>(suspected), MessageManager.getSafeModeMessage());
                 for(String ip : suspected){
                     if(ConfigManger.getPacketCheckConfig().isBlacklist()) {

@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.objects;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;

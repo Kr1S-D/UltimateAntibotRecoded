@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
 
 public class FilesUpdater {
     public static void checkFiles(IAntiBotPlugin pl, double fileVersion, IConfiguration config, IConfiguration messages){

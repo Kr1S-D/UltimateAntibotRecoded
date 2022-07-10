@@ -3,9 +3,9 @@ package me.kr1s_d.ultimateantibot.events;
 import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.common.checks.*;
-import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
@@ -49,7 +49,7 @@ public class MainEventListener implements Listener {
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.accountCheck = new AccountBasicCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
-        this.VPNService = plugin.getConnectionCheckerService();
+        this.VPNService = plugin.getVPNService();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -75,6 +75,12 @@ public class MainEventListener implements Listener {
             return;
         }
         //
+        //Queue Check
+        //
+        if(whitelistService.isWhitelisted(ip) || blackListService.isBlackListed(ip)){
+            queueService.removeQueue(ip);
+        }
+        //
         //AntiBotMode Enable
         //
         if(antiBotManager.getJoinPerSecond() > ConfigManger.antiBotModeTrigger){
@@ -83,12 +89,7 @@ public class MainEventListener implements Listener {
                 return;
             }
         }
-        //
-        //Queue Service
-        //
-        if(!queueService.isQueued(ip) && !blackListService.isBlackListed(ip) && !whitelistService.isWhitelisted(ip)){
-            queueService.queue(ip);
-        }
+
         //
         //Some Checks
         //
@@ -148,7 +149,7 @@ public class MainEventListener implements Listener {
         //
         //Connection check (ProxyCheck.io)
         //
-        VPNService.submit(ip, nickname);
+        VPNService.submitIP(ip, nickname);
         //If isn't whitelisted
         if(!antiBotManager.getWhitelistService().isWhitelisted(ip)){
             //Add to last join

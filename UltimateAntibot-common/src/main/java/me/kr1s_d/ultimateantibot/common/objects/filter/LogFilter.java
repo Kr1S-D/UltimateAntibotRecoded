@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.objects.filter;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
+@Deprecated
 public class LogFilter implements Filter {
 
     private final IAntiBotManager antiBotManager;

@@ -1,11 +1,15 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.base.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,8 +43,20 @@ public class CheckIDCommand implements SubCommand {
                     .replace("$nick", profile.getName())
                     .replace("$ip", profile.getIp())
             ));
+
         }
 
+        TextComponent whitelistComponent = new TextComponent();
+        whitelistComponent.setText("§a§l[WHITELIST]§f");
+        whitelistComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder("§a§n» Click to WHITELIST this IP!").create())));
+        whitelistComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/uab whitelist add " + profile.getIp().replace("/", "")));
+
+        TextComponent blacklistComponent = new TextComponent();
+        blacklistComponent.setText("§c§l[BLACKLIST]§f");
+        blacklistComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (new ComponentBuilder("§c§n» Click to BLACKLIST this IP!").create())));
+        blacklistComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/uab blacklist add " + profile.getIp().replace("/", "")));
+
+        sender.sendMessage(whitelistComponent, blacklistComponent);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package me.kr1s_d.ultimateantibot.common.helper;
 
-import me.kr1s_d.ultimateantibot.common.helper.enums.PerformanceMode;
-import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.Version;
 

@@ -5,7 +5,7 @@ import net.md_5.bungee.api.scheduler.TaskScheduler;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
 
 import java.io.File;
 import java.io.IOException;

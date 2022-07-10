@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.utils;
 
-import me.kr1s_d.ultimateantibot.common.helper.enums.ColorHelper;
+import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.Connection;

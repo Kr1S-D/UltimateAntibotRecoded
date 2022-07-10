@@ -1,18 +1,20 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.IService;
 
 import java.util.*;
 
 public class WhitelistService implements IService {
 
+    private QueueService queueService;
     private final Set<String> whitelist;
     private final IConfiguration whitelistConfig;
     private final LogHelper logHelper;
 
-    public WhitelistService(IConfiguration whitelistConfig, LogHelper logHelper){
+    public WhitelistService(QueueService queueService, IConfiguration whitelistConfig, LogHelper logHelper){
+        this.queueService = queueService;
         this.whitelist = new HashSet<>();
         this.whitelistConfig = whitelistConfig;
         this.logHelper = logHelper;
@@ -42,12 +44,24 @@ public class WhitelistService implements IService {
         whitelistConfig.save();
     }
 
+    public void save(){
+        try {
+            whitelistConfig.set("data", new ArrayList<>(whitelist));
+        }
+        catch (Exception ignored){
+            logHelper.error("Error while saving whitelist...");
+        }
+
+        whitelistConfig.save();
+    }
+
     public int size(){
         return whitelist.size();
     }
 
     public void whitelist(String ip){
         whitelist.add(ip);
+        queueService.removeQueue(ip);
     }
 
     public void clear(){

@@ -1,11 +1,11 @@
 package me.kr1s_d.ultimateantibot.checks;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
-import me.kr1s_d.ultimateantibot.common.helper.enums.AuthCheckType;
-import me.kr1s_d.ultimateantibot.common.helper.enums.ColorHelper;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.base.IncreaseInteger;
+import me.kr1s_d.ultimateantibot.common.checks.enums.AuthCheckType;
+import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.IncreaseInteger;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -44,7 +44,7 @@ public class AuthCheckReloaded {
         this.failure = new HashMap<>();
         this.taskScheduler = ProxyServer.getInstance().getScheduler();
         this.runningTasks = new HashMap<>();
-        this.VPNService = plugin.getConnectionCheckerService();
+        this.VPNService = plugin.getVPNService();
         plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
     }
 
@@ -82,11 +82,11 @@ public class AuthCheckReloaded {
     public void onJoin(PreLoginEvent e, String ip) {
         if (isCompletingPingCheck(ip)) {
             int currentIPPings = pingMap.get(ip).get();
-            int pingRequired = pingData.get(ip);
-            if (currentIPPings == pingRequired) {
+            int pingRequired = pingData.getOrDefault(ip, 0);
+            if (pingRequired != 0 && currentIPPings == pingRequired) {
                 //checking connection
-                if(ConfigManger.getProxyCheckConfig().isCheckFastJoin() && ConfigManger.getProxyCheckConfig().isEnabled()) {
-                    VPNService.submit(ip, e.getConnection().getName());
+                if(ConfigManger.getProxyCheckConfig().isCheckFastJoin()) {
+                    VPNService.submitIP(ip, e.getConnection().getName());
                 }
                 addToPingCheckCompleted(ip);
                 checking.remove(ip);

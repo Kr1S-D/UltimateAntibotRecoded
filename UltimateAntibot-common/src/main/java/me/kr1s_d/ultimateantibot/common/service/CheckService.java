@@ -2,10 +2,10 @@ package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.checks.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.objects.enums.CheckListenedEvent;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.check.IManagedCheck;
+import me.kr1s_d.ultimateantibot.common.checks.CheckListenedEvent;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IService;
+import me.kr1s_d.ultimateantibot.common.checks.IManagedCheck;
 
 import java.util.*;
 

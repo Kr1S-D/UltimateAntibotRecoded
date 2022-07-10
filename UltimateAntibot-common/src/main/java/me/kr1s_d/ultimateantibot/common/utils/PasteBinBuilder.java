@@ -33,7 +33,7 @@ public class PasteBinBuilder {
         return this;
     }
 
-    public void pasteAsync(){
+    public void pasteSync(){
         try {
             URL url = new URL("https://pastebin.com/api/api_post.php");
             URLConnection con = url.openConnection();

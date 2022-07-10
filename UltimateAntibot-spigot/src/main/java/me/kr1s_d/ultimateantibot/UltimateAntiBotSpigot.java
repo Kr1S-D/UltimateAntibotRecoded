@@ -2,10 +2,10 @@ package me.kr1s_d.ultimateantibot;
 
 import me.kr1s_d.commandframework.CommandManager;
 import me.kr1s_d.ultimateantibot.commands.*;
+import me.kr1s_d.ultimateantibot.common.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
-import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
+import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.objects.filter.BukkitFilter;
@@ -19,6 +19,7 @@ import me.kr1s_d.ultimateantibot.events.CustomEventListener;
 import me.kr1s_d.ultimateantibot.events.MainEventListener;
 import me.kr1s_d.ultimateantibot.events.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
+import me.kr1s_d.ultimateantibot.common.UABRunnable;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.apache.logging.log4j.LogManager;
@@ -111,7 +112,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         //commandManager.register(new SatelliteCommand(this));
         Bukkit.getPluginManager().registerEvents(new PingListener(this), this);
         Bukkit.getPluginManager().registerEvents(new MainEventListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new CustomEventListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CustomEventListener(this), this);
         long b = System.currentTimeMillis() - a;
         logHelper.info("&7Took &c" + b + "ms&7 to load");
         new Updater(this);
@@ -131,6 +132,19 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         logHelper.info("&7Took &c" + b + "ms&7 to unload");
     }
 
+    @Override
+    public void runTask(Runnable task, boolean isAsync) {
+        if(isAsync){
+            scheduler.runTaskAsynchronously(this, task);
+        }else{
+            scheduler.runTask(this, task);
+        }
+    }
+
+    @Override
+    public void runTask(UABRunnable runnable) {
+        runTask(runnable, runnable.isAsync());
+    }
 
     @Override
     public void scheduleDelayedTask(Runnable runnable, boolean async, long milliseconds) {
@@ -142,12 +156,8 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
-    public void runTask(Runnable task, boolean isAsync) {
-        if(isAsync){
-            scheduler.runTaskAsynchronously(this, task);
-        }else{
-            scheduler.runTask(this, task);
-        }
+    public void scheduleDelayedTask(UABRunnable runnable){
+        scheduleDelayedTask(runnable, runnable.isAsync(), Utils.convertToTicks(runnable.getPeriod()));
     }
 
     @Override
@@ -157,6 +167,11 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         }else{
             scheduler.runTaskTimer(this, runnable, 0, Utils.convertToTicks(repeatMilliseconds));
         }
+    }
+
+    @Override
+    public void scheduleRepeatingTask(UABRunnable runnable) {
+        scheduleRepeatingTask(runnable, runnable.isAsync(), runnable.getPeriod());
     }
 
     @Override
@@ -215,7 +230,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
-    public VPNService getConnectionCheckerService() {
+    public VPNService getVPNService() {
         return VPNService;
     }
 

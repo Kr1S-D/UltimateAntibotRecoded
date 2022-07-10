@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
+import me.kr1s_d.ultimateantibot.common.IService;
 
 import java.util.HashSet;
 import java.util.Set;

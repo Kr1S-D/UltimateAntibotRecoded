@@ -1,7 +1,5 @@
 package me.kr1s_d.ultimateantibot.common.cache;
 
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-
 import java.util.ArrayList;
 import java.util.List;
 

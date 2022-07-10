@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.CommandSender;
@@ -24,11 +24,11 @@ public class AddRemoveWhitelistCommand implements SubCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args[1].equalsIgnoreCase("add")) {
-            iAntiBotManager.getWhitelistService().whitelist(args[2]);
+            iAntiBotManager.getWhitelistService().whitelist("/" +args[2]);
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandAdded(args[2], "whitelist")));
         } else {
             if (args[1].equalsIgnoreCase("remove")) {
-                iAntiBotManager.getWhitelistService().unWhitelist(args[2]);
+                iAntiBotManager.getWhitelistService().unWhitelist("/" + args[2]);
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandRemove(args[2], "whitelist")));
             } else {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.commandWrongArgument));

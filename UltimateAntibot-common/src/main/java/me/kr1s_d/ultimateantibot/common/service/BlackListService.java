@@ -1,10 +1,10 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
-import me.kr1s_d.ultimateantibot.common.objects.base.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.IService;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class BlackListService implements IService {
 
+    private QueueService queueService;
     private final Map<String, BlackListProfile> blacklist;
     private final IConfiguration blacklistConfig;
     private final LogHelper logHelper;
@@ -22,7 +23,8 @@ public class BlackListService implements IService {
      * @param blacklistConfig - IConfiguration for BlackList Service
      * @param logHelper - LogHelper for debug
      */
-    public BlackListService(IConfiguration blacklistConfig, LogHelper logHelper){
+    public BlackListService(QueueService queueService, IConfiguration blacklistConfig, LogHelper logHelper){
+        this.queueService = queueService;
         this.blacklist = new HashMap<>();
         this.blacklistConfig = blacklistConfig;
         this.logHelper = logHelper;
@@ -58,13 +60,34 @@ public class BlackListService implements IService {
     @Override
     public void unload() {
         blacklistConfig.set("data", null);
-        for(Map.Entry<String, BlackListProfile> map : blacklist.entrySet()){
-            String ip = toFileString(map.getKey());
-            String reason = map.getValue().getReason();
-            String id = map.getValue().getId();
-            blacklistConfig.set("data." + ip + ".reason", reason);
-            blacklistConfig.set("data." + ip + ".id", id);
-            blacklistConfig.set("data." + ip + ".name", map.getValue().getName());
+        for(Map.Entry<String, BlackListProfile> map : new HashMap<>(blacklist).entrySet()){
+            try {
+                String ip = toFileString(map.getKey());
+                String reason = map.getValue().getReason();
+                String id = map.getValue().getId();
+                blacklistConfig.set("data." + ip + ".reason", reason);
+                blacklistConfig.set("data." + ip + ".id", id);
+                blacklistConfig.set("data." + ip + ".name", map.getValue().getName());
+            }catch (Exception e){
+
+            }
+        }
+        blacklistConfig.save();
+    }
+
+    public void save(){
+        blacklistConfig.set("data", null);
+        for(Map.Entry<String, BlackListProfile> map : new HashMap<>(blacklist).entrySet()){
+            try {
+                String ip = toFileString(map.getKey());
+                String reason = map.getValue().getReason();
+                String id = map.getValue().getId();
+                blacklistConfig.set("data." + ip + ".reason", reason);
+                blacklistConfig.set("data." + ip + ".id", id);
+                blacklistConfig.set("data." + ip + ".name", map.getValue().getName());
+            }catch (Exception e){
+                System.out.println();
+            }
         }
         blacklistConfig.save();
     }
@@ -91,6 +114,7 @@ public class BlackListService implements IService {
             return;
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
+        queueService.removeQueue(ip);
     }
 
     /**
@@ -103,6 +127,7 @@ public class BlackListService implements IService {
             return;
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason()));
+        queueService.removeQueue(ip);
     }
 
     /**
@@ -115,6 +140,7 @@ public class BlackListService implements IService {
             return getProfile(ip);
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
+        queueService.removeQueue(ip);
         return getProfile(ip);
     }
 

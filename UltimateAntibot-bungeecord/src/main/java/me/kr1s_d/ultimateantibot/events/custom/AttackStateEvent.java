@@ -1,10 +1,10 @@
 package me.kr1s_d.ultimateantibot.events.custom;
 
 
-import me.kr1s_d.ultimateantibot.common.objects.enums.AttackState;
-import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.AttackState;
+import me.kr1s_d.ultimateantibot.common.ModeType;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import net.md_5.bungee.api.plugin.Event;
 
 public class AttackStateEvent extends Event {

@@ -1,11 +1,10 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.ultimateantibot.common.helper.enums.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.helper.enums.ColorHelper;
-import me.kr1s_d.ultimateantibot.common.objects.enums.BarColor;
-import me.kr1s_d.ultimateantibot.common.objects.enums.BarStyle;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.INotificator;
+import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
+import me.kr1s_d.ultimateantibot.common.BarColor;
+import me.kr1s_d.ultimateantibot.common.BarStyle;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.INotificator;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.objects.DynamicBar;
@@ -14,12 +13,9 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.Title;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.md_5.bungee.protocol.packet.BossBar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Notificator implements INotificator {
 

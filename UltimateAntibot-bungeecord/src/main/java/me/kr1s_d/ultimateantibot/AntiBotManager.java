@@ -2,9 +2,9 @@ package me.kr1s_d.ultimateantibot;
 
 import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.objects.enums.ModeType;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.ModeType;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
@@ -43,16 +43,16 @@ public class AntiBotManager implements IAntiBotManager {
         this.pingPerSecond = new DynamicCounterThread(plugin);
         this.packetPerSecond = new DynamicCounterThread(plugin);
         this.connectionPerSecond = new DynamicCounterThread(plugin);
-        this.blackListService = new BlackListService(plugin.getBlackList(), logHelper);
-        this.whitelistService = new WhitelistService(plugin.getWhitelist(), logHelper);
         this.queueService = new QueueService();
+        this.blackListService = new BlackListService(queueService, plugin.getBlackList(), logHelper);
+        this.whitelistService = new WhitelistService(queueService, plugin.getWhitelist(), logHelper);
         this.modeType = ModeType.OFFLINE;
         this.isAntiBotModeOnline = false;
         this.isSlowAntiBotModeOnline = false;
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
         this.joinCache = new JoinCache();
-        this.VPNService = plugin.getConnectionCheckerService();
+        this.VPNService = plugin.getVPNService();
     }
 
     @Override

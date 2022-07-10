@@ -1,9 +1,9 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IService;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.IService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +32,15 @@ public class UserDataService implements IService {
 
     @Override
     public void unload() {
+        List<String> list = new ArrayList<>();
+        for(Map.Entry<String, Boolean> map : ipMap.entrySet()){
+            list.add(map.getKey() + ";" + map.getValue());
+        }
+        database.set("data", list);
+        database.save();
+    }
+
+    public void save(){
         List<String> list = new ArrayList<>();
         for(Map.Entry<String, Boolean> map : ipMap.entrySet()){
             list.add(map.getKey() + ";" + map.getValue());

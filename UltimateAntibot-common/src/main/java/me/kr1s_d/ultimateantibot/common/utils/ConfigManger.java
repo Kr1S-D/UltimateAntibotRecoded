@@ -1,10 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
-import me.kr1s_d.ultimateantibot.common.objects.base.ProxyCheckConfig;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.base.SlowJoinCheckConfiguration;
-
-import java.util.List;
+import me.kr1s_d.ultimateantibot.common.objects.config.ProxyCheckConfig;
+import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.config.SlowJoinCheckConfiguration;
 
 public class ConfigManger {
     public static double version;

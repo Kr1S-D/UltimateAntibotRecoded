@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.objects;
 
 import com.google.common.collect.Sets;
-import me.kr1s_d.ultimateantibot.common.objects.enums.BarColor;
-import me.kr1s_d.ultimateantibot.common.objects.enums.BarStyle;
+import me.kr1s_d.ultimateantibot.common.BarColor;
+import me.kr1s_d.ultimateantibot.common.BarStyle;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.chat.ComponentSerializer;

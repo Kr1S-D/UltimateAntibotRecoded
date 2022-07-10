@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.PasteBinBuilder;
 import me.kr1s_d.ultimateantibot.utils.Utils;
@@ -45,8 +45,8 @@ public class DumpCommand implements SubCommand {
         pasteBinBuilder.addLine("Whitelist Size: " + plugin.getAntiBotManager().getWhitelistService().size());
         pasteBinBuilder.addLine("Blacklist Size: " + plugin.getAntiBotManager().getBlackListService().size());
         pasteBinBuilder.addLine("Users: " + plugin.getUserDataService().size());
-        plugin.runTask(pasteBinBuilder::pasteAsync, true);
-        pasteBinBuilder.pasteAsync();
+        plugin.runTask(pasteBinBuilder::pasteSync, true);
+        pasteBinBuilder.pasteSync();
         sender.sendMessage(Utils.colora(MessageManager.prefix + "&fsending request to server, wait please..."));
         plugin.scheduleDelayedTask(() -> {
             if (pasteBinBuilder.isReady()) {

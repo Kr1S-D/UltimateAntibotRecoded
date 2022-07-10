@@ -3,11 +3,11 @@ package me.kr1s_d.ultimateantibot;
 
 import me.kr1s_d.ultimateantibot.commands.CommandManager;
 import me.kr1s_d.ultimateantibot.commands.subcommands.*;
+import me.kr1s_d.ultimateantibot.common.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
-import me.kr1s_d.ultimateantibot.common.helper.enums.ServerType;
+import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilterV2;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.*;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
@@ -116,7 +116,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MainEventListener(this));
-        ProxyServer.getInstance().getPluginManager().registerListener(this, new CustomEventListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new CustomEventListener(this));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new HandShakeListener(this));
         long b = System.currentTimeMillis() - a;
         this.logHelper.info("&7Took &c" + b + "ms&7 to load");
@@ -136,14 +136,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.logHelper.info("&7Took &c" + b + "ms&7 to unload");
     }
 
-    public void scheduleDelayedTask(Runnable runnable, boolean async, long milliseconds) {
-        if (async) {
-            this.scheduler.schedule(this, () -> this.scheduler.runAsync(this, runnable), milliseconds, TimeUnit.MILLISECONDS);
-        } else {
-            this.scheduler.schedule(this, runnable, milliseconds, TimeUnit.MILLISECONDS);
-        }
-    }
-
     public void runTask(Runnable task, boolean isAsync) {
         if (isAsync) {
             this.scheduler.runAsync(this, task);
@@ -152,12 +144,36 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         }
     }
 
+    @Override
+    public void runTask(UABRunnable runnable) {
+        runTask(runnable, runnable.isAsync());
+    }
+
+
+    public void scheduleDelayedTask(Runnable runnable, boolean async, long milliseconds) {
+        if (async) {
+            this.scheduler.schedule(this, () -> this.scheduler.runAsync(this, runnable), milliseconds, TimeUnit.MILLISECONDS);
+        } else {
+            this.scheduler.schedule(this, runnable, milliseconds, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    @Override
+    public void scheduleDelayedTask(UABRunnable runnable) {
+        scheduleDelayedTask(runnable, runnable.isAsync(), runnable.getPeriod());
+    }
+
     public void scheduleRepeatingTask(Runnable runnable, boolean async, long repeatMilliseconds) {
         if (async) {
             this.scheduler.schedule(this, () -> this.scheduler.runAsync(this, runnable), 0L, repeatMilliseconds, TimeUnit.MILLISECONDS);
         } else {
             this.scheduler.schedule(this, runnable, 0L, repeatMilliseconds, TimeUnit.MILLISECONDS);
         }
+    }
+
+    @Override
+    public void scheduleRepeatingTask(UABRunnable runnable) {
+        scheduleRepeatingTask(runnable, runnable.isAsync(), runnable.getPeriod());
     }
 
     public IConfiguration getConfigYml() {
@@ -204,7 +220,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         return this.userDataService;
     }
 
-    public VPNService getConnectionCheckerService() {
+    public VPNService getVPNService() {
         return this.VPNService;
     }
 

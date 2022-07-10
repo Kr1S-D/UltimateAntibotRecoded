@@ -1,19 +1,5 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
-import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
-import me.kr1s_d.ultimateantibot.commands.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.interfaces.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.server.SatelliteServer;
-import me.kr1s_d.ultimateantibot.common.objects.server.json.StatusResponseJSON;
-import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
-import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
-import me.kr1s_d.ultimateantibot.utils.Utils;
-import net.md_5.bungee.api.CommandSender;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 /*public class SatelliteCommand implements SubCommand {
 
     private final IAntiBotPlugin iAntiBotPlugin;
