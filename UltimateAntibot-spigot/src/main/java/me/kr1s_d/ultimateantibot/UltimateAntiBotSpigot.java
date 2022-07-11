@@ -138,8 +138,8 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
 
     @Override
     public void reload() {
-        this.config = new Config(this, "%datafolder%/config.yml");
-        this.messages = new Config(this, "%datafolder%/messages.yml");
+        this.config = new Config(this, "config");
+        this.messages = new Config(this, "messages");
 
         ConfigManger.init(config);
         MessageManager.init(messages);

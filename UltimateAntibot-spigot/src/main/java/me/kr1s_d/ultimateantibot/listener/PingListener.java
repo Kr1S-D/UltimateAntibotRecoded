@@ -10,6 +10,7 @@ import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PingListener implements Listener {
     private IAntiBotPlugin plugin;
@@ -17,7 +18,6 @@ public class PingListener implements Listener {
     private final QueueService queueService;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
-    // TODO: 03/12/2021 superping check;
 
     public PingListener(IAntiBotPlugin plugin){
         this.plugin = plugin;
