@@ -2,7 +2,7 @@ package me.kr1s_d.ultimateantibot.common.utils;
 
 import me.kr1s_d.ultimateantibot.common.objects.config.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
-import me.kr1s_d.ultimateantibot.common.objects.config.SlowJoinCheckConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.config.SlowCheckConfig;
 
 import java.util.SplittableRandom;
 
@@ -47,10 +47,9 @@ public class ConfigManger {
     public static boolean authPingInterface;
     public static long taskManagerUpdate;
     public static boolean isIPApiVerificationEnabled;
-    private static SlowJoinCheckConfiguration packetSlowJoinCheckConfiguration;
-    private static SlowJoinCheckConfiguration similarNameCheck;
-    private static SlowJoinCheckConfiguration lenghtCheck;
-    private static SlowJoinCheckConfiguration accountCheck;
+    private static SlowCheckConfig packetSlowCheckConfig;
+    private static SlowCheckConfig accountCheckConfig;
+    private static SlowCheckConfig delayCheckConfig;
     private static ProxyCheckConfig proxyCheckConfig;
 
     public static void init(IConfiguration cfg){
@@ -93,27 +92,22 @@ public class ConfigManger {
         authMaxFails = cfg.getInt("checks.auth.maxfails");
         authPingInterface = cfg.getBoolean("checks.auth.ping_interface");
         taskManagerUpdate = cfg.getLong("taskmanager.update");
-        packetSlowJoinCheckConfiguration = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.packet");
-        similarNameCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.similar");
-        lenghtCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.lenght");
-        accountCheck = new SlowJoinCheckConfiguration(cfg, "checks.slowjoin.account");
+        packetSlowCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.packet");
+        delayCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.delay");
+        accountCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.account");
         proxyCheckConfig = new ProxyCheckConfig(cfg);
     }
 
-    public static SlowJoinCheckConfiguration getAccountCheckConfig() {
-        return accountCheck;
+    public static SlowCheckConfig getAccountCheckConfig() {
+        return accountCheckConfig;
     }
 
-    public static SlowJoinCheckConfiguration getLenghtCheckConfig() {
-        return lenghtCheck;
+    public static SlowCheckConfig getDelayCheckConfig() {
+        return delayCheckConfig;
     }
 
-    public static SlowJoinCheckConfiguration getSimilarNameCheckConfig() {
-        return similarNameCheck;
-    }
-
-    public static SlowJoinCheckConfiguration getPacketCheckConfig() {
-        return packetSlowJoinCheckConfiguration;
+    public static SlowCheckConfig getPacketCheckConfig() {
+        return packetSlowCheckConfig;
     }
 
     public static ProxyCheckConfig getProxyCheckConfig() {
@@ -136,12 +130,30 @@ public class ConfigManger {
             a[j] += f;
         }
 
-        authMinMaxPing = a;
-        authMinMaxTimer = b;
+        authMinMaxPing = fix(a);
+        authMinMaxTimer = fix(b);
     }
 
     public static void restoreAuthCheck() {
         authMinMaxPing = Parser.toIntArray(Parser.toArray(CONFIG.getString("checks.auth.ping"), "-"));
         authMinMaxTimer = Parser.toIntArray(Parser.toArray(CONFIG.getString("checks.auth.ping"), "-"));
+    }
+
+    /**
+     * Facciamo in modo che non ci siano problemi con i numeri
+     * In caso di numeri uguali, o maggiori / minori invertiti
+     *
+     * @param i int array to fix
+     * @return fixed int array
+     */
+    private static int[] fix(int[] i){
+        if(i[0] == i[1]){
+            i[1] += 2;
+            return i;
+        }
+
+        int min = Math.min(i[0], i[1]);
+        int max = Math.min(i[0], i[1]);
+        return new int[] {min, max};
     }
 }

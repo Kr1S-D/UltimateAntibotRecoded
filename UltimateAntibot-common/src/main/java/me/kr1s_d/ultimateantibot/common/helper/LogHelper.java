@@ -23,7 +23,7 @@ public class LogHelper {
     }
 
     public void error(String msg){
-        logger.log(Level.SEVERE, ColorHelper.colorize(MessageManager.prefix + msg));
+        logger.log(Level.SEVERE, ColorHelper.colorize(MessageManager.prefix + "&c" + msg));
     }
 
     public void info(String msg){

@@ -10,5 +10,4 @@ public interface INotificator {
     void sendBossBarMessage(String str, float health);
 
     void init(IAntiBotPlugin plugin);
-
 }

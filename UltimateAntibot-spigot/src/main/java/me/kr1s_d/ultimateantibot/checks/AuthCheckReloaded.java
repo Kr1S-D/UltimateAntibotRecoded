@@ -1,9 +1,9 @@
 package me.kr1s_d.ultimateantibot.checks;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotSpigot;
-import me.kr1s_d.ultimateantibot.common.checks.enums.AuthCheckType;
+import me.kr1s_d.ultimateantibot.common.AuthCheckType;
 import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
-import me.kr1s_d.ultimateantibot.common.objects.IncreaseInteger;
+import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
@@ -18,9 +18,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class AuthCheckReloaded {
@@ -29,9 +27,9 @@ public class AuthCheckReloaded {
     private final IAntiBotManager antiBotManager;
     private final Map<String, AuthCheckType> checking;
     private final Map<String, AuthCheckType> completedCheck;
-    private final Map<String, IncreaseInteger> pingMap;
+    private final Map<String, FancyInteger> pingMap;
     private final Map<String, Integer> pingData;
-    private final Map<String, IncreaseInteger> failure;
+    private final Map<String, FancyInteger> failure;
     private final BukkitScheduler taskScheduler;
     private final Map<String, BukkitTask> runningTasks;
     private final VPNService VPNService;
@@ -176,7 +174,7 @@ public class AuthCheckReloaded {
      * @return if the ip has failed at least x min times this check
      */
     private boolean hasFailedThisCheck(String ip, int min){
-        return failure.getOrDefault(ip, new IncreaseInteger(0)).get() >= min;
+        return failure.getOrDefault(ip, new FancyInteger(0)).get() >= min;
     }
 
     /**
@@ -196,7 +194,7 @@ public class AuthCheckReloaded {
      * @param generatedPingAmount Numero di volte che deve pingare il server per eseguire un controllo corretto
      */
     private void addToCompletingPingCheck(String ip, int generatedPingAmount){
-        pingMap.put(ip, new IncreaseInteger(0));
+        pingMap.put(ip, new FancyInteger(0));
         pingData.put(ip, generatedPingAmount);
         checking.put(ip, AuthCheckType.PING);
     }
@@ -257,7 +255,7 @@ public class AuthCheckReloaded {
         if(pingMap.containsKey(ip)){
             pingMap.get(ip).increase();
         }else{
-            pingMap.put(ip, new IncreaseInteger(0));
+            pingMap.put(ip, new FancyInteger(0));
         }
     }
 
@@ -267,7 +265,7 @@ public class AuthCheckReloaded {
      * @param ip IP a cui si deve aumentare i fails
      */
     public void increaseFails(String ip, String name) {
-        IncreaseInteger current = failure.getOrDefault(ip, new IncreaseInteger(0));
+        FancyInteger current = failure.getOrDefault(ip, new FancyInteger(0));
         current.increase();
         failure.put(ip, current);
 

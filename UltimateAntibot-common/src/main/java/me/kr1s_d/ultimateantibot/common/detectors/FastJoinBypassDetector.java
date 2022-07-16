@@ -19,8 +19,9 @@ public class FastJoinBypassDetector extends AbstractDetector {
             count++;
         }
 
-        if(count > 5){
+        if(count > 2){
             ConfigManger.incrementAuthCheckDifficulty();
+            plugin.getLogHelper().debug("[BYPASS DETECTED] Incrementing auth check difficulty...");
         }
     }
 

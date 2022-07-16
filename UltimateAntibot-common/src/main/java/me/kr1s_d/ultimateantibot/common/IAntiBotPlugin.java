@@ -3,6 +3,7 @@ package me.kr1s_d.ultimateantibot.common;
 import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
+import me.kr1s_d.ultimateantibot.common.service.FirewallService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
@@ -52,6 +53,8 @@ public interface IAntiBotPlugin {
     CheckService getCheckService();
 
     UltimateAntiBotCore getCore();
+
+    FirewallService getFirewallService();
 
     boolean isConnected(String ip);
 

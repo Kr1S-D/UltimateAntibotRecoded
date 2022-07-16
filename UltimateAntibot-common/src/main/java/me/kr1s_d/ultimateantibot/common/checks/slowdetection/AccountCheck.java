@@ -1,8 +1,11 @@
-package me.kr1s_d.ultimateantibot.common.checks;
+package me.kr1s_d.ultimateantibot.common.checks.slowdetection;
 
+import me.kr1s_d.ultimateantibot.common.checks.CheckListenedEvent;
+import me.kr1s_d.ultimateantibot.common.checks.CheckPriority;
+import me.kr1s_d.ultimateantibot.common.checks.IManagedCheck;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.config.SlowJoinCheckConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.config.SlowCheckConfig;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
@@ -11,13 +14,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class AccountBasicCheck extends IManagedCheck {
+public class AccountCheck extends IManagedCheck {
 
     private final IAntiBotPlugin plugin;
     private final Map<String, Set<String>> map;
-    private final SlowJoinCheckConfiguration config;
+    private final SlowCheckConfig config;
 
-    public AccountBasicCheck(IAntiBotPlugin plugin){
+    public AccountCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.map = new HashMap<>();
         this.config = ConfigManger.getAccountCheckConfig();

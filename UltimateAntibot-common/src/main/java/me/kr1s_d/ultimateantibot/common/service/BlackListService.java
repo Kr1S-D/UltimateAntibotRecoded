@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
@@ -13,7 +14,9 @@ import java.util.Map;
 
 public class BlackListService implements IService {
 
-    private QueueService queueService;
+    private IAntiBotPlugin plugin;
+    private FirewallService firewallService;
+    private final QueueService queueService;
     private final Map<String, BlackListProfile> blacklist;
     private final IConfiguration blacklistConfig;
     private final LogHelper logHelper;
@@ -23,7 +26,9 @@ public class BlackListService implements IService {
      * @param blacklistConfig - IConfiguration for BlackList Service
      * @param logHelper - LogHelper for debug
      */
-    public BlackListService(QueueService queueService, IConfiguration blacklistConfig, LogHelper logHelper){
+    public BlackListService(IAntiBotPlugin plugin, QueueService queueService, IConfiguration blacklistConfig, LogHelper logHelper){
+        this.plugin = plugin;
+        this.firewallService = plugin.getFirewallService();
         this.queueService = queueService;
         this.blacklist = new HashMap<>();
         this.blacklistConfig = blacklistConfig;
@@ -69,7 +74,7 @@ public class BlackListService implements IService {
                 blacklistConfig.set("data." + ip + ".id", id);
                 blacklistConfig.set("data." + ip + ".name", map.getValue().getName());
             }catch (Exception e){
-
+                logHelper.error("An error occurred while saving blacklist.yml -> " + e.getMessage());
             }
         }
         blacklistConfig.save();
@@ -115,6 +120,7 @@ public class BlackListService implements IService {
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
         queueService.removeQueue(ip);
+        firewallService.firewall(ip);
     }
 
     /**
@@ -128,6 +134,7 @@ public class BlackListService implements IService {
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason()));
         queueService.removeQueue(ip);
+        firewallService.firewall(ip);
     }
 
     /**
@@ -141,15 +148,18 @@ public class BlackListService implements IService {
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
         queueService.removeQueue(ip);
+        firewallService.firewall(ip);
         return getProfile(ip);
     }
 
     public void clear(){
         blacklist.clear();
+        firewallService.drop();
     }
 
     public void unBlacklist(String ip){
         blacklist.remove(ip);
+        firewallService.dropIP(ip);
     }
 
     public boolean isBlackListed(String ip){

@@ -44,7 +44,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.packetPerSecond = new DynamicCounterThread(plugin);
         this.connectionPerSecond = new DynamicCounterThread(plugin);
         this.queueService = new QueueService();
-        this.blackListService = new BlackListService(queueService, plugin.getBlackList(), logHelper);
+        this.blackListService = new BlackListService(plugin, queueService, plugin.getBlackList(), logHelper);
         this.whitelistService = new WhitelistService(queueService, plugin.getWhitelist(), logHelper);
         this.modeType = ModeType.OFFLINE;
         this.isAntiBotModeOnline = false;
@@ -61,7 +61,6 @@ public class AntiBotManager implements IAntiBotManager {
     }
 
     @Override
-    @Deprecated
     public long getJoinPerSecond() {
         return joinPerSecond.getCount();
     }

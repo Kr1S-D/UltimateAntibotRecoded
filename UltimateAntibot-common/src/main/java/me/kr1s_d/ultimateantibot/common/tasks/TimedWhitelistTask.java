@@ -4,9 +4,7 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.UABRunnable;
 
-import java.util.concurrent.TimeUnit;
-
-public class TimedWhitelistTask implements UABRunnable {
+public class TimedWhitelistTask extends UABRunnable {
     private final IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
     private final String ip;

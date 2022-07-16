@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.checks.*;
+import me.kr1s_d.ultimateantibot.common.checks.slowdetection.AccountCheck;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.checks.CheckListenedEvent;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
@@ -22,10 +23,10 @@ public class CheckService implements IService {
 
     @Override
     public void load() {
-        register(new FirstJoinBasicCheck(plugin));
-        register(new NameChangerBasicCheck(plugin));
-        register(new SuperJoinBasicCheck(plugin));
-        register(new AccountBasicCheck(plugin));
+        register(new FirstJoinCheck(plugin));
+        register(new NameChangerCheck(plugin));
+        register(new SuperJoinCheck(plugin));
+        register(new AccountCheck(plugin));
         logger.debug("Initializing " + loadedChecks.size() + " blocks of checks!");
         for(CheckListenedEvent e : CheckListenedEvent.values()){
             List<IManagedCheck> checkRegistry = getCheckListByEvent(e);

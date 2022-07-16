@@ -144,7 +144,62 @@ checks:
       kick: true
       antibotmode: true
       enabled: true
+    #Disable this check only if slow antibot mode is
+    #triggered too many times
+    #dev only
+    delay:
+      time: 60
+      trigger: 4 #amount to trigger
+      condition: 700 #delay between
+      blacklist: true
+      kick: true
+      antibotmode: true
+      enabled: true
 
+######################################
+#               FIREWALL             #
+######################################
+
+#This is the firewall section, to work correctly it requires the IPSet and IPTables service,
+#otherwise the hook will not be activated.
+#It will only work if the start script has permissions to execute the commands, it may not
+#work on sites that offer minecraft servers as a pterodactyl panel (aternos, elixirnode, server.pro, etc ...)
+
+#Removing / changing one of these commands in case you don't know what
+#you are doing is highly discouraged and could cause lag problems.
+#
+#Positive points:
+#After about 5 minutes of attack the number of connections per second will be lowered to 50/100
+#The time depends on the number of IPs to be blacklisted
+#
+#Negative points:
+#Slower on spigot!
+#There will be an increase of CPU usage (Especially on low-powered servers)
+#
+firewall:
+  enabled: true
+  #Unique name of IPSet
+  ip-set-id: "uab_blacklist"
+  #The duration of the blacklist for each ip
+  timeout: 0 # seconds, 0 = cancels on server restart
+  #Also clear the firewall blacklist when the blacklist is reset by command?
+  reset-on-blacklist-clear: true
+  #Commands executed to load the hook
+  setup-commands:
+    - "sudo ipset create %set% hash:ip %options% %t%"
+    - "sudo iptables -N UltimateAntiBot"
+    - "sudo iptables -F UltimateAntiBot"
+    - "sudo iptables -A UltimateAntiBot -p tcp -m set --match-set %set% src -j DROP"
+    - "sudo iptables -A INPUT -p tcp -j UltimateAntiBot"
+  shutdown-commands:
+    - "sudo iptables -F UltimateAntiBot"
+    - "sudo iptables -D INPUT -p tcp -j UltimateAntiBot"
+    - "sudo iptables -X UltimateAntiBot"
+    - "sudo ipset destroy %set%"
+  #Command executed to blacklist an ip
+  blacklist-command: "sudo ipset add %set% %ip%"
+  un-blacklist-command:
+    - "sudo ipset del %set% %ip%"
 
 #######################################
 #                 VPN                 #
@@ -163,8 +218,7 @@ proxycheck:
   #if key is not valid proxycheck is disabled (without errors in console (unless you have active debugging!))
   api-key: "enter-here-your-key"
 
-#Custom Message filter only during bot / packet / ping attack
-filter:
-  - 'Another plugin has cancelled the connection for' #luckperms on spigot
-  - 'The UUID the player is connecting with now is NOT Mojang-assigned' #luckperms on bungeecord
-
+#Custom Message filter only works during a bot/packet/ping attack
+attack-filter:
+  - "Another plugin has cancelled the connection for" #luckperms on spigot
+  - "The UUID the player is connecting with now is NOT Mojang-assigned" #luckperms on bungeecord

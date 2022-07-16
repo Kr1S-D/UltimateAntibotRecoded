@@ -4,6 +4,7 @@ import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
 import me.kr1s_d.ultimateantibot.common.checks.*;
+import me.kr1s_d.ultimateantibot.common.checks.slowdetection.AccountCheck;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
@@ -28,12 +29,12 @@ public class MainEventListener implements Listener {
     private final QueueService queueService;
     private final WhitelistService whitelistService;
     private final BlackListService blackListService;
-    private final FirstJoinBasicCheck firstJoinCheck;
-    private final NameChangerBasicCheck nameChangerCheck;
-    private final SuperJoinBasicCheck superJoinCheck;
+    private final FirstJoinCheck firstJoinCheck;
+    private final NameChangerCheck nameChangerCheck;
+    private final SuperJoinCheck superJoinCheck;
     private final AuthCheckReloaded authCheck;
     private final PacketCheck packetCheck;
-    private final AccountBasicCheck accountCheck;
+    private final AccountCheck accountCheck;
     private int blacklistedPercentage;
     private final VPNService VPNService;
 
@@ -43,12 +44,12 @@ public class MainEventListener implements Listener {
         this.queueService = antiBotManager.getQueueService();
         this.whitelistService = antiBotManager.getWhitelistService();
         this.blackListService = antiBotManager.getBlackListService();
-        this.firstJoinCheck = new FirstJoinBasicCheck(antiBotPlugin);
-        this.nameChangerCheck = new NameChangerBasicCheck(antiBotPlugin);
-        this.superJoinCheck = new SuperJoinBasicCheck(antiBotPlugin);
+        this.firstJoinCheck = new FirstJoinCheck(antiBotPlugin);
+        this.nameChangerCheck = new NameChangerCheck(antiBotPlugin);
+        this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.packetCheck = new PacketCheck(antiBotPlugin);
-        this.accountCheck = new AccountBasicCheck(antiBotPlugin);
+        this.accountCheck = new AccountCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
         this.VPNService = plugin.getVPNService();
     }
@@ -87,9 +88,13 @@ public class MainEventListener implements Listener {
         //
         //AntiBotMode Enable
         //
-        if(antiBotManager.getJoinPerSecond() > ConfigManger.antiBotModeTrigger){
+        if(antiBotManager.getJoinPerSecond() >= ConfigManger.antiBotModeTrigger){
             if(!antiBotManager.isAntiBotModeEnabled()){
                 antiBotManager.enableAntiBotMode();
+                e.setCancelReason(ComponentBuilder.buildColorized(
+                        MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(blacklistedPercentage))
+                ));
+                e.setCancelled(true);
                 return;
             }
         }

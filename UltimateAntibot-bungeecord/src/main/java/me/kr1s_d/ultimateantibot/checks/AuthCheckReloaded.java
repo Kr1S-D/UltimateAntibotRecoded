@@ -1,11 +1,11 @@
 package me.kr1s_d.ultimateantibot.checks;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
-import me.kr1s_d.ultimateantibot.common.checks.enums.AuthCheckType;
+import me.kr1s_d.ultimateantibot.common.AuthCheckType;
 import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.IncreaseInteger;
+import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
@@ -19,9 +19,7 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -30,9 +28,9 @@ public class AuthCheckReloaded {
     private final IAntiBotManager antibotManager;
     private final Map<String, AuthCheckType> checking;
     private final Map<String, AuthCheckType> completedCheck;
-    private final Map<String, IncreaseInteger> pingMap;
+    private final Map<String, FancyInteger> pingMap;
     private final Map<String, Integer> pingData;
-    private final Map<String, IncreaseInteger> failure;
+    private final Map<String, FancyInteger> failure;
     private final TaskScheduler taskScheduler;
     private final Map<String, ScheduledTask> runningTasks;
     private final VPNService VPNService;
@@ -114,10 +112,10 @@ public class AuthCheckReloaded {
         }
         int pingTimer = ThreadLocalRandom.current().nextInt(ConfigManger.authMinMaxPing[0], ConfigManger.authMinMaxPing[1]);
         addToCompletingPingCheck(ip, pingTimer);
+        increaseFails(ip, e.getConnection().getName());
         e.setCancelReason(ComponentBuilder.buildColorized(
                 MessageManager.getPingMessage(String.valueOf(pingTimer)))
         );
-        increaseFails(ip, e.getConnection().getName());
         e.setCancelled(true);
     }
 
@@ -187,7 +185,7 @@ public class AuthCheckReloaded {
      * @return if the ip has failed at least x min times this check
      */
     private boolean hasFailedThisCheck(String ip, int min){
-        return failure.getOrDefault(ip, new IncreaseInteger(0)).get() >= min;
+        return failure.getOrDefault(ip, new FancyInteger(0)).get() >= min;
     }
 
     /**
@@ -207,7 +205,7 @@ public class AuthCheckReloaded {
      * @param generatedPingAmount Numero di volte che deve pingare il server per eseguire un controllo corretto
      */
     private void addToCompletingPingCheck(String ip, int generatedPingAmount){
-        pingMap.put(ip, new IncreaseInteger(0));
+        pingMap.put(ip, new FancyInteger(0));
         pingData.put(ip, generatedPingAmount);
         checking.put(ip, AuthCheckType.PING);
     }
@@ -268,7 +266,7 @@ public class AuthCheckReloaded {
         if(pingMap.containsKey(ip)){
             pingMap.get(ip).increase();
         }else{
-            pingMap.put(ip, new IncreaseInteger(0));
+            pingMap.put(ip, new FancyInteger(0));
         }
     }
 
@@ -278,7 +276,7 @@ public class AuthCheckReloaded {
      * @param ip IP a cui si deve aumentare i fails
      */
     public void increaseFails(String ip, String name){
-        IncreaseInteger current = failure.getOrDefault(ip, new IncreaseInteger(0));
+        FancyInteger current = failure.getOrDefault(ip, new FancyInteger(0));
         current.increase();
         failure.put(ip, current);
 

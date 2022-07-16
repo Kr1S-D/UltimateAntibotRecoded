@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
-public abstract class IManagedCheck implements IBasicCheck {
+public abstract class IManagedCheck implements ICheck {
 
     public abstract String getCheckName();
 

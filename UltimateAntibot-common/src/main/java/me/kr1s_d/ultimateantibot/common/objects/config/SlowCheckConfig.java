@@ -2,7 +2,7 @@ package me.kr1s_d.ultimateantibot.common.objects.config;
 
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 
-public class SlowJoinCheckConfiguration {
+public class SlowCheckConfig {
     private final int time;
     private final int trigger;
     private final int condition;
@@ -11,7 +11,7 @@ public class SlowJoinCheckConfiguration {
     private final boolean enableAntiBotMode;
     private final boolean isEnabled;
 
-    public SlowJoinCheckConfiguration(IConfiguration configuration, String path){
+    public SlowCheckConfig(IConfiguration configuration, String path){
         time = configuration.getInt(path + ".time");
         trigger = configuration.getInt(path + ".trigger");
         condition = configuration.getInt(path + ".condition");

@@ -6,11 +6,11 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.Map;
 
-public class FirstJoinBasicCheck extends IManagedCheck {
+public class FirstJoinCheck extends IManagedCheck {
 
     private final Map<String, Boolean> data;
 
-    public FirstJoinBasicCheck(IAntiBotPlugin plugin){
+    public FirstJoinCheck(IAntiBotPlugin plugin){
         UserDataService userDataService = plugin.getUserDataService();
         this.data = userDataService.getFirstJoinMap();
         if(isEnabled()){

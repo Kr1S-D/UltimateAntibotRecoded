@@ -1,9 +1,9 @@
 package me.kr1s_d.ultimateantibot.common.objects;
 
-public class IncreaseInteger {
+public class FancyInteger {
     private int i;
 
-    public IncreaseInteger(int i){
+    public FancyInteger(int i){
         this.i = i;
     }
 

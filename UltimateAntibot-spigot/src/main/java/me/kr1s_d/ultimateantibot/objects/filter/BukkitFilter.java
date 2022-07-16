@@ -19,7 +19,6 @@ public class BukkitFilter implements Filter {
     private final List<String> blocked;
 
     public BukkitFilter(IAntiBotPlugin antiBotPlugin){
-
         this.antiBotManager = antiBotPlugin.getAntiBotManager();
         this.blocked = new ArrayList<>(Arrays.asList(
                 "InitialHandler has",
@@ -46,7 +45,7 @@ public class BukkitFilter implements Filter {
                 "overflow in packet",
                 "pipeline"
         ));
-        blocked.addAll(antiBotPlugin.getConfigYml().getStringList("filter"));
+        blocked.addAll(antiBotPlugin.getConfigYml().getStringList("attack-filter"));
     }
 
     public Result checkMessage(String record) {
@@ -57,7 +56,6 @@ public class BukkitFilter implements Filter {
         }
         return Result.NEUTRAL;
     }
-
 
     @Override
     public Result getOnMismatch() {

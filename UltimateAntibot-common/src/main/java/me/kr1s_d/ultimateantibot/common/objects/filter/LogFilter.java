@@ -43,7 +43,7 @@ public class LogFilter implements Filter {
                 "Connect reset by peer",
                 "overflow in packet"
         ));
-        blocked.addAll(antiBotPlugin.getConfigYml().getStringList("filter"));
+        blocked.addAll(antiBotPlugin.getConfigYml().getStringList("attack-filter"));
     }
 
     @Override

@@ -8,6 +8,7 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
+import me.kr1s_d.ultimateantibot.common.service.FirewallService;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.objects.filter.BukkitFilter;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
@@ -29,8 +30,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
-public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotPlugin {
+public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotPlugin, IServerPlatform {
 
     private static UltimateAntiBotSpigot instance;
     private BukkitScheduler scheduler;
@@ -43,6 +45,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     private LatencyThread latencyThread;
     private AnimationThread animationThread;
     private LogHelper logHelper;
+    private FirewallService firewallService;
     private UserDataService userDataService;
     private VPNService VPNService;
     private Notificator notificator;
@@ -55,6 +58,8 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         instance = this;
         this.isRunning = true;
         PerformanceHelper.init(ServerType.SPIGOT);
+        RuntimeUtil.setup(this);
+        ServerUtil.setPlatform(this);
         long a = System.currentTimeMillis();
         this.scheduler = Bukkit.getScheduler();
         this.config = new Config(this, "config");
@@ -62,13 +67,18 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.whitelist = new Config(this, "whitelist");
         this.blacklist = new Config(this, "blacklist");
         this.database = new Config(this, "database");
-        if(FilesUpdater.checkFiles(this, 4.0, config, messages)){
+        if (FilesUpdater.checkFiles(this, 4.0, config, messages)) {
+            logHelper.error("Unable to load UltimateAntiBot....");
+            logHelper.error("Please remove your files!");
+            logHelper.error("Unloading plugin...");
+            Bukkit.getScheduler().cancelTasks(this);
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
         try {
             ConfigManger.init(config);
             MessageManager.init(messages);
-        }catch (Exception e){
+        } catch (Exception e) {
             logHelper.error("Error during config.yml & messages.yml loading!");
             return;
         }
@@ -76,12 +86,14 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         new Metrics(this, 11777);
         logHelper = new LogHelper(Bukkit.getLogger());
         logHelper.info("&fLoading &cUltimateAntiBot...");
+        this.firewallService = new FirewallService(this);
         VPNService = new VPNService(this);
         VPNService.load();
         antiBotManager = new AntiBotManager(this);
         antiBotManager.getQueueService().load();
         antiBotManager.getWhitelistService().load();
         antiBotManager.getBlackListService().load();
+        firewallService.enable();
         latencyThread = new LatencyThread(this);
         animationThread = new AnimationThread(this);
         core = new UltimateAntiBotCore(this);
@@ -126,6 +138,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     public void onDisable() {
         long a = System.currentTimeMillis();
         logHelper.info("&cUnloading...");
+        firewallService.shutDownFirewall();
         userDataService.unload();
         VPNService.unload();
         antiBotManager.getBlackListService().unload();
@@ -147,44 +160,68 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
 
     @Override
     public void runTask(Runnable task, boolean isAsync) {
-        if(isAsync){
+        if (isAsync) {
             scheduler.runTaskAsynchronously(this, task);
-        }else{
+        } else {
             scheduler.runTask(this, task);
         }
     }
 
     @Override
     public void runTask(UABRunnable runnable) {
-        runTask(runnable, runnable.isAsync());
+        BukkitTask bukkitTask = null;
+
+        if (runnable.isAsync()) {
+            bukkitTask = scheduler.runTaskAsynchronously(this, runnable);
+        } else {
+            bukkitTask = scheduler.runTask(this, runnable);
+        }
+
+        runnable.setTaskID(bukkitTask.getTaskId());
     }
 
     @Override
     public void scheduleDelayedTask(Runnable runnable, boolean async, long milliseconds) {
-        if(async){
+        if (async) {
             scheduler.runTaskLaterAsynchronously(this, runnable, Utils.convertToTicks(milliseconds));
-        }else{
+        } else {
             scheduler.runTaskLater(this, runnable, Utils.convertToTicks(milliseconds));
         }
     }
 
     @Override
-    public void scheduleDelayedTask(UABRunnable runnable){
-        scheduleDelayedTask(runnable, runnable.isAsync(), Utils.convertToTicks(runnable.getPeriod()));
+    public void scheduleDelayedTask(UABRunnable runnable) {
+        BukkitTask bukkitTask = null;
+
+        if (runnable.isAsync()) {
+            bukkitTask = scheduler.runTaskLaterAsynchronously(this, runnable, Utils.convertToTicks(runnable.getPeriod()));
+        } else {
+            bukkitTask = scheduler.runTaskLater(this, runnable, Utils.convertToTicks(runnable.getPeriod()));
+        }
+
+        runnable.setTaskID(bukkitTask.getTaskId());
     }
 
     @Override
     public void scheduleRepeatingTask(Runnable runnable, boolean async, long repeatMilliseconds) {
-        if(async){
+        if (async) {
             scheduler.runTaskTimerAsynchronously(this, runnable, 0, Utils.convertToTicks(repeatMilliseconds));
-        }else{
+        } else {
             scheduler.runTaskTimer(this, runnable, 0, Utils.convertToTicks(repeatMilliseconds));
         }
     }
 
     @Override
     public void scheduleRepeatingTask(UABRunnable runnable) {
-        scheduleRepeatingTask(runnable, runnable.isAsync(), runnable.getPeriod());
+        BukkitTask bukkitTask = null;
+
+        if (runnable.isAsync()) {
+            bukkitTask = scheduler.runTaskTimerAsynchronously(this, runnable, 0, Utils.convertToTicks(runnable.getPeriod()));
+        } else {
+            bukkitTask = scheduler.runTaskTimer(this, runnable, 0, Utils.convertToTicks(runnable.getPeriod()));
+        }
+
+        runnable.setTaskID(bukkitTask.getTaskId());
     }
 
     @Override
@@ -263,6 +300,11 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
+    public FirewallService getFirewallService() {
+        return firewallService;
+    }
+
+    @Override
     public boolean isConnected(String ip) {
         return Bukkit.getOnlinePlayers().stream().anyMatch(p -> Utils.getPlayerIP(p).equals(ip));
     }
@@ -277,8 +319,8 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         new BukkitRunnable() {
             @Override
             public void run() {
-                for(Player player : Bukkit.getOnlinePlayers()){
-                    if(Utils.getPlayerIP(player).equals(ip)){
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (Utils.getPlayerIP(player).equals(ip)) {
                         player.kickPlayer(Utils.colora(reasonNoColor));
                     }
                 }
@@ -286,14 +328,14 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         }.runTaskLater(this, 1);
     }
 
-    //@Override
-    //public SatelliteServer getSatellite() {
-    //    return satelliteServer;
-    //}
-
     @Override
     public boolean isRunning() {
         return isRunning;
+    }
+
+    @Override
+    public void cancelTask(int id) {
+        Bukkit.getScheduler().cancelTask(id);
     }
 
     public static UltimateAntiBotSpigot getInstance() {

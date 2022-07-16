@@ -16,7 +16,6 @@ public class LogFilterV2 implements Filter {
     private final List<String> blocked;
 
     public LogFilterV2(IAntiBotPlugin antiBotPlugin) {
-
         this.antiBotManager = antiBotPlugin.getAntiBotManager();
         this.blocked = new ArrayList<>(Arrays.asList(
                 "InitialHandler has",
@@ -42,7 +41,7 @@ public class LogFilterV2 implements Filter {
                 "Connect reset by peer",
                 "overflow in packet"
         ));
-        blocked.addAll(antiBotPlugin.getConfigYml().getStringList("filter"));
+        blocked.addAll(antiBotPlugin.getConfigYml().getStringList("attack-filter"));
     }
 
     @Override

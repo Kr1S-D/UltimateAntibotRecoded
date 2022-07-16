@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.detectors.AbstractDetector;
-import me.kr1s_d.ultimateantibot.common.objects.IncreaseInteger;
+import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class DetectorService {
     private static final List<AbstractDetector> DETECTORS = new ArrayList<>();
-    private static final Map<AbstractDetector, IncreaseInteger> TICKDATA = new HashMap<>();
+    private static final Map<AbstractDetector, FancyInteger> TICKDATA = new HashMap<>();
 
     public static void tickDetectors(){
         for(AbstractDetector detector : DETECTORS){
             int tickDelay = detector.getTickDelay();
-            IncreaseInteger i = TICKDATA.getOrDefault(detector, new IncreaseInteger(0));
+            FancyInteger i = TICKDATA.getOrDefault(detector, new FancyInteger(0));
             i.increase();
             TICKDATA.put(detector, i);
 
