@@ -3,7 +3,9 @@ package me.kr1s_d.ultimateantibot.listener;
 import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.common.AttackState;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.ModeType;
 import me.kr1s_d.ultimateantibot.common.detectors.FastJoinBypassDetector;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.event.AttackStateEvent;
 import me.kr1s_d.ultimateantibot.event.DuringAttackIPJoinEvent;
 import me.kr1s_d.ultimateantibot.event.ModeEnableEvent;
@@ -27,6 +29,12 @@ public class CustomEventListener implements Listener {
         for(Player player : Bukkit.getOnlinePlayers()){
             if(player.hasPermission("uab.notification.automatic")){
                 Notificator.automaticNotification(player);
+            }
+        }
+
+        if(e.getEnabledMode().equals(ModeType.ANTIBOT)){
+            if(ConfigManger.antibotDisconnect) {
+                e.disconnectBots();
             }
         }
     }

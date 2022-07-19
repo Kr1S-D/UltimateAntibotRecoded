@@ -126,6 +126,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         commandManager.register(new ToggleNotificationCommand());
         commandManager.register(new CheckIDCommand(this));
         commandManager.register(new ReloadCommand(this));
+        commandManager.register(new FirewallCommand(this));
         //commandManager.register(new SatelliteCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));

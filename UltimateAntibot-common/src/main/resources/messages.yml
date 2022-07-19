@@ -80,6 +80,14 @@ satellitestats:
   - "&cResponse time: &f%time%ms"
   - ""
   - "&fThere are &c%currentserver%&f out of &c%maxservers%&f servers connected"
+firewall:
+  - "&cFirewall status: %status%"
+  - ""
+  - "&cIP in queue: %queue%"
+  - "&cIP blacklisted: %blacklist%"
+  - ""
+  - "&cThese are the UAB firewall stats that will only work if you have it enabled in the config!"
+  - "&cThe attack will be mitigated when all IPs have been blocked!"
 antibotmode:
   - "&fᛃ &4&LU&c&LA&4&LB &fᛃ"
   - ""

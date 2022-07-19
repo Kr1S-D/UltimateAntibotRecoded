@@ -21,6 +21,7 @@ public class FirewallService {
     private boolean isEnabled;
 
     private final Queue<String> IPQueue;
+    private long blacklisted;
 
     public FirewallService(IAntiBotPlugin plugin) {
         this.plugin = plugin;
@@ -34,6 +35,7 @@ public class FirewallService {
         this.isEnabled = configuration.getBoolean("firewall.enabled");
 
         this.IPQueue = new ArrayDeque<>();
+        this.blacklisted = 0;
 
         plugin.scheduleRepeatingTask(() -> {
             String ip = IPQueue.poll();
@@ -42,10 +44,10 @@ public class FirewallService {
                 return;
             }
 
-            plugin.getLogHelper().info("[FIREWALL] &c" + ip + " &fhas been firewalled!");
-
+            plugin.getLogHelper().debug("[FIREWALL] &c" + ip + " &fhas been firewalled!");
+            blacklisted++;
             RuntimeUtil.execute(getBlackListCommand(ip));
-        }, true, 10L);
+        }, true, 20L);
     }
 
     public void enable(){
@@ -112,6 +114,19 @@ public class FirewallService {
         if(!isEnabled) return;
         if(!resetOnBlackListClear) return;
         plugin.runTask(() -> RuntimeUtil.execute("ipset flush " + ipSetID), true);
+        blacklisted = 0;
+    }
+
+    public String getFirewallStatus(){
+        return isEnabled ? "ENABLED" : "DISABLED";
+    }
+
+    public int getIPQueue(){
+        return IPQueue.size();
+    }
+
+    public long getBlacklistedIP(){
+        return blacklisted;
     }
 
     private void setupFirewall() {

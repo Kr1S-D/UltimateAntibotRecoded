@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDataService implements IService {
-    private IAntiBotPlugin plugin;
+    private final IAntiBotPlugin plugin;
     private final IConfiguration database;
     private final LogHelper logHelper;
     private final Map<String, Boolean> ipMap;
@@ -69,7 +69,7 @@ public class UserDataService implements IService {
     }
 
     public void resetFirstJoin(String ip){
-        ipMap.put(ip, true);
+        ipMap.put(ip, false);
     }
 
     public int size(){

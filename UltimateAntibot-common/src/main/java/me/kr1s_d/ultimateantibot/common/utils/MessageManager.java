@@ -4,6 +4,7 @@ import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 
 import java.util.List;
+import java.util.Map;
 
 public class MessageManager {
     public static double version;
@@ -44,6 +45,7 @@ public class MessageManager {
     public static String commandNoBlacklist;
     public static List<String> blacklistProfileString;
     public static String attackAnalyzerIncrease;
+    public static List<String> firewallMessage;
     public static String attackAnalyzerDecrease;
     public static String bossBarIdleMessage;
     public static String fastJoinQueueMessage;
@@ -88,6 +90,7 @@ public class MessageManager {
         commandNoBlacklist = messages.getString("commands.no-blacklist");
         blacklistProfileString = messages.getStringList("blacklist_info");
         attackAnalyzerIncrease = messages.getString("analyzer.increase");
+        firewallMessage = messages.getStringList("firewall");
         attackAnalyzerDecrease = messages.getString("analyzer.decrease");
         bossBarIdleMessage = messages.getString("bossbar_idle_message");
         fastJoinQueueMessage = convertToString(messages.getStringList("fastjoin-queue"));

@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.listener;
 
+import com.sun.scenario.effect.Flood;
 import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.common.checks.*;
@@ -33,6 +34,7 @@ public class MainEventListener implements Listener {
     private final FirstJoinCheck firstJoinCheck;
     private final NameChangerCheck nameChangerCheck;
     private final SuperJoinCheck superJoinCheck;
+    private final FloodCheck floodCheck;
     private final AuthCheckReloaded authCheck;
     private final AccountCheck accountCheck;
     private int blacklistedPercentage;
@@ -47,6 +49,7 @@ public class MainEventListener implements Listener {
         this.firstJoinCheck = new FirstJoinCheck(antiBotPlugin);
         this.nameChangerCheck = new NameChangerCheck(antiBotPlugin);
         this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
+        this.floodCheck = new FloodCheck(antiBotPlugin);
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.accountCheck = new AccountCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
@@ -76,12 +79,6 @@ public class MainEventListener implements Listener {
             return;
         }
         //
-        //Queue Check
-        //
-        if(whitelistService.isWhitelisted(ip) || blackListService.isBlackListed(ip)){
-            queueService.removeQueue(ip);
-        }
-        //
         //AntiBotMode Enable
         //
         if(antiBotManager.getJoinPerSecond() >= ConfigManger.antiBotModeTrigger){
@@ -91,33 +88,41 @@ public class MainEventListener implements Listener {
                 return;
             }
         }
-
         //
-        //Some Checks
+        //Queue Check
         //
-        if(antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()) {
-            //
-            // NameChangerCheck
-            //
-            if(nameChangerCheck.isDenied(ip, name)){
-                blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
-                e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
-                return;
-            }
-            //
-            // SuperJoinCheck
-            //
-            if(superJoinCheck.isDenied(ip, name)){
-                blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
-                e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
-                return;
-            }
+        if(whitelistService.isWhitelisted(ip) || blackListService.isBlackListed(ip)){
+            queueService.removeQueue(ip);
+        }
+        //
+        //Flood Check
+        //
+        if (floodCheck.isDenied(ip, name)) {
+            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
+            return;
         }
         //
         //FirstJoinCheck
         //
         if(firstJoinCheck.isDenied(ip, name)){
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.firstJoinMessage));
+            return;
+        }
+        //
+        // NameChangerCheck
+        //
+        if(nameChangerCheck.isDenied(ip, name)){
+            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
+            return;
+        }
+        //
+        // SuperJoinCheck
+        //
+        if(superJoinCheck.isDenied(ip, name)){
+            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
             return;
         }
         //

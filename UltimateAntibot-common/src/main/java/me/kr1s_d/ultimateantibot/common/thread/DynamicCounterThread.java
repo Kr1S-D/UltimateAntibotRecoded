@@ -2,41 +2,35 @@ package me.kr1s_d.ultimateantibot.common.thread;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
-
 public class DynamicCounterThread{
-    private final List<Long> a;
-    private long b;
-    private long c;
-    private final long n;
+    private long total;
+    private long lastCount;
+    private long count;
 
-    public DynamicCounterThread(IAntiBotPlugin f) {
-        this.a = new CopyOnWriteArrayList<Long>();
-        this.b = 0L;
-        this.c = 0L;
-        this.n = TimeUnit.SECONDS.toNanos(1L);
-        f.getLogHelper().debug("Enabled " + this.getClass().getSimpleName() + "!");
-
-        f.scheduleRepeatingTask(() -> a.removeIf(n -> System.nanoTime() - n >= n), false, 250L);
-        f.scheduleRepeatingTask(() -> c = a.stream().filter(n2 -> System.nanoTime() - n2 < n).count(), false, 10L);
+    public DynamicCounterThread(IAntiBotPlugin plugin) {
+        plugin.getLogHelper().debug("Enabled " + this.getClass().getSimpleName() + "!");
+        this.total = 0L;
+        this.count = 0L;
+        plugin.scheduleRepeatingTask(() -> {
+            lastCount = count;
+            count = 0;
+        }, false, 1000L);
     }
 
     public long getCount() {
-        return c;
+        return lastCount;
     }
 
     public void increase() {
-        b++;
-        this.a.add(System.nanoTime());
+        total++;
+        count++;
     }
 
     public long getTotal() {
-        return this.b;
+        return this.total;
     }
 
     public void resetTotal() {
-        this.b = 0L;
+        this.total = 0L;
     }
 }

@@ -17,6 +17,7 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.*;
@@ -32,6 +33,7 @@ public class MainEventListener implements Listener {
     private final FirstJoinCheck firstJoinCheck;
     private final NameChangerCheck nameChangerCheck;
     private final SuperJoinCheck superJoinCheck;
+    private final FloodCheck floodCheck;
     private final AuthCheckReloaded authCheck;
     private final PacketCheck packetCheck;
     private final AccountCheck accountCheck;
@@ -47,6 +49,7 @@ public class MainEventListener implements Listener {
         this.firstJoinCheck = new FirstJoinCheck(antiBotPlugin);
         this.nameChangerCheck = new NameChangerCheck(antiBotPlugin);
         this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
+        this.floodCheck = new FloodCheck(antiBotPlugin);
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.packetCheck = new PacketCheck(antiBotPlugin);
         this.accountCheck = new AccountCheck(antiBotPlugin);
@@ -105,33 +108,37 @@ public class MainEventListener implements Listener {
             queueService.queue(ip);
         }
         //
-        //Some Checks
+        //Flood Check
         //
-        if(antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()) {
-            //
-            // NameChangerCheck
-            //
-            if(nameChangerCheck.isDenied(ip, name)){
-                blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
-                e.setCancelReason(blacklistMSG(ip));
-                e.setCancelled(true);
-                return;
-            }
-            //
-            // SuperJoinCheck
-            //
-            if(superJoinCheck.isDenied(ip, name)){
-                blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
-                e.setCancelReason(blacklistMSG(ip));
-                e.setCancelled(true);
-                return;
-            }
+        if (floodCheck.isDenied(ip, name)) {
+            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
+            e.setCancelReason(blacklistMSG(ip));
+            e.setCancelled(true);
+            return;
         }
         //
         //FirstJoinCheck
         //
         if(firstJoinCheck.isDenied(ip, name)){
             e.setCancelReason(ComponentBuilder.buildColorized(MessageManager.firstJoinMessage));
+            e.setCancelled(true);
+            return;
+        }
+        //
+        // NameChangerCheck
+        //
+        if(nameChangerCheck.isDenied(ip, name)){
+            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
+            e.setCancelReason(blacklistMSG(ip));
+            e.setCancelled(true);
+            return;
+        }
+        //
+        // SuperJoinCheck
+        //
+        if(superJoinCheck.isDenied(ip, name)){
+            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
+            e.setCancelReason(blacklistMSG(ip));
             e.setCancelled(true);
             return;
         }

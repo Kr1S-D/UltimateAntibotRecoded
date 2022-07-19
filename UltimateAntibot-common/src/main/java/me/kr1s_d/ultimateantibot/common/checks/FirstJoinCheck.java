@@ -56,9 +56,9 @@ public class FirstJoinCheck extends IManagedCheck {
 
     public boolean isFirstJoin(String ip){
         if(data.containsKey(ip)){
-            return data.get(ip);
+            return !data.get(ip);
         }
-        data.put(ip, false);
+        data.put(ip, true);
         return true;
     }
 

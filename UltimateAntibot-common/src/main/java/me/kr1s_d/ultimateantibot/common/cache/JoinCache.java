@@ -1,17 +1,20 @@
 package me.kr1s_d.ultimateantibot.common.cache;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class JoinCache {
-    private final List<String> lastIpJoined;
+    private final Map<String, Long> lastIpJoined;
 
     public JoinCache(){
-        this.lastIpJoined = new ArrayList<>();
+        this.lastIpJoined = new HashMap<>();
     }
 
     public void addJoined(String ip){
-        lastIpJoined.add(ip);
+        lastIpJoined.put(ip, System.currentTimeMillis());
     }
 
     public void removeJoined(String ip){
@@ -22,7 +25,16 @@ public class JoinCache {
         lastIpJoined.clear();
     }
 
-    public List<String> getJoined() {
-        return lastIpJoined;
+    public List<String> getJoined(int minSec) {
+        List<String> ip = new ArrayList<>();
+
+        for(Map.Entry<String, Long> map : lastIpJoined.entrySet()){
+            int second = (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - map.getValue());
+            if(second <= minSec){
+                ip.add(map.getKey());
+            }
+        }
+
+        return ip;
     }
 }

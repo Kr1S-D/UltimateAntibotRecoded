@@ -128,7 +128,9 @@ public class AntiBotManager implements IAntiBotManager {
         if(type.equals(ModeType.PING)){
             this.isPingModeEnabled = false;
         }
-        this.modeType = ModeType.OFFLINE;
+        if(type != ModeType.OFFLINE){
+            this.modeType = ModeType.OFFLINE;
+        }
     }
 
     @Override

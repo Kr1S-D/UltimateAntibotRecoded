@@ -18,6 +18,7 @@ public class ConfigManger {
     public static boolean isConsoleAttackMessageDisabled;
     public static int antiBotModeKeep;
     public static int antiBotModeTrigger;
+    public static boolean antibotDisconnect;
     public static long slowAntibotModeKeep;
     public static int pingModeKeep;
     public static int pingModeTrigger;
@@ -46,10 +47,13 @@ public class ConfigManger {
     public static int authMaxFails;
     public static boolean authPingInterface;
     public static long taskManagerUpdate;
+    public static int floodTime;
+    public static int floodLatency;
+    public static int floodCondition;
+    public static boolean isFloodCheckEnabled;
     public static boolean isIPApiVerificationEnabled;
     private static SlowCheckConfig packetSlowCheckConfig;
     private static SlowCheckConfig accountCheckConfig;
-    private static SlowCheckConfig delayCheckConfig;
     private static ProxyCheckConfig proxyCheckConfig;
 
     public static void init(IConfiguration cfg){
@@ -64,6 +68,7 @@ public class ConfigManger {
         detectServerPerformance = cfg.getBoolean("detect-server-performance");
         antiBotModeKeep = cfg.getInt("antibotmode.keep");
         antiBotModeTrigger = cfg.getInt("antibotmode.trigger");
+        antibotDisconnect = cfg.getBoolean("antibotmode.disconnect");
         slowAntibotModeKeep = cfg.getInt("antibotmode.keep-slow");
         pingModeKeep = cfg.getInt("pingmode.keep");
         pingModeTrigger = cfg.getInt("pingmode.trigger");
@@ -92,8 +97,11 @@ public class ConfigManger {
         authMaxFails = cfg.getInt("checks.auth.maxfails");
         authPingInterface = cfg.getBoolean("checks.auth.ping_interface");
         taskManagerUpdate = cfg.getLong("taskmanager.update");
+        floodTime = cfg.getInt("checks.flood.time");
+        floodLatency = cfg.getInt("checks.flood.latency");
+        floodCondition = cfg.getInt("checks.flood.condition");
+        isFloodCheckEnabled = cfg.getBoolean("checks.flood.enabled");
         packetSlowCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.packet");
-        delayCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.delay");
         accountCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.account");
         proxyCheckConfig = new ProxyCheckConfig(cfg);
     }
@@ -102,9 +110,6 @@ public class ConfigManger {
         return accountCheckConfig;
     }
 
-    public static SlowCheckConfig getDelayCheckConfig() {
-        return delayCheckConfig;
-    }
 
     public static SlowCheckConfig getPacketCheckConfig() {
         return packetSlowCheckConfig;

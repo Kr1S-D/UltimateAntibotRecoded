@@ -41,10 +41,12 @@ disable-console-attack-message: false
 antibotmode:
   #Duration of the anti-botmode when activated
   keep: 15 #seconds
-  #If there are 15 connections in 1 second the antibot mode will be activated!
-  trigger: 15
+  #If there are 10 connections in 1 second the antibot mode will be activated!
+  trigger: 10
   #Slowmode duration
   keep-slow: 60
+  #disconnect joined players
+  disconnect: true
 
 #Pingmode allows player connections to your server!
 pingmode:
@@ -117,6 +119,12 @@ checks:
     #On spigot will use the motd
     #Editable in messages.yml
     ping_interface: true
+  #Dev only
+  flood:
+    time: 60
+    latency: 200
+    condition: 1
+    enabled: true
   slowjoin:
     #This check will check if a player sends a certain packet,
     #which the bots do not send, to 5 bots that do not send it
@@ -140,17 +148,6 @@ checks:
       time: 0 #ignored here
       trigger: 4
       condition: 0 #ignored here
-      blacklist: true
-      kick: true
-      antibotmode: true
-      enabled: true
-    #Disable this check only if slow antibot mode is
-    #triggered too many times
-    #dev only
-    delay:
-      time: 60
-      trigger: 4 #amount to trigger
-      condition: 700 #delay between
       blacklist: true
       kick: true
       antibotmode: true
@@ -181,7 +178,7 @@ firewall:
   #Unique name of IPSet
   ip-set-id: "uab_blacklist"
   #The duration of the blacklist for each ip
-  timeout: 0 # seconds, 0 = cancels on server restart
+  timeout: 0 # seconds, 0 = cancels on server restart or on blacklist clear (with command)
   #Also clear the firewall blacklist when the blacklist is reset by command?
   reset-on-blacklist-clear: true
   #Commands executed to load the hook

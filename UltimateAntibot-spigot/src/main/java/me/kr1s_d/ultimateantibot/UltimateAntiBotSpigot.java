@@ -125,6 +125,8 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         commandManager.register(new ToggleNotificationCommand());
         commandManager.register(new CheckIDCommand(this));
         commandManager.register(new ReloadCommand(this));
+        commandManager.register(new FirewallCommand(this));
+        commandManager.setDefaultCommandWrongArgumentMessage(MessageManager.commandWrongArgument);
         //commandManager.register(new SatelliteCommand(this));
         Bukkit.getPluginManager().registerEvents(new PingListener(this), this);
         Bukkit.getPluginManager().registerEvents(new MainEventListener(this), this);
