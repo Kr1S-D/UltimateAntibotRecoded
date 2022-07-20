@@ -27,7 +27,6 @@ public class Updater {
         return isAvailable;
     }
 
-
     public void checkNotification() {
         if(isAvailable()) {
             plugin.scheduleRepeatingTask(() -> {
