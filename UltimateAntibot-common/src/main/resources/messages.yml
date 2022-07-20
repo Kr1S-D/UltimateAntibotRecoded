@@ -66,6 +66,7 @@ help:
   - "&c/uab &cclear &fblacklist/whitelist"
   - "&c/uab &cwhitelist &fadd/remove &f<ip>"
   - "&c/uab &cblacklist &fadd/remove &f<ip>"
+  - "&c/uab &cfirewall"
   - "&c/uab &ccheck &f<id>"
   - "&c/uab &creload"
   - "&c/uab &cdump"

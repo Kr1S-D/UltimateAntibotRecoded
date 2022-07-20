@@ -171,10 +171,10 @@ checks:
 #
 #Negative points:
 #Slower on spigot!
-#There will be an increase of CPU usage (Especially on low-powered servers)
+#There will be an increase of CPU usage during ip blacklisting (Especially on low-powered servers)
 #
 firewall:
-  enabled: true
+  enabled: false
   #Unique name of IPSet
   ip-set-id: "uab_blacklist"
   #The duration of the blacklist for each ip
