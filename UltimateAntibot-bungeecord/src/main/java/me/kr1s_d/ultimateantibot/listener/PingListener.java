@@ -2,6 +2,8 @@ package me.kr1s_d.ultimateantibot.listener;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.NameChangerCheck;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
@@ -18,7 +20,7 @@ public class PingListener implements Listener {
     private final QueueService queueService;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
-    // TODO: 03/12/2021 superping check;
+    private final NameChangerCheck changerCheck;
 
     public PingListener(IAntiBotPlugin plugin){
         this.plugin = plugin;
@@ -26,14 +28,19 @@ public class PingListener implements Listener {
         this.queueService = antiBotManager.getQueueService();
         blackListService = antiBotManager.getBlackListService();
         whitelistService = antiBotManager.getWhitelistService();
+        this.changerCheck = new NameChangerCheck(plugin);
     }
 
     @EventHandler(priority = -128)
     public void onPing(ProxyPingEvent e){
         String ip = Utils.getIP(e.getConnection());
+        String name = e.getConnection().getName();
         antiBotManager.increasePingPerSecond();
         if(!blackListService.isBlackListed(ip) && antiBotManager.isPingModeEnabled()){
             antiBotManager.increaseChecksPerSecond();
+        }
+        if(changerCheck.isDenied(ip, name)){
+            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
         }
         //PingMode checks
         if(antiBotManager.isSomeModeOnline()){

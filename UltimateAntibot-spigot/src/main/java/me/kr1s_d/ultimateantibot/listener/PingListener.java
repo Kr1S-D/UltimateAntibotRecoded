@@ -2,6 +2,8 @@ package me.kr1s_d.ultimateantibot.listener;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.NameChangerCheck;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
@@ -34,6 +36,7 @@ public class PingListener implements Listener {
         if(!blackListService.isBlackListed(ip) && antiBotManager.isPingModeEnabled()){
             antiBotManager.increaseChecksPerSecond();
         }
+
         //PingMode checks
         if(antiBotManager.isSomeModeOnline()){
             if(!ConfigManger.pingModeSendInfo){
