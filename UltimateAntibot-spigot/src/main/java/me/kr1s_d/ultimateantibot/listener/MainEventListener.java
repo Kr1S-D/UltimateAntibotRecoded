@@ -37,6 +37,7 @@ public class MainEventListener implements Listener {
     private final FloodCheck floodCheck;
     private final AuthCheckReloaded authCheck;
     private final AccountCheck accountCheck;
+    private final LegalNameCheck legalNameCheck;
     private int blacklistedPercentage;
     private final VPNService VPNService;
 
@@ -52,6 +53,7 @@ public class MainEventListener implements Listener {
         this.floodCheck = new FloodCheck(antiBotPlugin);
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.accountCheck = new AccountCheck(antiBotPlugin);
+        this.legalNameCheck = new LegalNameCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
         this.VPNService = plugin.getVPNService();
     }
@@ -93,6 +95,13 @@ public class MainEventListener implements Listener {
         //
         if(whitelistService.isWhitelisted(ip) || blackListService.isBlackListed(ip)){
             queueService.removeQueue(ip);
+        }
+        //
+        //Legal Name Check
+        //
+        if(legalNameCheck.isDenied(ip, name)){
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
+            return;
         }
         //
         //Flood Check

@@ -3,21 +3,20 @@ package me.kr1s_d.ultimateantibot.listener;
 import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
+import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.*;
 import me.kr1s_d.ultimateantibot.common.checks.slowdetection.AccountCheck;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
-import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
 import me.kr1s_d.ultimateantibot.utils.Utils;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.*;
@@ -37,6 +36,7 @@ public class MainEventListener implements Listener {
     private final AuthCheckReloaded authCheck;
     private final PacketCheck packetCheck;
     private final AccountCheck accountCheck;
+    private final LegalNameCheck legalNameCheck;
     private int blacklistedPercentage;
     private final VPNService VPNService;
 
@@ -53,17 +53,10 @@ public class MainEventListener implements Listener {
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.packetCheck = new PacketCheck(antiBotPlugin);
         this.accountCheck = new AccountCheck(antiBotPlugin);
+        this.legalNameCheck = new LegalNameCheck(antiBotPlugin);
         this.blacklistedPercentage = 0;
         this.VPNService = plugin.getVPNService();
     }
-
-    //@EventHandler
-    //public void onClientConnection(ClientConnectEvent e){
-    //    SocketAddress encodedIP = e.getSocketAddress();
-    //    InetSocketAddress socketAddress = (InetSocketAddress) encodedIP;
-    //    String ip = socketAddress.getAddress().toString();
-    //    e.setCancelled(true);
-    //}
 
     @EventHandler(priority = -128)
     public void onPreLoginEvent(PreLoginEvent e){
@@ -106,6 +99,14 @@ public class MainEventListener implements Listener {
         //
         if(!queueService.isQueued(ip) && !blackListService.isBlackListed(ip) && !whitelistService.isWhitelisted(ip)){
             queueService.queue(ip);
+        }
+        //
+        //Legal Name Check
+        //
+        if(legalNameCheck.isDenied(ip, name)){
+            e.setCancelReason(blacklistMSG(ip));
+            e.setCancelled(true);
+            return;
         }
         //
         //Flood Check
