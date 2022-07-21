@@ -43,7 +43,9 @@ public class BukkitFilter implements Filter {
                 "read time out",
                 "Connect reset by peer",
                 "overflow in packet",
-                "pipeline"
+                "pipeline",
+                "The received encoded string",
+                "is longer than maximum allowed"
         ));
         blocked.addAll(antiBotPlugin.getConfigYml().getStringList("attack-filter"));
     }

@@ -39,7 +39,10 @@ public class LogFilterV2 implements Filter {
                 "disconnected with",
                 "read time out",
                 "Connect reset by peer",
-                "overflow in packet"
+                "overflow in packet",
+                "pipeline",
+                "The received encoded string",
+                "is longer than maximum allowed"
         ));
         blocked.addAll(antiBotPlugin.getConfigYml().getStringList("attack-filter"));
     }
