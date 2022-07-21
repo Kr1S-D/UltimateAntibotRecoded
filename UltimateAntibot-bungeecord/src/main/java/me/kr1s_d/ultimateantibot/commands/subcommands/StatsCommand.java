@@ -33,7 +33,7 @@ public class StatsCommand implements SubCommand {
 
     @Override
     public String getPermission() {
-        return "uab.commands.stats";
+        return "uab.command.stats";
     }
 
     @Override
