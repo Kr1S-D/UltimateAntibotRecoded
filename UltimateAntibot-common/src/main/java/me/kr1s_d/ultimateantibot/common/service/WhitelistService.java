@@ -8,7 +8,7 @@ import java.util.*;
 
 public class WhitelistService implements IService {
 
-    private QueueService queueService;
+    private final QueueService queueService;
     private final Set<String> whitelist;
     private final IConfiguration whitelistConfig;
     private final LogHelper logHelper;
