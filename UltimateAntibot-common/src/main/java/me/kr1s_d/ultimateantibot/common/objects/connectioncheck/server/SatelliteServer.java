@@ -1,9 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server;
 
-import com.google.gson.Gson;
-import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.json.StatusResponseJSON;
+import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,7 +27,7 @@ public class SatelliteServer {
     public long pingUABServers(String sessionID) {
         long a = System.currentTimeMillis();
         try {
-            URL register = new URL(String.format("http://satellite.kr1sd.me:8080/api/v1/register?sessionid=%s&client=%s", sessionID, PerformanceHelper.getRunning().toString()));
+            URL register = new URL(String.format("http://uabserver.kr1sd.me:8080/api/v1/handle?sessionid=%s&client=%s", sessionID, PerformanceHelper.getRunning().toString()));
             HttpURLConnection connection = (HttpURLConnection) register.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(5000);
@@ -44,24 +42,24 @@ public class SatelliteServer {
         return System.currentTimeMillis() - a;
     }
 
-    public StatusResponseJSON getStatus(){
-        try {
-            URL url = new URL("http://satellite.kr1sd.me:8080/api/v1/status");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(5000);
-            connection.connect();
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-            Gson gson = new Gson();
-            StatusResponseJSON serverInfo = gson.fromJson(reader, StatusResponseJSON.class);
-            reader.close();
-            return serverInfo;
-        }catch (Exception e){
-            e.printStackTrace();
-            plugin.getLogHelper().debug("Error during contacting UAB servers, are they down?");
-            return null;
-        }
-    }
+    //public StatusResponseJSON getStatus(){
+    //    try {
+    //        URL url = new URL("http://satellite.kr1sd.me:8080/api/v1/status");
+    //        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    //        connection.setRequestMethod("GET");
+    //        connection.setConnectTimeout(5000);
+    //        connection.connect();
+    //        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+    //        Gson gson = new Gson();
+    //        StatusResponseJSON serverInfo = gson.fromJson(reader, StatusResponseJSON.class);
+    //        reader.close();
+    //        return serverInfo;
+    //    }catch (Exception e){
+    //        e.printStackTrace();
+    //        plugin.getLogHelper().debug("Error during contacting UAB servers, are they down?");
+    //        return null;
+    //    }
+    //}
 
     public long getLastPingLatency() {
         return lastPingLatency;
