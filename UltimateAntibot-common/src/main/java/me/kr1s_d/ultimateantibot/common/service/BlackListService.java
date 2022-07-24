@@ -14,8 +14,7 @@ import java.util.Map;
 
 public class BlackListService implements IService {
 
-    private IAntiBotPlugin plugin;
-    private FirewallService firewallService;
+    private final FirewallService firewallService;
     private final QueueService queueService;
     private final Map<String, BlackListProfile> blacklist;
     private final IConfiguration blacklistConfig;
@@ -27,7 +26,6 @@ public class BlackListService implements IService {
      * @param logHelper - LogHelper for debug
      */
     public BlackListService(IAntiBotPlugin plugin, QueueService queueService, IConfiguration blacklistConfig, LogHelper logHelper){
-        this.plugin = plugin;
         this.firewallService = plugin.getFirewallService();
         this.queueService = queueService;
         this.blacklist = new HashMap<>();

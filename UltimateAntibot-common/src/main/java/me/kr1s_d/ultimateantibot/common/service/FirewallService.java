@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.FancyPair;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.utils.RuntimeUtil;
 
@@ -58,12 +59,17 @@ public class FirewallService {
         }
         if(!isEnabled) return;
         plugin.getLogHelper().info("Trying to hook in IPTables & IPSet...");
-        if(!checkInstallation()){
+
+        FancyPair<Boolean, String> checkInstallation = checkInstallation();
+        if(!checkInstallation.getElementA()){
             plugin.getLogHelper().error("Unable to hook intro IPTables & IPSet!");
             plugin.getLogHelper().error("It looks like they haven't been installed!");
+            plugin.getLogHelper().error("Printing error....");
+            plugin.getLogHelper().error(checkInstallation.getElementB());
             isEnabled = false;
             return;
         }
+
         if(!isEnabled) return;
         setupFirewall();
         plugin.getLogHelper().info("Hooked intro IPTables & IPSet!");
@@ -137,10 +143,10 @@ public class FirewallService {
         }
     }
 
-    private boolean checkInstallation() {
+    private FancyPair<Boolean, String> checkInstallation() {
         String tables = RuntimeUtil.executeAndGetOutput("iptables --version");
         String ipset = RuntimeUtil.executeAndGetOutput("ipset --version");
-        return tables.contains("iptables v") && ipset.contains("ipset v");
+        return new FancyPair<>(tables.contains("iptables v") && ipset.contains("ipset v"), ipset);
     }
 
     private String getBlackListCommand(String ip) {
