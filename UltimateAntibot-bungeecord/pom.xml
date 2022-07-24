@@ -8,7 +8,7 @@
     <parent>
         <groupId>me.kr1s_d.ultimateantibot</groupId>
         <artifactId>UltimateAntibot</artifactId>
-        <version>4.0.1-ABYSS</version>
+        <version>4.0.2-ABYSS</version>
     </parent>
 
     <artifactId>UltimateAntibot-bungeecord</artifactId>
