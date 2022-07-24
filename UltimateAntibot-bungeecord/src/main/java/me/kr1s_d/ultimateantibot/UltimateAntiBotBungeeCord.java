@@ -70,10 +70,17 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         this.database = new Config(this, "%datafolder%/database.yml");
-        if (FilesUpdater.checkFiles(this, 4.0, this.config, this.messages)) {
-            logHelper.error("Unable to load UltimateAntiBot....");
-            logHelper.error("Please remove your files!");
-            logHelper.error("Unloading plugin...");
+        if (!FilesUpdater.isValid(4.0, this.config, this.messages)) {
+            config.destroy();
+            messages.destroy();
+            whitelist.destroy();
+            blacklist.destroy();
+            database.destroy();
+            this.config = new Config(this, "%datafolder%/config.yml");
+            this.messages = new Config(this, "%datafolder%/messages.yml");
+            this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
+            this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
+            this.database = new Config(this, "%datafolder%/database.yml");
             return;
         }
         try {

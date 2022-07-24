@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.objects;
 
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.api.scheduler.TaskScheduler;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -22,20 +21,22 @@ public class Config implements IConfiguration {
     private final Configuration config;
     private final Logger logger;
 
-    private final String file;
+    private File file;
+    private final String filePath;
 
-    public Config(Plugin plugin, String file) {
-        this.file = file;
+    public Config(Plugin plugin, String filePath) {
+        this.filePath = filePath;
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-        createConfiguration(file);
-        this.config = getConfiguration(file);
+        createConfiguration(filePath);
+        this.config = getConfiguration(filePath);
     }
 
     public Configuration getConfiguration(String file) {
         file = replaceDataFolder(file);
         try {
-            return ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(file));
+            this.file = new File(file);
+            return ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
         } catch (IOException e) {
             return new Configuration();
         }
@@ -139,7 +140,17 @@ public class Config implements IConfiguration {
     }
 
     @Override
+    public void rename(String newName) {
+        file.renameTo(new File(plugin.getDataFolder(), newName + ".yml"));
+    }
+
+    @Override
+    public void destroy() {
+        file.delete();
+    }
+
+    @Override
     public void save(){
-        saveConfiguration(config, file);
+        saveConfiguration(config, filePath);
     }
 }

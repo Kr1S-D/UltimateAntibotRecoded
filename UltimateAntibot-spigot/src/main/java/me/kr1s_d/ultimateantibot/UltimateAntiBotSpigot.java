@@ -55,25 +55,29 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
 
     @Override
     public void onEnable() {
+        long a = System.currentTimeMillis();
         instance = this;
         this.isRunning = true;
         PerformanceHelper.init(ServerType.SPIGOT);
         RuntimeUtil.setup(this);
         ServerUtil.setPlatform(this);
-        long a = System.currentTimeMillis();
         this.scheduler = Bukkit.getScheduler();
         this.config = new Config(this, "config");
         this.messages = new Config(this, "messages");
         this.whitelist = new Config(this, "whitelist");
         this.blacklist = new Config(this, "blacklist");
         this.database = new Config(this, "database");
-        if (FilesUpdater.checkFiles(this, 4.0, config, messages)) {
-            logHelper.error("Unable to load UltimateAntiBot....");
-            logHelper.error("Please remove your files!");
-            logHelper.error("Unloading plugin...");
-            Bukkit.getScheduler().cancelTasks(this);
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
+        if (!FilesUpdater.isValid(4.0, config, messages)) {
+            config.destroy();
+            messages.destroy();
+            whitelist.destroy();
+            blacklist.destroy();
+            database.destroy();
+            this.config = new Config(this, "config");
+            this.messages = new Config(this, "messages");
+            this.whitelist = new Config(this, "whitelist");
+            this.blacklist = new Config(this, "blacklist");
+            this.database = new Config(this, "database");
         }
         try {
             ConfigManger.init(config);

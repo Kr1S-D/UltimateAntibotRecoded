@@ -14,13 +14,18 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class Config implements IConfiguration {
+    private final JavaPlugin plugin;
     private final File file;
 
     private YamlConfiguration config;
     private Consumer<Exception> exceptionHandler;
 
+    private String configName;
+
     public Config(JavaPlugin plugin, String configName) {
-        file = new File(plugin.getDataFolder(), configName + ".yml");
+        this.plugin = plugin;
+        this.configName = configName;
+        this.file = new File(plugin.getDataFolder(), configName + ".yml");
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             plugin.saveResource(configName + ".yml", false);
@@ -99,6 +104,16 @@ public class Config implements IConfiguration {
     @Override
     public void set(String path, Object value) {
         config.set(path, value);
+    }
+
+    @Override
+    public void rename(String newName) {
+        file.renameTo(new File(plugin.getDataFolder(), newName + ".yml"));
+    }
+
+    @Override
+    public void destroy() {
+        file.delete();
     }
 
     public YamlConfiguration asBukkitConfig() {
