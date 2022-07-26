@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.common.checks;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.UABRunnable;
+import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.HashMap;
@@ -10,10 +11,12 @@ import java.util.Map;
 public class FloodCheck implements ICheck {
     private final IAntiBotPlugin plugin;
     private final Map<String, Long> latencyMap;
+    private final Map<String, FancyInteger> counterMap;
 
     public FloodCheck(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.latencyMap = new HashMap<>();
+        this.counterMap = new HashMap<>();
         loadTask();
         if(isEnabled()){
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
@@ -31,7 +34,18 @@ public class FloodCheck implements ICheck {
         }
         long pastedMillis = System.currentTimeMillis() - lastJoinMillis;
         latencyMap.put(ip, System.currentTimeMillis());
-        return ConfigManger.floodLatency >= pastedMillis;
+        boolean isTriggered = ConfigManger.floodLatency >= pastedMillis;
+
+        if(isTriggered){
+            FancyInteger integer = counterMap.getOrDefault(ip, new FancyInteger(0));
+            integer.increase();
+            if(integer.get() >= ConfigManger.floodCondition){
+                return true;
+            }
+            counterMap.put(ip, integer);
+        }
+
+        return false;
     }
 
     @Override
@@ -60,6 +74,7 @@ public class FloodCheck implements ICheck {
             @Override
             public void run() {
                 latencyMap.clear();
+                counterMap.clear();
             }
         });
     }

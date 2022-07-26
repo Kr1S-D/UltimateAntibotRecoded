@@ -123,7 +123,7 @@ checks:
   flood:
     time: 60
     latency: 200
-    condition: 1
+    condition: 2
     enabled: true
   slowjoin:
     #This check will check if a player sends a certain packet,

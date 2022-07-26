@@ -30,6 +30,7 @@ public class JoinCache {
 
         for(Map.Entry<String, Long> map : lastIpJoined.entrySet()){
             int second = (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - map.getValue());
+
             if(second <= minSec){
                 ip.add(map.getKey());
             }
