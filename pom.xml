@@ -6,7 +6,7 @@
 
     <groupId>me.kr1s_d.ultimateantibot</groupId>
     <artifactId>UltimateAntibot</artifactId>
-    <version>4.0.2-ABYSS</version>
+    <version>4.0.3-ABYSS</version>
     <packaging>pom</packaging>
 
     <properties>

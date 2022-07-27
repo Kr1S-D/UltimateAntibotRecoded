@@ -7,6 +7,7 @@ import me.kr1s_d.ultimateantibot.common.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilterV2;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.FirewallService;
@@ -54,7 +55,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private Notificator notificator;
     private CheckService checkService;
     private UltimateAntiBotCore core;
-    //private SatelliteServer satelliteServer;
+    private SatelliteServer satelliteServer;
     private boolean isRunning;
 
     public void onEnable() {
@@ -70,18 +71,14 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         this.database = new Config(this, "%datafolder%/database.yml");
-        if (!FilesUpdater.isValid(4.0, this.config, this.messages)) {
-            config.destroy();
-            messages.destroy();
-            whitelist.destroy();
-            blacklist.destroy();
-            database.destroy();
+        FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist, database);
+        updater.check(4.1, 4.0);
+        if(updater.requiresReassign()) {
             this.config = new Config(this, "%datafolder%/config.yml");
             this.messages = new Config(this, "%datafolder%/messages.yml");
             this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
             this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
             this.database = new Config(this, "%datafolder%/database.yml");
-            return;
         }
         try {
             ConfigManger.init(this.config);
@@ -106,7 +103,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.animationThread = new AnimationThread(this);
         this.core = new UltimateAntiBotCore(this);
         this.core.load();
-        //this.satelliteServer = new SatelliteServer(this);
+        this.satelliteServer = new SatelliteServer(this);
         this.userDataService = new UserDataService(this.database, this);
         this.userDataService.load();
         ProxyServer.getInstance().getLogger().setFilter(new LogFilterV2(this));
@@ -332,6 +329,16 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
             if (Utils.getIP(player).equals(ip))
                 player.disconnect(new TextComponent(Utils.colora(reasonNoColor)));
         }
+    }
+
+    @Override
+    public SatelliteServer getSatellite() {
+        return satelliteServer;
+    }
+
+    @Override
+    public int getOnlineCount() {
+        return ProxyServer.getInstance().getOnlineCount();
     }
 
     @Override

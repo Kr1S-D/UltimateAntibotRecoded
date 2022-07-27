@@ -7,6 +7,7 @@ import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.FirewallService;
 import me.kr1s_d.ultimateantibot.common.utils.*;
@@ -50,7 +51,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     private VPNService VPNService;
     private Notificator notificator;
     private UltimateAntiBotCore core;
-    //private SatelliteServer satelliteServer;
+    private SatelliteServer satelliteServer;
     private boolean isRunning;
 
     @Override
@@ -67,12 +68,9 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.whitelist = new Config(this, "whitelist");
         this.blacklist = new Config(this, "blacklist");
         this.database = new Config(this, "database");
-        if (!FilesUpdater.isValid(4.0, config, messages)) {
-            config.destroy();
-            messages.destroy();
-            whitelist.destroy();
-            blacklist.destroy();
-            database.destroy();
+        FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist, database);
+        updater.check(4.1, 4.0);
+        if(updater.requiresReassign()) {
             this.config = new Config(this, "config");
             this.messages = new Config(this, "messages");
             this.whitelist = new Config(this, "whitelist");
@@ -102,7 +100,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         animationThread = new AnimationThread(this);
         core = new UltimateAntiBotCore(this);
         core.load();
-        //satelliteServer = new SatelliteServer(this);
+        satelliteServer = new SatelliteServer(this);
         userDataService = new UserDataService(database, this);
         userDataService.load();
         ((Logger) LogManager.getRootLogger()).addFilter(new BukkitFilter(this));
@@ -332,6 +330,16 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
                 }
             }
         }.runTaskLater(this, 1);
+    }
+
+    @Override
+    public SatelliteServer getSatellite() {
+        return satelliteServer;
+    }
+
+    @Override
+    public int getOnlineCount() {
+        return Bukkit.getOnlinePlayers().size();
     }
 
     @Override

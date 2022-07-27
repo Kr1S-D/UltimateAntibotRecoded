@@ -16,25 +16,25 @@ public class SatelliteServer {
 
     public SatelliteServer(IAntiBotPlugin plugin){
         this.plugin = plugin;
+        this.lastPingLatency = 0;
         this.sessionID = UUID.randomUUID().toString();
         plugin.scheduleRepeatingTask(() -> {
             if(plugin.getAntiBotManager().isSomeModeOnline()) return;
-            lastPingLatency = pingUABServers(sessionID);
-            plugin.getLogHelper().debug(String.format("Sending update request to UAB servers! (Took %sms)", lastPingLatency));
+            lastPingLatency = ping(sessionID);
         }, true, 1000L * 60L * 10L);
     }
 
-    public long pingUABServers(String sessionID) {
+    public long ping(String sessionID) {
         long a = System.currentTimeMillis();
         try {
-            URL register = new URL(String.format("http://uabserver.kr1sd.me:8080/api/v1/handle?sessionid=%s&client=%s", sessionID, PerformanceHelper.getRunning().toString()));
+            URL register = new URL(String.format("http://uabserver.kr1sd.me:8080/api/v1/handle?session=%s&platform=%s&onlinecount=%s&latency=%s", sessionID, PerformanceHelper.getRunning().toString(), plugin.getOnlineCount(), lastPingLatency));
             HttpURLConnection connection = (HttpURLConnection) register.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(2000);
             connection.connect();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            plugin.getLogHelper().debug(reader.readLine());
+            //plugin.getLogHelper().debug(reader.readLine());
             connection.disconnect();
         }catch (Exception e) {
             plugin.getLogHelper().debug("Error during contacting UAB servers, are they down?");

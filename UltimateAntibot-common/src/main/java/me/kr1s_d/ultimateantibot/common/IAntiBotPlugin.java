@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.common;
 
 import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.FirewallService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
@@ -62,7 +63,9 @@ public interface IAntiBotPlugin {
 
     void disconnect(String ip, String reasonNoColor);
 
-    //SatelliteServer getSatellite();
+    SatelliteServer getSatellite();
+
+    int getOnlineCount();
 
     boolean isRunning();
 }

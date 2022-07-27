@@ -1,4 +1,4 @@
-version: 4.0
+version: 4.1
 #   _    _ _ _   _                 _                        _   _ _           _
 #  | |  | | | | (_)               | |           /\         | | (_) |         | |
 #  | |  | | | |_ _ _ __ ___   __ _| |_ ___     /  \   _ __ | |_ _| |__   ___ | |_
@@ -119,6 +119,12 @@ checks:
     #On spigot will use the motd
     #Editable in messages.yml
     ping_interface: true
+  legalname:
+    #All nicknames with a length less than or equal to 16 and containing
+    #characters such as "_" and "." the point is supported for geyser players to enter the server
+    #If you use a different character such as a "," just substitute it at the point in the expression below!
+    name-regex: "[a-zA-Z0-9_.]*"
+    enabled: true
   #Dev only
   flood:
     time: 60

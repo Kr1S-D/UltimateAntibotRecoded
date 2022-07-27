@@ -7,7 +7,6 @@ import me.kr1s_d.ultimateantibot.common.objects.config.SlowCheckConfig;
 import java.util.SplittableRandom;
 
 public class ConfigManger {
-
     private static IConfiguration CONFIG;
 
     public static double version;
@@ -47,6 +46,8 @@ public class ConfigManger {
     public static int authMaxFails;
     public static boolean authPingInterface;
     public static long taskManagerUpdate;
+    public static boolean isLegalNameCheckEnabled;
+    public static String legalNameCheckRegex;
     public static int floodTime;
     public static int floodLatency;
     public static int floodCondition;
@@ -97,6 +98,8 @@ public class ConfigManger {
         authMaxFails = cfg.getInt("checks.auth.maxfails");
         authPingInterface = cfg.getBoolean("checks.auth.ping_interface");
         taskManagerUpdate = cfg.getLong("taskmanager.update");
+        isLegalNameCheckEnabled = cfg.getBoolean("checks.legalname.enabled");
+        legalNameCheckRegex = cfg.getString("checks.legalname.name-regex");
         floodTime = cfg.getInt("checks.flood.time");
         floodLatency = cfg.getInt("checks.flood.latency");
         floodCondition = cfg.getInt("checks.flood.condition");
