@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.core;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.detectors.AttackTypeDetector;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.DetectorService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
@@ -17,6 +18,7 @@ public class UltimateAntiBotCore {
         this.plugin = plugin;
         this.blackListService = plugin.getAntiBotManager().getBlackListService();
         this.whitelistService = plugin.getAntiBotManager().getWhitelistService();
+        new AttackTypeDetector(plugin);
     }
 
     public void load() {

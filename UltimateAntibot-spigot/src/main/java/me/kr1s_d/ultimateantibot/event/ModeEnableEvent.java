@@ -30,7 +30,7 @@ public class ModeEnableEvent extends Event {
     }
 
     public void disconnectBots(){
-        List<String> profileList = new ArrayList<>(antiBotManager.getJoinCache().getJoined(6));
+        List<String> profileList = new ArrayList<>(antiBotManager.getJoinCache().getJoined(10));
         profileList.forEach(userDataService::resetFirstJoin);
         Utils.disconnectAll(profileList, MessageManager.getSafeModeMessage());
         antiBotManager.getJoinCache().clear();

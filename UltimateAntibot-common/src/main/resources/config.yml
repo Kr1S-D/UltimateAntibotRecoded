@@ -110,8 +110,8 @@ checks:
     between: 1300 #milliseconds
     #BlackList enable condition
     percent: 95
-    #If player fail this check 6 times will be blacklisted
-    maxfails: 6
+    #If player fail this check 10 times will be blacklisted
+    maxfails: 10
     #If a player has to ping the verification,
     #the non-verifying players will have a counter of the times they pinged the
     #server to enter!
@@ -124,12 +124,6 @@ checks:
     #characters such as "_" and "." the point is supported for geyser players to enter the server
     #If you use a different character such as a "," just substitute it at the point in the expression below!
     name-regex: "[a-zA-Z0-9_.]*"
-    enabled: true
-  #Dev only
-  flood:
-    time: 60
-    latency: 200
-    condition: 2
     enabled: true
   slowjoin:
     #This check will check if a player sends a certain packet,
@@ -215,11 +209,16 @@ ip-api:
 
 #This check allows you to verify your users during bot attacks!
 #The site offers a free plan that you can access by signing up which gives you access to 1k requests per day.
-#Each check will cost you 1 request and at the end of the daily requests you will have to wait for the next day
+#Each check will cost you 1 request and at the end of the daily requests you will have to wait for the next day,
+
 #provided by: https://proxycheck.io/
 proxycheck:
   #if key is not valid proxycheck is disabled (without errors in console (unless you have active debugging!))
   api-key: "enter-here-your-key"
+
+#######################################
+#              FILTER                 #
+#######################################
 
 #Custom Message filter only works during a bot/packet/ping attack
 attack-filter:

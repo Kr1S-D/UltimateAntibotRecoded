@@ -9,10 +9,7 @@ import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilterV2;
-import me.kr1s_d.ultimateantibot.common.service.CheckService;
-import me.kr1s_d.ultimateantibot.common.service.FirewallService;
-import me.kr1s_d.ultimateantibot.common.service.VPNService;
-import me.kr1s_d.ultimateantibot.common.service.UserDataService;
+import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
@@ -32,6 +29,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -44,7 +42,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private IConfiguration messages;
     private IConfiguration whitelist;
     private IConfiguration blacklist;
-    private IConfiguration database;
     private IAntiBotManager antiBotManager;
     private LatencyThread latencyThread;
     private AnimationThread animationThread;
@@ -70,15 +67,13 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.messages = new Config(this, "%datafolder%/messages.yml");
         this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
-        this.database = new Config(this, "%datafolder%/database.yml");
-        FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist, database);
+        FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
         updater.check(4.1, 4.0);
         if(updater.requiresReassign()) {
             this.config = new Config(this, "%datafolder%/config.yml");
             this.messages = new Config(this, "%datafolder%/messages.yml");
             this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
             this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
-            this.database = new Config(this, "%datafolder%/database.yml");
         }
         try {
             ConfigManger.init(this.config);
@@ -104,7 +99,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.core = new UltimateAntiBotCore(this);
         this.core.load();
         this.satelliteServer = new SatelliteServer(this);
-        this.userDataService = new UserDataService(this.database, this);
+        this.userDataService = new UserDataService(this);
         this.userDataService.load();
         ProxyServer.getInstance().getLogger().setFilter(new LogFilterV2(this));
         this.notificator = new Notificator();
@@ -252,11 +247,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
-    public IConfiguration getDatabase() {
-        return this.database;
-    }
-
-    @Override
     public IAntiBotManager getAntiBotManager() {
         return this.antiBotManager;
     }
@@ -349,6 +339,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     @Override
     public void cancelTask(int id) {
         ProxyServer.getInstance().getScheduler().cancel(id);
+    }
+
+    @Override
+    public File getDFolder(){
+        return getDataFolder();
     }
 
     public static UltimateAntiBotBungeeCord getInstance() {

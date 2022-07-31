@@ -22,21 +22,59 @@ public class ProxyCheckProvider implements VPNProvider {
 
     @Override
     public void process(String ip, String name) {
+        VPNResults res = getResults(ip);
+        if(res == null) return;
+
+        if(res.isProxy){
+            BlackListProfile profile = plugin.getAntiBotManager().getBlackListService().blacklistAndGet(ip, BlackListReason.VPN, name);
+            plugin.disconnect(ip, MessageManager.getBlacklistedMessage(profile));
+        }else {
+            plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
+            plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip));
+        }
+    }
+
+    @Override
+    public String getCountry(String ip, String name) {
+        VPNResults results = getResults(ip);
+        return results == null ? "" : results.country;
+    }
+
+    private VPNResults getResults(String ip){
         ConnectionCheck connectionCheck = new ConnectionCheck();
         ProxyResults results = connectionCheck.getAndMapResults(ip.replace("/", ""));
         if(results == null){
             plugin.getLogHelper().warn("Your API key has reached the daily limit or is not valid!");
-            return;
+            return null;
         }
         plugin.getLogHelper().debug("ConnectionCheckerService --> checked " + ip + " result " + results.getProxy());
-        if(results.getProxy().equals("yes")){
-            BlackListProfile profile = plugin.getAntiBotManager().getBlackListService().blacklistAndGet(ip, BlackListReason.VPN, name);
-            plugin.disconnect(ip, MessageManager.getBlacklistedMessage(profile));
-        }else{
-            if(results.getProxy().equals("no")){
-                plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
-                plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip));
-            }
+
+        return new VPNResults(results.getIsoCode(), results.getProxy().equals("yes"));
+    }
+
+    private static class VPNResults {
+        private String country;
+        private boolean isProxy;
+
+        public VPNResults(String country, boolean isProxy) {
+            this.country = country;
+            this.isProxy = isProxy;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public boolean isProxy() {
+            return isProxy;
+        }
+
+        public void setProxy(boolean proxy) {
+            isProxy = proxy;
         }
     }
 }

@@ -8,12 +8,9 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.SatelliteServer;
-import me.kr1s_d.ultimateantibot.common.service.CheckService;
-import me.kr1s_d.ultimateantibot.common.service.FirewallService;
+import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.objects.filter.BukkitFilter;
-import me.kr1s_d.ultimateantibot.common.service.VPNService;
-import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
@@ -33,6 +30,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.File;
+
 public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotPlugin, IServerPlatform {
 
     private static UltimateAntiBotSpigot instance;
@@ -41,7 +40,6 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     private IConfiguration messages;
     private IConfiguration whitelist;
     private IConfiguration blacklist;
-    private IConfiguration database;
     private IAntiBotManager antiBotManager;
     private LatencyThread latencyThread;
     private AnimationThread animationThread;
@@ -67,15 +65,13 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.messages = new Config(this, "messages");
         this.whitelist = new Config(this, "whitelist");
         this.blacklist = new Config(this, "blacklist");
-        this.database = new Config(this, "database");
-        FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist, database);
+        FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
         updater.check(4.1, 4.0);
         if(updater.requiresReassign()) {
             this.config = new Config(this, "config");
             this.messages = new Config(this, "messages");
             this.whitelist = new Config(this, "whitelist");
             this.blacklist = new Config(this, "blacklist");
-            this.database = new Config(this, "database");
         }
         try {
             ConfigManger.init(config);
@@ -101,7 +97,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         core = new UltimateAntiBotCore(this);
         core.load();
         satelliteServer = new SatelliteServer(this);
-        userDataService = new UserDataService(database, this);
+        userDataService = new UserDataService(this);
         userDataService.load();
         ((Logger) LogManager.getRootLogger()).addFilter(new BukkitFilter(this));
         notificator = new Notificator();
@@ -249,11 +245,6 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
-    public IConfiguration getDatabase() {
-        return database;
-    }
-
-    @Override
     public IAntiBotManager getAntiBotManager() {
         return antiBotManager;
     }
@@ -350,6 +341,11 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     @Override
     public void cancelTask(int id) {
         Bukkit.getScheduler().cancelTask(id);
+    }
+
+    @Override
+    public File getDFolder(){
+        return getDataFolder();
     }
 
     public static UltimateAntiBotSpigot getInstance() {

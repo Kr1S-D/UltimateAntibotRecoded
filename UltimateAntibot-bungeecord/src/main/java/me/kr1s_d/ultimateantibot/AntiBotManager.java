@@ -1,6 +1,8 @@
 package me.kr1s_d.ultimateantibot;
 
+import me.kr1s_d.ultimateantibot.common.AttackType;
 import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
+import me.kr1s_d.ultimateantibot.common.detectors.AttackDurationDetector;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.ModeType;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
@@ -11,6 +13,7 @@ import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.thread.DynamicCounterThread;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+import me.kr1s_d.ultimateantibot.common.utils.Formatter;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.event.ModeEnableEvent;
 import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
@@ -21,12 +24,13 @@ public class AntiBotManager implements IAntiBotManager {
     private final DynamicCounterThread joinPerSecond;
     private final DynamicCounterThread pingPerSecond;
     private final DynamicCounterThread packetPerSecond;
-    private final DynamicCounterThread checkPerSecond;
     private final DynamicCounterThread connectionPerSecond;
+    private final AttackDurationDetector attackDurationDetector;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
     private final QueueService queueService;
     private ModeType modeType;
+    private AttackType attackType;
     private boolean isAntiBotModeOnline;
     private boolean isSlowAntiBotModeOnline;
     private boolean isPacketModeEnabled;
@@ -38,15 +42,16 @@ public class AntiBotManager implements IAntiBotManager {
     public AntiBotManager(IAntiBotPlugin plugin){
         this.iAntiBotPlugin = plugin;
         this.logHelper = plugin.getLogHelper();
-        this.checkPerSecond = new DynamicCounterThread(plugin);
         this.joinPerSecond = new DynamicCounterThread(plugin);
         this.pingPerSecond = new DynamicCounterThread(plugin);
         this.packetPerSecond = new DynamicCounterThread(plugin);
         this.connectionPerSecond = new DynamicCounterThread(plugin);
+        this.attackDurationDetector = new AttackDurationDetector(plugin);
         this.queueService = new QueueService();
         this.blackListService = new BlackListService(plugin, queueService, plugin.getBlackList(), logHelper);
         this.whitelistService = new WhitelistService(queueService, plugin.getWhitelist(), logHelper);
         this.modeType = ModeType.OFFLINE;
+        this.attackType = AttackType.NONE;
         this.isAntiBotModeOnline = false;
         this.isSlowAntiBotModeOnline = false;
         this.isPacketModeEnabled = false;
@@ -56,28 +61,33 @@ public class AntiBotManager implements IAntiBotManager {
     }
 
     @Override
-    public long getChecksPerSecond() {
-        return checkPerSecond.getCount();
+    public long getJoinPerSecond() {
+        return joinPerSecond.getSlowCount();
     }
 
     @Override
-    public long getJoinPerSecond() {
-        return joinPerSecond.getCount();
+    public long getSpeedJoinPerSecond() {
+        return joinPerSecond.getSpeedCount();
     }
 
     @Override
     public long getPingPerSecond() {
-        return pingPerSecond.getCount();
+        return pingPerSecond.getSlowCount();
     }
 
     @Override
     public long getPacketPerSecond() {
-        return packetPerSecond.getCount();
+        return packetPerSecond.getSlowCount();
     }
 
     @Override
     public long getConnectionPerSecond() {
-        return connectionPerSecond.getCount();
+        return connectionPerSecond.getSlowCount();
+    }
+
+    @Override
+    public long getAttackDuration() {
+        return attackDurationDetector.getAttackDuration();
     }
 
     @Override
@@ -103,6 +113,21 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public void setModeType(ModeType type) {
         this.modeType = type;
+
+        if(type != ModeType.OFFLINE){
+            this.modeType = ModeType.OFFLINE;
+            this.attackType = AttackType.NONE;
+        }
+    }
+
+    @Override
+    public AttackType getAttackType() {
+        return attackType;
+    }
+
+    @Override
+    public void setAttackType(AttackType attackType) {
+        this.attackType = attackType;
     }
 
     @Override
@@ -112,6 +137,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
         this.modeType = ModeType.OFFLINE;
+        this.attackType = AttackType.NONE;
     }
 
     @Override
@@ -130,18 +156,13 @@ public class AntiBotManager implements IAntiBotManager {
         }
         if(type != ModeType.OFFLINE){
             this.modeType = ModeType.OFFLINE;
+            this.attackType = AttackType.NONE;
         }
     }
 
     @Override
     public boolean isSomeModeOnline() {
         return isAntiBotModeOnline || isSlowAntiBotModeOnline || isPacketModeEnabled || isPingModeEnabled;
-    }
-
-    @Override
-    public void increaseChecksPerSecond() {
-        checkPerSecond.increase();
-        increaseConnectionPerSecond();
     }
 
     @Override
@@ -257,13 +278,13 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public boolean canDisable(ModeType modeType) {
         if(modeType.equals(ModeType.ANTIBOT) || modeType.equals(ModeType.SLOW)){
-            return joinPerSecond.getCount() <= ConfigManger.antiBotModeTrigger;
+            return joinPerSecond.getSlowCount() <= ConfigManger.antiBotModeTrigger;
         }
         if(modeType.equals(ModeType.PING)){
-            return pingPerSecond.getCount() <= ConfigManger.pingModeTrigger;
+            return pingPerSecond.getSlowCount() <= ConfigManger.pingModeTrigger;
         }
         if (modeType.equals(ModeType.PACKETS)) {
-            return packetPerSecond.getCount() < ConfigManger.packetModeTrigger;
+            return packetPerSecond.getSlowCount() < ConfigManger.packetModeTrigger;
         }
         return false;
     }
@@ -276,17 +297,16 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public String replaceInfo(String str) {
         return str
-                .replace("%bots%", String.valueOf(joinPerSecond.getCount()))
-                .replace("%pings%", String.valueOf(pingPerSecond.getCount()))
-                .replace("%checks%", String.valueOf(checkPerSecond.getCount()))
+                .replace("%bots%", String.valueOf(joinPerSecond.getSlowCount()))
+                .replace("%pings%", String.valueOf(pingPerSecond.getSlowCount()))
                 .replace("%queue%", String.valueOf(queueService.size()))
                 .replace("%whitelist%", String.valueOf(whitelistService.size()))
                 .replace("%blacklist%", String.valueOf(blackListService.size()))
-                .replace("%type%", String.valueOf(modeType.toString()))
-                .replace("%packets%", String.valueOf(packetPerSecond.getCount()))
-                .replace("%totalbots%", String.valueOf(this.joinPerSecond.getTotal()))
-                .replace("%totalpings%", String.valueOf(this.pingPerSecond.getTotal()))
-                .replace("%totalpackets%", String.valueOf(this.packetPerSecond.getTotal()))
+                .replace("%type%", String.valueOf(attackType.toString()))
+                .replace("%packets%", String.valueOf(packetPerSecond.getSlowCount()))
+                .replace("%totalbots%", String.valueOf(Formatter.format(joinPerSecond.getTotal())))
+                .replace("%totalpings%", String.valueOf(Formatter.format(pingPerSecond.getTotal())))
+                .replace("%totalpackets%", String.valueOf(Formatter.format(packetPerSecond.getTotal())))
                 .replace("%latency%", iAntiBotPlugin.getLatencyThread().getLatency())
                 .replace("%prefix%", iAntiBotPlugin.getAnimationThread().getEmote() + " " + MessageManager.prefix)
                 .replace("%underverification%", String.valueOf(VPNService.getUnderVerificationSize()))

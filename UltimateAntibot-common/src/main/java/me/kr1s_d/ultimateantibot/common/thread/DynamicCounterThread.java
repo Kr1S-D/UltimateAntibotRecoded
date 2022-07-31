@@ -17,8 +17,12 @@ public class DynamicCounterThread{
         }, false, 1000L);
     }
 
-    public long getCount() {
+    public long getSlowCount() {
         return lastCount;
+    }
+
+    public long getSpeedCount(){
+        return count;
     }
 
     public void increase() {

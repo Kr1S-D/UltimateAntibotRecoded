@@ -33,6 +33,7 @@ public class AuthCheckReloaded {
     private final Map<String, FancyInteger> failure;
     private final TaskScheduler taskScheduler;
     private final Map<String, ScheduledTask> runningTasks;
+    private final Map<String, String> checkInitiator;
     private final VPNService VPNService;
 
     public AuthCheckReloaded(IAntiBotPlugin plugin){
@@ -45,6 +46,7 @@ public class AuthCheckReloaded {
         this.failure = new HashMap<>();
         this.taskScheduler = ProxyServer.getInstance().getScheduler();
         this.runningTasks = new HashMap<>();
+        this.checkInitiator = new HashMap<>();
         this.VPNService = plugin.getVPNService();
         plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
     }
@@ -85,12 +87,20 @@ public class AuthCheckReloaded {
             int currentIPPings = pingMap.get(ip).get();
             int pingRequired = pingData.getOrDefault(ip, 0);
             if (pingRequired != 0 && currentIPPings == pingRequired) {
-                //checking connection
-                if(ConfigManger.getProxyCheckConfig().isCheckFastJoin() && !hasFailedThisCheck(ip, 2)) {
-                    VPNService.submitIP(ip, e.getConnection().getName());
+                //0#133
+                String initiator = checkInitiator.getOrDefault(ip, null);
+                if(initiator.equals(e.getConnection().getName())) {
+                    //checking connection
+                    if (ConfigManger.getProxyCheckConfig().isCheckFastJoin() && !hasFailedThisCheck(ip, 2)) {
+                        VPNService.submitIP(ip, e.getConnection().getName());
+                    }
+                    addToPingCheckCompleted(ip);
+                    checking.remove(ip);
                 }
-                addToPingCheckCompleted(ip);
-                checking.remove(ip);
+                else{
+                    resetData(ip);
+                    increaseFails(ip, e.getConnection().getName());
+                }
             }
 
             //se i ping sono inferiori quando entra ha fallito
@@ -111,7 +121,10 @@ public class AuthCheckReloaded {
             return;
         }
         int pingTimer = ThreadLocalRandom.current().nextInt(ConfigManger.authMinMaxPing[0], ConfigManger.authMinMaxPing[1]);
+        //aggiungiamo l'ip nella verifica del ping timer
         addToCompletingPingCheck(ip, pingTimer);
+        //registriamo ip e nome di chi inizia per controllare che siano gli stessi alla fine
+        checkInitiator.put(ip, e.getConnection().getName());
         increaseFails(ip, e.getConnection().getName());
         e.setCancelReason(ComponentBuilder.buildColorized(
                 MessageManager.getPingMessage(String.valueOf(pingTimer)))
@@ -198,6 +211,7 @@ public class AuthCheckReloaded {
         runningTasks.remove(ip);
         pingData.remove(ip);
         failure.remove(ip);
+        checkInitiator.remove(ip);
     }
 
     /**

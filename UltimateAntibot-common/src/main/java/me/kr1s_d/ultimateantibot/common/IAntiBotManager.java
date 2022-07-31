@@ -5,16 +5,18 @@ import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 
-public interface IAntiBotManager {
-    long getChecksPerSecond();
-
+public abstract interface IAntiBotManager {
     long getJoinPerSecond();
+
+    long getSpeedJoinPerSecond();
 
     long getPingPerSecond();
 
     long getPacketPerSecond();
 
     long getConnectionPerSecond();
+
+    long getAttackDuration();
 
     BlackListService getBlackListService();
 
@@ -26,13 +28,15 @@ public interface IAntiBotManager {
 
     void setModeType(ModeType type);
 
+    AttackType getAttackType();
+
+    void setAttackType(AttackType attackType);
+
     void disableAll();
 
     void disableMode(ModeType type);
 
     boolean isSomeModeOnline();
-
-    void increaseChecksPerSecond();
 
     void increaseJoinPerSecond();
 

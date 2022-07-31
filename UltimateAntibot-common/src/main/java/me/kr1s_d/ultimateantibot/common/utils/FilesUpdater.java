@@ -11,19 +11,17 @@ public class FilesUpdater {
     private final IConfiguration messages;
     private final IConfiguration whitelist;
     private final IConfiguration blacklist;
-    private final IConfiguration database;
 
     private boolean isDeleted;
     private int i;
 
-    public FilesUpdater(IAntiBotPlugin plugin, IConfiguration config, IConfiguration messages, IConfiguration whitelist, IConfiguration blacklist, IConfiguration database) {
+    public FilesUpdater(IAntiBotPlugin plugin, IConfiguration config, IConfiguration messages, IConfiguration whitelist, IConfiguration blacklist) {
         this.plugin = plugin;
 
         this.config = config;
         this.messages = messages;
         this.whitelist = whitelist;
         this.blacklist = blacklist;
-        this.database = database;
 
         this.isDeleted = false;
         this.i = 0;
@@ -43,7 +41,6 @@ public class FilesUpdater {
             messages.destroy();
             whitelist.destroy();
             blacklist.destroy();
-            database.destroy();
             return;
         }
 

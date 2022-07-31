@@ -1,6 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.objects;
 
-public class FancyInteger {
+import java.io.Serializable;
+
+public class FancyInteger implements Serializable {
     private int i;
 
     public FancyInteger(int i){

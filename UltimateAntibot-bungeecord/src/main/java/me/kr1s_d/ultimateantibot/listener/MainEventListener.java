@@ -8,10 +8,7 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.*;
 import me.kr1s_d.ultimateantibot.common.checks.slowdetection.AccountCheck;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.service.BlackListService;
-import me.kr1s_d.ultimateantibot.common.service.QueueService;
-import me.kr1s_d.ultimateantibot.common.service.VPNService;
-import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
+import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -32,7 +29,6 @@ public class MainEventListener implements Listener {
     private final FirstJoinCheck firstJoinCheck;
     private final NameChangerCheck nameChangerCheck;
     private final SuperJoinCheck superJoinCheck;
-    private final FloodCheck floodCheck;
     private final AuthCheckReloaded authCheck;
     private final PacketCheck packetCheck;
     private final AccountCheck accountCheck;
@@ -49,7 +45,6 @@ public class MainEventListener implements Listener {
         this.firstJoinCheck = new FirstJoinCheck(antiBotPlugin);
         this.nameChangerCheck = new NameChangerCheck(antiBotPlugin);
         this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
-        this.floodCheck = new FloodCheck(antiBotPlugin);
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.packetCheck = new PacketCheck(antiBotPlugin);
         this.accountCheck = new AccountCheck(antiBotPlugin);
@@ -84,7 +79,7 @@ public class MainEventListener implements Listener {
         //
         //AntiBotMode Enable
         //
-        if(antiBotManager.getJoinPerSecond() >= ConfigManger.antiBotModeTrigger){
+        if(antiBotManager.getSpeedJoinPerSecond() >= ConfigManger.antiBotModeTrigger){
             if(!antiBotManager.isAntiBotModeEnabled()){
                 antiBotManager.enableAntiBotMode();
                 e.setCancelReason(ComponentBuilder.buildColorized(
@@ -104,15 +99,6 @@ public class MainEventListener implements Listener {
         //Legal Name Check
         //
         if(legalNameCheck.isDenied(ip, name)){
-            e.setCancelReason(blacklistMSG(ip));
-            e.setCancelled(true);
-            return;
-        }
-        //
-        //Flood Check
-        //
-        if (floodCheck.isDenied(ip, name)) {
-            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
             e.setCancelReason(blacklistMSG(ip));
             e.setCancelled(true);
             return;

@@ -4,15 +4,14 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstJoinCheck extends IManagedCheck {
-
-    private final Map<String, Boolean> data;
+    private final UserDataService userDataService;
 
     public FirstJoinCheck(IAntiBotPlugin plugin){
-        UserDataService userDataService = plugin.getUserDataService();
-        this.data = userDataService.getFirstJoinMap();
+        this.userDataService = plugin.getUserDataService();
         if(isEnabled()){
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
@@ -27,7 +26,7 @@ public class FirstJoinCheck extends IManagedCheck {
         if(!isEnabled()){
             return false;
         }
-        return isFirstJoin(ip);
+        return userDataService.isFirstJoin(ip);
     }
 
     @Override
@@ -52,14 +51,6 @@ public class FirstJoinCheck extends IManagedCheck {
     @Override
     public void loadTask() {
 
-    }
-
-    public boolean isFirstJoin(String ip){
-        if(data.containsKey(ip)){
-            return !data.get(ip);
-        }
-        data.put(ip, true);
-        return true;
     }
 
     @Override

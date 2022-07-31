@@ -3,12 +3,9 @@ package me.kr1s_d.ultimateantibot.common;
 import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.SatelliteServer;
-import me.kr1s_d.ultimateantibot.common.service.CheckService;
-import me.kr1s_d.ultimateantibot.common.service.FirewallService;
-import me.kr1s_d.ultimateantibot.common.service.VPNService;
+import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
-import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 
 public interface IAntiBotPlugin {
     void reload();
@@ -32,8 +29,6 @@ public interface IAntiBotPlugin {
     IConfiguration getWhitelist();
 
     IConfiguration getBlackList();
-
-    IConfiguration getDatabase();
 
     IAntiBotManager getAntiBotManager();
 

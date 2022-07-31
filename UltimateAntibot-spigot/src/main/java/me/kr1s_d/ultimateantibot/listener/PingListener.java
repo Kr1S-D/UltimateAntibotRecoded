@@ -33,9 +33,6 @@ public class PingListener implements Listener {
     public void onPing(ServerListPingEvent e){
         String ip = Utils.getInetAddressIP(e.getAddress());
         antiBotManager.increasePingPerSecond();
-        if(!blackListService.isBlackListed(ip) && antiBotManager.isPingModeEnabled()){
-            antiBotManager.increaseChecksPerSecond();
-        }
 
         //PingMode checks
         if(antiBotManager.isSomeModeOnline()){

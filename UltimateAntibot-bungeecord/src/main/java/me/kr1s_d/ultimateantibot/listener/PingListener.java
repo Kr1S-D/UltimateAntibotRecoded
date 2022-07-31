@@ -15,33 +15,22 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public class PingListener implements Listener {
-    private IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
     private final QueueService queueService;
-    private final BlackListService blackListService;
     private final WhitelistService whitelistService;
-    private final NameChangerCheck changerCheck;
 
     public PingListener(IAntiBotPlugin plugin){
-        this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
         this.queueService = antiBotManager.getQueueService();
-        blackListService = antiBotManager.getBlackListService();
         whitelistService = antiBotManager.getWhitelistService();
-        this.changerCheck = new NameChangerCheck(plugin);
     }
 
     @EventHandler(priority = -128)
     public void onPing(ProxyPingEvent e){
         String ip = Utils.getIP(e.getConnection());
-        String name = e.getConnection().getName();
+
         antiBotManager.increasePingPerSecond();
-        if(!blackListService.isBlackListed(ip) && antiBotManager.isPingModeEnabled()){
-            antiBotManager.increaseChecksPerSecond();
-        }
-        if(changerCheck.isDenied(ip, name)){
-            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
-        }
+
         //PingMode checks
         if(antiBotManager.isSomeModeOnline()){
             if(!ConfigManger.pingModeSendInfo){

@@ -34,7 +34,6 @@ public class MainEventListener implements Listener {
     private final FirstJoinCheck firstJoinCheck;
     private final NameChangerCheck nameChangerCheck;
     private final SuperJoinCheck superJoinCheck;
-    private final FloodCheck floodCheck;
     private final AuthCheckReloaded authCheck;
     private final AccountCheck accountCheck;
     private final LegalNameCheck legalNameCheck;
@@ -50,7 +49,6 @@ public class MainEventListener implements Listener {
         this.firstJoinCheck = new FirstJoinCheck(antiBotPlugin);
         this.nameChangerCheck = new NameChangerCheck(antiBotPlugin);
         this.superJoinCheck = new SuperJoinCheck(antiBotPlugin);
-        this.floodCheck = new FloodCheck(antiBotPlugin);
         this.authCheck = new AuthCheckReloaded(antiBotPlugin);
         this.accountCheck = new AccountCheck(antiBotPlugin);
         this.legalNameCheck = new LegalNameCheck(antiBotPlugin);
@@ -73,7 +71,6 @@ public class MainEventListener implements Listener {
         //BlackList & Whitelist Checks
         //
         if(blackListService.isBlackListed(ip)){
-            antiBotManager.increaseChecksPerSecond();
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
             return;
         }
@@ -83,7 +80,7 @@ public class MainEventListener implements Listener {
         //
         //AntiBotMode Enable
         //
-        if(antiBotManager.getJoinPerSecond() >= ConfigManger.antiBotModeTrigger){
+        if(antiBotManager.getSpeedJoinPerSecond() >= ConfigManger.antiBotModeTrigger){
             if(!antiBotManager.isAntiBotModeEnabled()){
                 antiBotManager.enableAntiBotMode();
                 e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(blacklistedPercentage))));
@@ -100,14 +97,6 @@ public class MainEventListener implements Listener {
         //Legal Name Check
         //
         if(legalNameCheck.isDenied(ip, name)){
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
-            return;
-        }
-        //
-        //Flood Check
-        //
-        if (floodCheck.isDenied(ip, name)) {
-            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
             return;
         }

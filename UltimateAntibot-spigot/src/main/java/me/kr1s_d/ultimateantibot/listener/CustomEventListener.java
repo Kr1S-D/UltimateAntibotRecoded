@@ -32,7 +32,7 @@ public class CustomEventListener implements Listener {
             }
         }
 
-        if(e.getEnabledMode().equals(ModeType.ANTIBOT)){
+        if(e.getEnabledMode().equals(ModeType.ANTIBOT) || e.getEnabledMode().equals(ModeType.SLOW)){
             if(ConfigManger.antibotDisconnect) {
                 e.disconnectBots();
             }
@@ -47,7 +47,7 @@ public class CustomEventListener implements Listener {
 
         plugin.scheduleDelayedTask(() -> {
             plugin.getAntiBotManager().getBlackListService().save();
-            plugin.getUserDataService().save();
+            plugin.getUserDataService().unload();
             plugin.getWhitelist().save();
         }, true, 1000L);
     }
