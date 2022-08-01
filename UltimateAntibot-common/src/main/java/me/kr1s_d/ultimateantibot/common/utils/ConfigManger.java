@@ -100,10 +100,6 @@ public class ConfigManger {
         taskManagerUpdate = cfg.getLong("taskmanager.update");
         isLegalNameCheckEnabled = cfg.getBoolean("checks.legalname.enabled");
         legalNameCheckRegex = cfg.getString("checks.legalname.name-regex");
-        floodTime = cfg.getInt("checks.flood.time");
-        floodLatency = cfg.getInt("checks.flood.latency");
-        floodCondition = cfg.getInt("checks.flood.condition");
-        isFloodCheckEnabled = cfg.getBoolean("checks.flood.enabled");
         packetSlowCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.packet");
         accountCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.account");
         proxyCheckConfig = new ProxyCheckConfig(cfg);
