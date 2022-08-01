@@ -1,41 +1,46 @@
 package me.kr1s_d.ultimateantibot.common.helper;
 
+import me.kr1s_d.ultimateantibot.common.IServerPlatform;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static me.kr1s_d.ultimateantibot.common.helper.LogHelper.LogType.*;
 
 public class LogHelper {
-    private final Logger logger;
+    private final IServerPlatform platform;
 
-    public LogHelper(Logger logger){
-        this.logger = logger;
+    public LogHelper(IServerPlatform platform) {
+        this.platform = platform;
     }
 
-    public void debug(String msg){
+    public void debug(String msg) {
         if(!ConfigManger.isDebugModeOnline) return;
-        logger.log(Level.INFO, ColorHelper.colorize("&F[UAB DEBUG] &7» " + msg));
+        platform.log(INFO, ServerUtil.colorize("&F[UAB DEBUG] &7» " + msg));
     }
 
-    public void warn(String msg){
-        logger.log(Level.WARNING, ColorHelper.colorize(MessageManager.prefix + msg));
+    public void warn(String msg) {
+        platform.log(WARNING, ServerUtil.colorize(MessageManager.prefix + msg));
     }
 
-    public void error(String msg){
-        logger.log(Level.SEVERE, ColorHelper.colorize(MessageManager.prefix + "&c" + msg));
+    public void error(String msg) {
+        platform.log(ERROR, ServerUtil.colorize(MessageManager.prefix + "&c" + msg));
     }
 
-    public void info(String msg){
-        logger.log(Level.INFO, ColorHelper.colorize(MessageManager.prefix + msg));
+    public void info(String msg) {
+        platform.log(INFO, ServerUtil.colorize(MessageManager.prefix + msg));
     }
 
-    public void sendLogo(){
+    public void sendLogo() {
         info("&c _    _         &c____ ");
-        info("&c| |  | |&f  /\\   &c|  _ \\ ");
-        info("&c| |  | |&f /  \\  &c| |_) |");
-        info("&c| |  | |&f/ /\\ \\&c |  _ <");
-        info("&c| |__| &f/ ____ \\&c| |_) |");
-        info("&c\\____&f/_/     \\_&c\\____/");
+        info("&c| |  | |§f  /\\   &c|  _ \\ ");
+        info("&c| |  | |§f /  \\  &c| |_) |");
+        info("&c| |  | |§f/ /\\ \\&c |  _ <");
+        info("&c| |__| §f/ ____ \\&c| |_) |");
+        info("&c\\____§f/_/     \\_&c\\____/");
+    }
+
+    public enum LogType {
+        INFO, WARNING, ERROR
     }
 }

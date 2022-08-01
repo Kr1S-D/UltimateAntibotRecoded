@@ -2,7 +2,6 @@ package me.kr1s_d.ultimateantibot.checks;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
 import me.kr1s_d.ultimateantibot.common.AuthCheckType;
-import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
@@ -10,6 +9,7 @@ import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
@@ -64,9 +64,9 @@ public class AuthCheckReloaded {
                 ping.getVersion().setProtocol(0);
                 //Impostazion e Dell'interfaccia per il conteggio dei ping
                 if(currentIPPings == pingRequired){
-                    ping.getVersion().setName(ColorHelper.colorize(MessageManager.verifiedPingInterface));
+                    ping.getVersion().setName(ServerUtil.colorize(MessageManager.verifiedPingInterface));
                 }else{
-                    ping.getVersion().setName(ColorHelper.colorize(MessageManager.normalPingInterface
+                    ping.getVersion().setName(ServerUtil.colorize(MessageManager.normalPingInterface
                             .replace("$1", String.valueOf(currentIPPings))
                             .replace("$2", String.valueOf(pingRequired))
                     ));

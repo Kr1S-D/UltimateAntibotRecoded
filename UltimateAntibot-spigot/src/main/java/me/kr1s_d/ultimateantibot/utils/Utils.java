@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.utils;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotSpigot;
-import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -34,7 +34,7 @@ public class Utils {
     }
 
     public static String colora(String str){
-        return ColorHelper.colorize(str);
+        return ServerUtil.colorize(str);
     }
 
     public static List<String> coloraLista(List<String> col){

@@ -1,10 +1,10 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.INotificator;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.utils.KBossBar;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class Notificator implements INotificator {
         }else{
             bar.addPlayer(player);
          }
-        player.sendMessage((ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledBossBar)));
+        player.sendMessage((ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledBossBar)));
     }
 
     public static void toggleActionBar(Player player){
@@ -44,7 +44,7 @@ public class Notificator implements INotificator {
         }else {
             actionbars.add(player);
         }
-        player.sendMessage(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledActionbar));
+        player.sendMessage(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledActionbar));
     }
 
     public static void toggleTitle(Player player){
@@ -53,18 +53,18 @@ public class Notificator implements INotificator {
         }else {
             titles.add(player);
         }
-        player.sendMessage(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledTitle));
+        player.sendMessage(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledTitle));
     }
 
 
     public void sendActionbar(String str){
-        actionbars.forEach(ac -> Utils.sendActionbar(ac, ColorHelper.colorize(str)));
+        actionbars.forEach(ac -> Utils.sendActionbar(ac, ServerUtil.colorize(str)));
     }
 
     public void sendTitle(String title, String subtitle){
         titles.forEach(t -> t.sendTitle(
-                UltimateAntiBotSpigot.getInstance().getAntiBotManager().replaceInfo(ColorHelper.colorize(title)),
-                UltimateAntiBotSpigot.getInstance().getAntiBotManager().replaceInfo(ColorHelper.colorize(subtitle)),
+                UltimateAntiBotSpigot.getInstance().getAntiBotManager().replaceInfo(ServerUtil.colorize(title)),
+                UltimateAntiBotSpigot.getInstance().getAntiBotManager().replaceInfo(ServerUtil.colorize(subtitle)),
                 0,
                 30,
                 0
@@ -74,7 +74,7 @@ public class Notificator implements INotificator {
     @Override
     public void sendBossBarMessage(String str, float health) {
         if(!bar.isCreated()) return;
-        bar.setTitle(ColorHelper.colorize(str));
+        bar.setTitle(ServerUtil.colorize(str));
         bar.setProgress(health);
     }
 

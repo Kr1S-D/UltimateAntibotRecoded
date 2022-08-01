@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.utils;
 
-import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.Connection;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Utils {
 
-    private Utils(){}
+    private Utils() {}
 
     public static String getIP(ProxiedPlayer player){
         return player.getAddress().getAddress().toString();
@@ -33,7 +33,7 @@ public class Utils {
     public static void disconnectPlayerFromIp(String ip, List<String> reason){
         for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
             if(getIP(p).equalsIgnoreCase(ip)){
-                p.disconnect(new TextComponent(ColorHelper.colorize(convertToString(reason))));
+                p.disconnect(new TextComponent(ServerUtil.colorize(convertToString(reason))));
             }
         }
     }
@@ -50,7 +50,7 @@ public class Utils {
         ProxyServer.getInstance().getPlayers().forEach(player -> {
             ips.forEach(ip -> {
                 if(Utils.getIP(player).equals(ip)){
-                    player.disconnect(new TextComponent(ColorHelper.colorize(convertToString(reason))));
+                    player.disconnect(new TextComponent(ServerUtil.colorize(convertToString(reason))));
                 }
             });
         });
@@ -60,7 +60,7 @@ public class Utils {
         ProxyServer.getInstance().getPlayers().forEach(player -> {
             ips.forEach(ip -> {
                 if(Utils.getIP(player).equals(ip)){
-                    player.disconnect(new TextComponent(ColorHelper.colorize(reason)));
+                    player.disconnect(new TextComponent(ServerUtil.colorize(reason)));
                 }
             });
         });
@@ -73,7 +73,7 @@ public class Utils {
     }
 
     public static String colora(String str){
-        return ColorHelper.colorize(str);
+        return ServerUtil.colorize(str);
     }
 
     public static List<String> coloraLista(List<String> str){

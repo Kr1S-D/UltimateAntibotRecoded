@@ -22,6 +22,7 @@ import me.kr1s_d.ultimateantibot.listener.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -84,7 +85,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         }
         Version.init(this);
         new Metrics(this, 11712);
-        this.logHelper = new LogHelper(ProxyServer.getInstance().getLogger());
+        this.logHelper = new LogHelper(this);
         this.logHelper.info("&fLoading &cUltimateAntiBot...");
         this.firewallService = new FirewallService(this);
         this.VPNService = new VPNService(this);
@@ -337,8 +338,28 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
+    public String colorize(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    @Override
     public void cancelTask(int id) {
         ProxyServer.getInstance().getScheduler().cancel(id);
+    }
+
+    @Override
+    public void log(LogHelper.LogType type, String log) {
+        switch (type){
+            case ERROR:
+                ProxyServer.getInstance().getLogger().severe(log);
+                break;
+            case WARNING:
+                ProxyServer.getInstance().getLogger().warning(log);
+                break;
+            case INFO:
+                ProxyServer.getInstance().getLogger().info(log);
+                break;
+        }
     }
 
     @Override

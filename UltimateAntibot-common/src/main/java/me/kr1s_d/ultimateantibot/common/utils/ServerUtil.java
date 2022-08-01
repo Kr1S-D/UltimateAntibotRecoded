@@ -19,4 +19,8 @@ public class ServerUtil {
     public static File getDataFolder(){
         return platform.getDFolder();
     }
+
+    public static String colorize(String text){
+        return platform.colorize(text);
+    }
 }

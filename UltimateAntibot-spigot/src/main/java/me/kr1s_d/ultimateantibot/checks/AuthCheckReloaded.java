@@ -2,14 +2,14 @@ package me.kr1s_d.ultimateantibot.checks;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotSpigot;
 import me.kr1s_d.ultimateantibot.common.AuthCheckType;
-import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
-import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -60,10 +60,10 @@ public class AuthCheckReloaded {
                 int pingRequired = pingData.get(ip);
                 //Impostazion e Dell'interfaccia per il conteggio dei ping
                 if(currentIPPings == pingRequired){
-                    e.setMotd(ColorHelper.colorize(MessageManager.verifiedPingInterface));
+                    e.setMotd(ServerUtil.colorize(MessageManager.verifiedPingInterface));
                     //ping.getVersion().setName(ColorHelper.colorize(MessageManager.verifiedPingInterface));
                 }else{
-                    e.setMotd(ColorHelper.colorize(MessageManager.normalPingInterface
+                    e.setMotd(ServerUtil.colorize(MessageManager.normalPingInterface
                             .replace("$1", String.valueOf(currentIPPings))
                             .replace("$2", String.valueOf(pingRequired))
                     ));
@@ -110,13 +110,13 @@ public class AuthCheckReloaded {
         int checkTimer = ThreadLocalRandom.current().nextInt(ConfigManger.authMinMaxTimer[0], ConfigManger.authMinMaxTimer[1]);
         if (hasCompletedPingCheck(ip)) {
             submitTimerTask(ip, checkTimer);
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ColorHelper.colorize(MessageManager.getTimerMessage(String.valueOf(checkTimer + 1))));
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ServerUtil.colorize(MessageManager.getTimerMessage(String.valueOf(checkTimer + 1))));
             return;
         }
         int pingTimer = ThreadLocalRandom.current().nextInt(ConfigManger.authMinMaxPing[0], ConfigManger.authMinMaxPing[1]);
         addToCompletingPingCheck(ip, pingTimer);
         checkInitiator.put(ip, e.getName());
-        e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ColorHelper.colorize(MessageManager.getPingMessage(String.valueOf(pingTimer))));
+        e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ServerUtil.colorize(MessageManager.getPingMessage(String.valueOf(pingTimer))));
     }
 
     /**

@@ -24,6 +24,10 @@ public class UserDataService implements IService {
     public void load() {
         try{
             String encoded = FileUtil.getEncodedBase64("users.dat", FileUtil.UABFolder.DATA);
+            if(encoded == null) {
+                firstJoin = new ArrayList<>();
+                return;
+            }
             firstJoin = SerializeUtil.deserialize(encoded, ArrayList.class);
             if(firstJoin == null) firstJoin = new ArrayList<>();
         }catch (Exception e){

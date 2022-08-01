@@ -24,6 +24,7 @@ import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -82,7 +83,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         }
         Version.init(this);
         new Metrics(this, 11777);
-        logHelper = new LogHelper(Bukkit.getLogger());
+        logHelper = new LogHelper(this);
         logHelper.info("&fLoading &cUltimateAntiBot...");
         this.firewallService = new FirewallService(this);
         VPNService = new VPNService(this);
@@ -339,8 +340,18 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     }
 
     @Override
+    public String colorize(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    @Override
     public void cancelTask(int id) {
         Bukkit.getScheduler().cancelTask(id);
+    }
+
+    @Override
+    public void log(LogHelper.LogType type, String log) {
+        Bukkit.getConsoleSender().sendMessage(log);
     }
 
     @Override

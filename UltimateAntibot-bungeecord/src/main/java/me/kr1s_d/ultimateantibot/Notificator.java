@@ -1,12 +1,12 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.ultimateantibot.common.helper.ColorHelper;
 import me.kr1s_d.ultimateantibot.common.BarColor;
 import me.kr1s_d.ultimateantibot.common.BarStyle;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.INotificator;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.objects.DynamicBar;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.ProxyServer;
@@ -45,7 +45,7 @@ public class Notificator implements INotificator {
         }else{
             bar.addPlayer(player);
         }
-        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledBossBar)));
+        player.sendMessage(new TextComponent(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledBossBar)));
     }
 
     public static void toggleActionBar(ProxiedPlayer player){
@@ -54,7 +54,7 @@ public class Notificator implements INotificator {
         }else {
             actionbars.add(player);
         }
-        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledActionbar)));
+        player.sendMessage(new TextComponent(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledActionbar)));
     }
 
     public static void toggleTitle(ProxiedPlayer player){
@@ -63,18 +63,18 @@ public class Notificator implements INotificator {
         }else {
             titles.add(player);
         }
-        player.sendMessage(new TextComponent(ColorHelper.colorize(MessageManager.prefix + MessageManager.toggledTitle)));
+        player.sendMessage(new TextComponent(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledTitle)));
     }
 
 
     public void sendActionbar(String str){
-        actionbars.forEach(ac -> ac.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ColorHelper.colorize(str))));
+        actionbars.forEach(ac -> ac.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ServerUtil.colorize(str))));
     }
 
     public void sendTitle(String title, String subtitle){
         Title t = ProxyServer.getInstance().createTitle();
-        t.title(new TextComponent(ColorHelper.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(title))));
-        t.subTitle(new TextComponent(ColorHelper.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(subtitle))));
+        t.title(new TextComponent(ServerUtil.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(title))));
+        t.subTitle(new TextComponent(ServerUtil.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(subtitle))));
         t.stay(20);
         t.fadeIn(0);
         t.fadeOut(0);
@@ -83,7 +83,7 @@ public class Notificator implements INotificator {
 
     @Override
     public void sendBossBarMessage(String str, float health) {
-        bar.setTitle(ColorHelper.colorize(str));
+        bar.setTitle(ServerUtil.colorize(str));
         bar.setProgress(health);
     }
 
