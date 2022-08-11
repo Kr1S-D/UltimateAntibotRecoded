@@ -151,10 +151,6 @@ public class MainEventListener implements Listener {
             plugin.getLogHelper().debug("Account Check Executed!");
             return;
         }
-        //
-        //Connection check (ProxyCheck.io)
-        //
-        VPNService.submitIP(ip, nickname);
         //If isn't whitelisted
         if(!antiBotManager.getWhitelistService().isWhitelisted(ip)){
             //Add to last join
@@ -163,6 +159,12 @@ public class MainEventListener implements Listener {
             plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
             //Remove from JoinCache after 30 Seconds
             plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip),false,1000L * 30);
+            //
+            //Connection check (ProxyCheck.io or ip-api.com)
+            //
+            if(!player.hasPermission("uab.bypass.vpn")) {
+                VPNService.submitIP(ip, nickname);
+            }
         }
         //Notification
         if(player.hasPermission("uab.notification.automatic") && antiBotManager.isAntiBotModeEnabled()){

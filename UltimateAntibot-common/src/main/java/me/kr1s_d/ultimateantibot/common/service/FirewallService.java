@@ -88,11 +88,11 @@ public class FirewallService {
                 int percent = Math.round((float) processed / total * 100);
                 if(percent >= percentCheck && total > 500){
                     percentCheck += 10;
-                    plugin.getLogHelper().info("[FIREWALL] process status: " + percent + "%");
+                    plugin.getLogHelper().info("[FIREWALL] Process status: " + percent + "%");
                 }
             }
 
-            plugin.getLogHelper().info("Firewall process completed...");
+            plugin.getLogHelper().info("Firewall loading completed...");
         }catch (Exception e){
             plugin.getLogHelper().error("Error during firewall initialization!");
         }
