@@ -1,4 +1,4 @@
-version: 4.0
+version: 4.1
 prefix: "&4&LU&c&LA&4&LB&r &7» "
 onping: #<-- works only on bungeecord!
   normal: "&c&l◆ &f&l$1&7/&c&l$2"
@@ -10,6 +10,7 @@ commands:
   removed: "&c$1&f has been removed from the &c$2"
   wrong-args: "&fInvalid argument! Use &c/uab help!"
   no-blacklist: "&cThis ID does not appear to be associated with anything!"
+  invalid-log-value: "&cThe provided value is not associated to a log!"
   reload: "&fThe config and messages have been reloaded! This command is not recommended and could cause problems, a server restart is suggested!"
 analyzer:
   increase: "&a↑ &7- &f%old% &c➜ &f%new% &7- &c%perc%%"
@@ -18,6 +19,7 @@ notifications:
   action: "&aToggled ActionBar notifications!"
   title: "&aToggled Title notifications!"
   bossbar: "&aToggled BossBar notifications"
+#(!) PLACEHOLDERS (!)
 #actionbar/title/stats allowed values
 #%bots% - return botpersecond
 #%queue% - return queue
@@ -60,27 +62,28 @@ reason:
   check: "Too many check fails!"
 help:
   - ""
-  - "&c/uab &chelp"
-  - "&c/uab &ctoggle &factionbar/title/bossbar"
-  - "&c/uab &cstats"
-  - "&c/uab &cclear &fblacklist/whitelist"
-  - "&c/uab &cwhitelist &fadd/remove &f<ip>"
-  - "&c/uab &cblacklist &fadd/remove &f<ip>"
-  - "&c/uab &cfirewall"
-  - "&c/uab &ccheck &f<id>"
-  - "&c/uab &creload"
-  - "&c/uab &cdump"
-satellitestats:
-  - ""
-  - "&cStatus: %status%"
-  - "&cAvg Requests: &f%avg%"
-  - "&cLast Minute Requests: &f%lastmin%"
-  - "&cCurrent Requests: &f%currentreq%"
-  - "&cLast UAB Servers Restart: &f%lastreboot%"
-  - "&cMessage: &f%message%"
-  - "&cResponse time: &f%time%ms"
-  - ""
-  - "&fThere are &c%currentserver%&f out of &c%maxservers%&f servers connected"
+  - "&c/uab &chelp &7- &fShows this message"
+  - "&c/uab &ctoggle &factionbar/title/bossbar &7- &fEnables notifications"
+  - "&c/uab &cstats &7- &fShows antibot stats"
+  - "&c/uab &cclear &fblacklist/whitelist &7- &fClear blacklist or whitelist"
+  - "&c/uab &cwhitelist &fadd/remove &f<ip> &7- &fManage whitelist"
+  - "&c/uab &cblacklist &fadd/remove &f<ip>&7- &fManage blacklist"
+  - "&c/uab logs list <amount> &7- &fReturns some info of an attack"
+  - "&c/uab logs last <id> &7- Shows last <amount> attacks"
+  - "&c/uab &cfirewall &7- &fShows some firewall info"
+  - "&c/uab &ccheck &f<id> &7- &fCheck for blacklisted player"
+  - "&c/uab &creload &7- &fReloads the config & messages"
+  - "&c/uab &cdump &7- &fUseful info to provide to support!"
+attack-log:
+  - "&cAttack ID&f %id%"
+  - "&cAttack date&f %attack%"
+  - "&cBlacklisted IPs &f%blacklist%"
+  - "&cBlocked bots &f%bots%"
+  - "&cBlocked pings &f%pings%"
+  - "&cBlocked Packets &f%packets%"
+  - "&cAverage CPS &f%avg%"
+  - "&cAttack Power &f%power%"
+  - "&cDuration &f%duration%"
 firewall:
   - "&cFirewall status: %status%"
   - ""

@@ -13,8 +13,9 @@ public class FancyInteger implements Serializable {
         return i;
     }
 
-    public void increase(){
+    public FancyInteger increase() {
         i++;
+        return this;
     }
 
     public void decrease(){
@@ -23,5 +24,10 @@ public class FancyInteger implements Serializable {
 
     public void reset(){
         this.i = 0;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(i);
     }
 }

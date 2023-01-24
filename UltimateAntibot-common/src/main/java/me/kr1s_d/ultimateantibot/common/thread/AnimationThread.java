@@ -19,6 +19,7 @@ public class AnimationThread {
         animationMap.put(2, "▜");
         animationMap.put(3, "▟");
         animationMap.put(4, "▙");
+
         iAntiBotPlugin.scheduleRepeatingTask(() -> {
             emote = animationMap.get(increase);
             if(increase == 4) this.increase = 0;

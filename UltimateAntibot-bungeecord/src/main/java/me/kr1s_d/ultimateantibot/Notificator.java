@@ -23,7 +23,6 @@ public class Notificator implements INotificator {
     private static final List<ProxiedPlayer> titles = new ArrayList<>();
     private static final DynamicBar bar = new DynamicBar("&fWaiting for a new attack!", BarColor.RED, BarStyle.SOLID);
 
-
     public static void automaticNotification(ProxiedPlayer player){
         if(actionbars.contains(player)) return;
         actionbars.remove(player);
@@ -64,6 +63,12 @@ public class Notificator implements INotificator {
             titles.add(player);
         }
         player.sendMessage(new TextComponent(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledTitle)));
+    }
+
+    public static void disableAllNotifications() {
+        actionbars.clear();
+        bar.removeAll();
+        titles.clear();
     }
 
 

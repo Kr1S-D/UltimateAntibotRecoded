@@ -14,11 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class BukkitFilter implements Filter {
+public class BukkitAttackFilter implements Filter {
     private final IAntiBotManager antiBotManager;
     private final List<String> blocked;
 
-    public BukkitFilter(IAntiBotPlugin antiBotPlugin){
+    public BukkitAttackFilter(IAntiBotPlugin antiBotPlugin) {
         this.antiBotManager = antiBotPlugin.getAntiBotManager();
         this.blocked = new ArrayList<>(Arrays.asList(
                 "InitialHandler has",
@@ -51,9 +51,11 @@ public class BukkitFilter implements Filter {
     }
 
     public Result checkMessage(String record) {
-        for(String str : blocked){
-            if(record.contains(str)){
-                return Result.DENY;
+        if(antiBotManager.isAntiBotModeEnabled()) {
+            for (String str : blocked) {
+                if (record.contains(str)) {
+                    return Result.DENY;
+                }
             }
         }
         return Result.NEUTRAL;

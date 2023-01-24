@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MessageManager {
+    public static IConfiguration configManger;
+
     public static double version;
     public static String prefix;
     public static String reloadMessage;
@@ -52,6 +54,7 @@ public class MessageManager {
     public static  List<String> satelliteStatus;
 
     public static void init(IConfiguration messages){
+        configManger = messages;
         version = messages.getDouble("version");
         prefix = messages.getString("prefix");
         reloadMessage = messages.getString("commands.reload");
@@ -140,5 +143,13 @@ public class MessageManager {
 
     private static String convertToString(List<String> stringList) {
         return String.join(System.lineSeparator(), stringList);
+    }
+
+    public static String getMessage(String path) {
+        return configManger.getString(path);
+    }
+
+    public static List<String> getMessageList(String path) {
+        return configManger.getStringList(path);
     }
 }

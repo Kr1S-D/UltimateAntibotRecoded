@@ -8,10 +8,10 @@ import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import net.md_5.bungee.api.ProxyServer;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class PacketCheck {
     private final IAntiBotPlugin iAntiBotPlugin;
@@ -22,7 +22,7 @@ public class PacketCheck {
     private final BlackListService blacklist;
     private final WhitelistService whitelistService;
 
-    public PacketCheck(IAntiBotPlugin plugin){
+    public PacketCheck(IAntiBotPlugin plugin) {
         this.iAntiBotPlugin = plugin;
         this.joined = new HashSet<>();
         this.packetReceived = new HashSet<>();
@@ -30,75 +30,74 @@ public class PacketCheck {
         this.antibotManager = plugin.getAntiBotManager();
         this.blacklist = plugin.getAntiBotManager().getBlackListService();
         this.whitelistService = plugin.getAntiBotManager().getWhitelistService();
-        loadTask();
-        if(isEnabled()){
+
+        List<String> invalidPlugins = Arrays.asList("Geyser-BungeeCord", "Protocolize");
+
+        for (String invalidPlugin : invalidPlugins) {
+            if (ProxyServer.getInstance().getPluginManager().getPlugin(invalidPlugin) != null) {
+                iAntiBotPlugin.getLogHelper().warn("The packet check has been automatically disabled to prevent false positives given by the presence of the plugin " + invalidPlugin + " (which could alter its correct functioning)");
+                ConfigManger.getPacketCheckConfig().setEnabled(false);
+            }
+        }
+
+        if (isEnabled()) {
+            loadTask();
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
     }
 
-    public void onUnLogin(String ip){
+    public void onUnLogin(String ip) {
         joined.remove(ip);
         packetReceived.remove(ip);
         suspected.remove(ip);
     }
 
     public void registerJoin(String ip) {
-        if (ConfigManger.getPacketCheckConfig().isEnabled() && !whitelistService.isWhitelisted(ip)) {
+        if (isEnabled() && !whitelistService.isWhitelisted(ip)) {
             joined.add(ip);
-            removeTask(ip);
             checkForAttack();
         }
     }
 
-
-    public void registerPacket(String ip){
-        if(ConfigManger.getPacketCheckConfig().isEnabled() && joined.contains(ip) & !whitelistService.isWhitelisted(ip)) {
+    public void registerPacket(String ip) {
+        if (isEnabled() && !whitelistService.isWhitelisted(ip)) {
             packetReceived.add(ip);
         }
     }
 
-    public void removeTask(String ip){
-        iAntiBotPlugin.scheduleDelayedTask(() -> {
-            joined.remove(ip);
-            packetReceived.remove(ip);
-        }, false, 1000L * ConfigManger.getPacketCheckConfig().getTime());
-    }
-
-    /**
-     *
-     */
-    public void checkForAttack(){
+    public void checkForAttack() {
         iAntiBotPlugin.scheduleDelayedTask(() -> {
             joined.forEach(user -> {
-                if(!packetReceived.contains(user)){
+                if (!packetReceived.contains(user)) {
                     suspected.add(user);
                 }
             });
-            if(suspected.size() >= ConfigManger.getPacketCheckConfig().getTrigger()){
+
+            suspected.removeIf(packetReceived::contains);
+
+            if (suspected.size() >= ConfigManger.getPacketCheckConfig().getTrigger()) {
                 iAntiBotPlugin.getLogHelper().debug("Packet Check Executed!");
                 Utils.disconnectAll(new ArrayList<>(suspected), MessageManager.getSafeModeMessage());
-                for(String ip : new ArrayList<>(suspected)){
-                    if(ConfigManger.getPacketCheckConfig().isBlacklist()) {
+                for (String ip : new ArrayList<>(suspected)) {
+                    if (ConfigManger.getPacketCheckConfig().isBlacklist()) {
                         blacklist.blacklist(ip, BlackListReason.STRANGE_PLAYER);
                     }
                 }
-                if(ConfigManger.getPacketCheckConfig().isEnableAntiBotMode()) {
+                if (ConfigManger.getPacketCheckConfig().isEnableAntiBotMode()) {
                     antibotManager.enableSlowAntiBotMode();
                 }
                 suspected.clear();
             }
-        }, false, 1000L);
+        }, false, 2500L);
     }
 
-    private boolean isEnabled(){
+    private boolean isEnabled() {
         return ConfigManger.getPacketCheckConfig().isEnabled();
     }
 
-    private void loadTask(){
-        if(!ConfigManger.getPacketCheckConfig().isEnabled()) return;
-        iAntiBotPlugin.getLogHelper().debug("PacketCheck has been initialized!");
+    private void loadTask() {
         iAntiBotPlugin.scheduleRepeatingTask(() -> {
-            if(!antibotManager.isAntiBotModeEnabled()){
+            if (!antibotManager.isAntiBotModeEnabled()) {
                 return;
             }
             joined.clear();

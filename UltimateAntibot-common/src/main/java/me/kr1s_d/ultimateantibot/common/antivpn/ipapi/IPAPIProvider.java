@@ -1,8 +1,8 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.ipapi;
+package me.kr1s_d.ultimateantibot.common.antivpn.ipapi;
 
 import com.google.gson.Gson;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.VPNProvider;
+import me.kr1s_d.ultimateantibot.common.antivpn.VPNProvider;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.tasks.TimedWhitelistTask;
@@ -34,7 +34,7 @@ public class IPAPIProvider implements VPNProvider {
             plugin.disconnect(ip, MessageManager.getBlacklistedMessage(profile));
         } else {
             plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
-            plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip));
+            plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip, 30));
         }
 
     }

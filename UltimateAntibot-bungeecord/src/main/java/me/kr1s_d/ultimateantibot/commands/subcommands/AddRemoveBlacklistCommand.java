@@ -29,6 +29,7 @@ public class AddRemoveBlacklistCommand implements SubCommand {
             iAntiBotManager.getBlackListService().blacklist("/" + args[2], BlackListReason.ADMIN);
             iAntiBotManager.getWhitelistService().unWhitelist("/" + args[2]);
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandAdded(args[2], "blacklist")));
+            sender.sendMessage(Utils.colora(MessageManager.prefix + "&7PS: The IP has been removed from the whitelist as it has been blacklisted!"));
         } else {
             if (args[1].equalsIgnoreCase("remove")) {
                 iAntiBotManager.getBlackListService().unBlacklist( "/" + args[2]);

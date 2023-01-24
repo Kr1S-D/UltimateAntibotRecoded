@@ -13,7 +13,7 @@ public class FastJoinBypassDetector extends AbstractDetector {
         this.count = 0;
     }
 
-    public void registerJoin(){
+    public void registerJoin() {
         IAntiBotManager antiBotManager = plugin.getAntiBotManager();
         if(antiBotManager.isAntiBotModeEnabled() && antiBotManager.getPingPerSecond() > 50){
             count++;

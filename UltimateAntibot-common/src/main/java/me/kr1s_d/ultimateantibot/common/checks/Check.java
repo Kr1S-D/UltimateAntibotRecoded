@@ -1,8 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.checks;
 
-public interface ICheck {
-    boolean isDenied(String ip, String name);
-
+public interface Check {
     void onDisconnect(String ip, String name);
 
     boolean isEnabled();

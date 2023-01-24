@@ -1,9 +1,9 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck;
+package me.kr1s_d.ultimateantibot.common.antivpn.proxycheck;
 
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.VPNProvider;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.result.ProxyResults;
+import me.kr1s_d.ultimateantibot.common.antivpn.VPNProvider;
+import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.result.ProxyResults;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.tasks.TimedWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -30,7 +30,7 @@ public class ProxyCheckProvider implements VPNProvider {
             plugin.disconnect(ip, MessageManager.getBlacklistedMessage(profile));
         }else {
             plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
-            plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip));
+            plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip, 30));
         }
     }
 
@@ -42,14 +42,19 @@ public class ProxyCheckProvider implements VPNProvider {
 
     private VPNResults getResults(String ip){
         ConnectionCheck connectionCheck = new ConnectionCheck();
-        ProxyResults results = connectionCheck.getAndMapResults(ip.replace("/", ""));
-        if(results == null){
+        try {
+            ProxyResults results = connectionCheck.getAndMapResults(ip.replace("/", ""));
+            if(results == null) {
+                plugin.getLogHelper().warn("Your API key has reached the daily limit or is not valid!");
+                return null;
+            }
+            plugin.getLogHelper().debug("ConnectionCheckerService --> checked " + ip + " result " + results.getProxy());
+            return new VPNResults(results.getIsoCode(), results.getProxy().equals("yes"));
+        }catch (Exception e) {
             plugin.getLogHelper().warn("Your API key has reached the daily limit or is not valid!");
             return null;
         }
-        plugin.getLogHelper().debug("ConnectionCheckerService --> checked " + ip + " result " + results.getProxy());
 
-        return new VPNResults(results.getIsoCode(), results.getProxy().equals("yes"));
     }
 
     private static class VPNResults {

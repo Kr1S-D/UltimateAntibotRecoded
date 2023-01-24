@@ -8,7 +8,7 @@
     <parent>
         <groupId>me.kr1s_d.ultimateantibot</groupId>
         <artifactId>UltimateAntibot</artifactId>
-        <version>4.0.5-ABYSS</version>
+        <version>4.0.6-ABYSS</version>
     </parent>
 
     <artifactId>UltimateAntibot-spigot</artifactId>
@@ -68,13 +68,13 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.17.2</version>
+            <version>2.19.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.17.2</version>
+            <version>2.19.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -49,6 +49,9 @@ public class Version {
             return 118;
         if(versionStr.startsWith("v1_19"))
             return 119;
+        if(versionStr.startsWith("v1_20")){
+            return 120;
+        }
         return 0;
     }
 

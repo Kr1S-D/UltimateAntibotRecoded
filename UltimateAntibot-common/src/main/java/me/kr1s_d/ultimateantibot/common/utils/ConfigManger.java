@@ -4,6 +4,7 @@ import me.kr1s_d.ultimateantibot.common.objects.config.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.config.SlowCheckConfig;
 
+import java.util.List;
 import java.util.SplittableRandom;
 
 public class ConfigManger {
@@ -14,6 +15,7 @@ public class ConfigManger {
     public static boolean detectServerPerformance;
     public static boolean enableLatencyThread;
     public static boolean enableBossBarAutomaticNotification;
+    public static boolean disableNotificationAfterAttack;
     public static boolean isConsoleAttackMessageDisabled;
     public static int antiBotModeKeep;
     public static int antiBotModeTrigger;
@@ -48,14 +50,19 @@ public class ConfigManger {
     public static long taskManagerUpdate;
     public static boolean isLegalNameCheckEnabled;
     public static String legalNameCheckRegex;
-    public static int floodTime;
-    public static int floodLatency;
-    public static int floodCondition;
-    public static boolean isFloodCheckEnabled;
+    public static List<String> invalidNamesBlockedEntries;
+    public static boolean isInvalidNameCheckBlacklist;
+    public static boolean isInvalidNameCheckEnabled;
+    public static List<String> registerCheckCommandListeners;
+    public static int registerCheckLimit;
+    public static boolean isRegisterCheckBlacklist;
+    public static boolean isRegisterCheckAntiBotMode;
+    public static boolean isRegisterCheckEnabled;
     public static boolean isIPApiVerificationEnabled;
     private static SlowCheckConfig packetSlowCheckConfig;
     private static SlowCheckConfig accountCheckConfig;
     private static ProxyCheckConfig proxyCheckConfig;
+
 
     public static void init(IConfiguration cfg){
         CONFIG = cfg;
@@ -64,6 +71,7 @@ public class ConfigManger {
         isDebugModeOnline = cfg.getBoolean("debug");
         enableLatencyThread = cfg.getBoolean("enable-latency-thread");
         enableBossBarAutomaticNotification = cfg.getBoolean("enable-bossbar-automatic-notification");
+        disableNotificationAfterAttack = cfg.getBoolean("disable-notifications-after-attack");
         isIPApiVerificationEnabled = cfg.getBoolean("ip-api.enabled");
         isConsoleAttackMessageDisabled = cfg.getBoolean("disable-console-attack-message");
         detectServerPerformance = cfg.getBoolean("detect-server-performance");
@@ -100,6 +108,14 @@ public class ConfigManger {
         taskManagerUpdate = cfg.getLong("taskmanager.update");
         isLegalNameCheckEnabled = cfg.getBoolean("checks.legalname.enabled");
         legalNameCheckRegex = cfg.getString("checks.legalname.name-regex");
+        invalidNamesBlockedEntries = cfg.getStringList("checks.invalidname.invalid");
+        isInvalidNameCheckBlacklist = cfg.getBoolean("checks.invalidname.blacklist");
+        isInvalidNameCheckEnabled = cfg.getBoolean("checks.invalidname.enabled");
+        registerCheckCommandListeners = cfg.getStringList("checks.strange-register.listen");
+        registerCheckLimit = cfg.getInt("checks.strange-register.limit");
+        isRegisterCheckBlacklist = cfg.getBoolean("checks.strange-register.blacklist");
+        isRegisterCheckAntiBotMode = cfg.getBoolean("checks.strange-register.antibotmode");
+        isRegisterCheckEnabled = cfg.getBoolean("checks.strange-register.enabled");
         packetSlowCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.packet");
         accountCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.account");
         proxyCheckConfig = new ProxyCheckConfig(cfg);
@@ -109,13 +125,32 @@ public class ConfigManger {
         return accountCheckConfig;
     }
 
-
     public static SlowCheckConfig getPacketCheckConfig() {
         return packetSlowCheckConfig;
     }
 
     public static ProxyCheckConfig getProxyCheckConfig() {
         return proxyCheckConfig;
+    }
+
+    public static String getAutoPurgerParam(String path) {
+        return CONFIG.getString("auto-purger." + path);
+    }
+
+    public static boolean getAutoPurgerBoolean(String path) {
+        return CONFIG.getBoolean("auto-purger." + path);
+    }
+
+    public static int getAutoPurgerValue(String path) {
+        return CONFIG.getInt("auto-purger." + path);
+    }
+
+    public static String getStringParam(String path) {
+        return CONFIG.getString(path);
+    }
+
+    public static boolean getBooleanParam(String path) {
+        return CONFIG.getBoolean(path);
     }
 
     public static void incrementAuthCheckDifficulty(){
@@ -157,7 +192,7 @@ public class ConfigManger {
         }
 
         int min = Math.min(i[0], i[1]);
-        int max = Math.min(i[0], i[1]);
+        int max = Math.max(i[0], i[1]);
         return new int[] {min, max};
     }
 }

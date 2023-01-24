@@ -2,8 +2,6 @@ package me.kr1s_d.ultimateantibot.listener;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.checks.NameChangerCheck;
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
@@ -12,20 +10,15 @@ import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class PingListener implements Listener {
-    private IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
     private final QueueService queueService;
-    private final BlackListService blackListService;
     private final WhitelistService whitelistService;
 
     public PingListener(IAntiBotPlugin plugin){
-        this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
         this.queueService = antiBotManager.getQueueService();
-        blackListService = antiBotManager.getBlackListService();
         whitelistService = antiBotManager.getWhitelistService();
     }
 

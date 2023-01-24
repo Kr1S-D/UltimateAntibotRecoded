@@ -7,8 +7,7 @@ import me.kr1s_d.ultimateantibot.common.*;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.server.SatelliteServer;
-import me.kr1s_d.ultimateantibot.common.objects.filter.LogFilterV2;
+import me.kr1s_d.ultimateantibot.common.objects.filter.ProxyAttackFilter;
 import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
@@ -51,9 +50,8 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private UserDataService userDataService;
     private VPNService VPNService;
     private Notificator notificator;
-    private CheckService checkService;
     private UltimateAntiBotCore core;
-    private SatelliteServer satelliteServer;
+    private AttackTrackerService attackTrackerService;
     private boolean isRunning;
 
     public void onEnable() {
@@ -68,9 +66,10 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.messages = new Config(this, "%datafolder%/messages.yml");
         this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
+        this.logHelper = new LogHelper(this);
         FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
-        updater.check(4.1, 4.0);
-        if(updater.requiresReassign()) {
+        updater.check(4.3, 4.1);
+        if (updater.requiresReassign()) {
             this.config = new Config(this, "%datafolder%/config.yml");
             this.messages = new Config(this, "%datafolder%/messages.yml");
             this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
@@ -85,7 +84,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         }
         Version.init(this);
         new Metrics(this, 11712);
-        this.logHelper = new LogHelper(this);
         this.logHelper.info("&fLoading &cUltimateAntiBot...");
         this.firewallService = new FirewallService(this);
         this.VPNService = new VPNService(this);
@@ -94,19 +92,19 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.antiBotManager.getQueueService().load();
         this.antiBotManager.getWhitelistService().load();
         this.antiBotManager.getBlackListService().load();
+        this.attackTrackerService = new AttackTrackerService(this);
+        attackTrackerService.load();
         this.firewallService.enable();
         this.latencyThread = new LatencyThread(this);
         this.animationThread = new AnimationThread(this);
         this.core = new UltimateAntiBotCore(this);
         this.core.load();
-        this.satelliteServer = new SatelliteServer(this);
         this.userDataService = new UserDataService(this);
         this.userDataService.load();
-        ProxyServer.getInstance().getLogger().setFilter(new LogFilterV2(this));
+        ProxyServer.getInstance().getLogger().setFilter(new ProxyAttackFilter(this));
+
         this.notificator = new Notificator();
         this.notificator.init(this);
-        this.checkService = new CheckService(this);
-        this.checkService.load();
         new AttackAnalyzerThread(this);
         this.logHelper.info("&fLoaded &cUltimateAntiBot!");
         this.logHelper.sendLogo();
@@ -127,6 +125,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         commandManager.register(new CheckIDCommand(this));
         commandManager.register(new ReloadCommand(this));
         commandManager.register(new FirewallCommand(this));
+        commandManager.register(new AttackLogCommand(this));
         //commandManager.register(new SatelliteCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PingListener(this));
@@ -141,6 +140,8 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     public void onDisable() {
         long a = System.currentTimeMillis();
         this.logHelper.info("&cUnloading...");
+        this.isRunning = false;
+        this.attackTrackerService.unload();
         this.firewallService.shutDownFirewall();
         this.userDataService.unload();
         this.VPNService.unload();
@@ -148,7 +149,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.antiBotManager.getWhitelistService().unload();
         this.logHelper.info("&cThanks for choosing us!");
         long b = System.currentTimeMillis() - a;
-        this.isRunning = false;
         this.logHelper.info("&7Took &c" + b + "ms&7 to unload");
     }
 
@@ -288,11 +288,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
-    public CheckService getCheckService() {
-        return this.checkService;
-    }
-
-    @Override
     public UltimateAntiBotCore getCore() {
         return this.core;
     }
@@ -323,11 +318,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
-    public SatelliteServer getSatellite() {
-        return satelliteServer;
-    }
-
-    @Override
     public int getOnlineCount() {
         return ProxyServer.getInstance().getOnlineCount();
     }
@@ -349,7 +339,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
 
     @Override
     public void log(LogHelper.LogType type, String log) {
-        switch (type){
+        switch (type) {
             case ERROR:
                 ProxyServer.getInstance().getLogger().severe(log);
                 break;
@@ -363,7 +353,19 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
-    public File getDFolder(){
+    public void broadcast(String message) {
+        for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+            player.sendMessage(new TextComponent(Utils.colora(message)));
+        }
+    }
+
+    @Override
+    public AttackTrackerService getAttackTrackerService(){
+        return attackTrackerService;
+    }
+
+    @Override
+    public File getDFolder() {
         return getDataFolder();
     }
 

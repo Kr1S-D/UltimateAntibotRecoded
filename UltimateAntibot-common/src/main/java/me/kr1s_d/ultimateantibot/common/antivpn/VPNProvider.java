@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck;
+package me.kr1s_d.ultimateantibot.common.antivpn;
 
 public interface VPNProvider {
     String getID();

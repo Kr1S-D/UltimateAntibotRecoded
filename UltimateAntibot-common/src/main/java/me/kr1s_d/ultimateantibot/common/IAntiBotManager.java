@@ -4,6 +4,7 @@ import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
+import me.kr1s_d.ultimateantibot.common.thread.DynamicCounterThread;
 
 public abstract interface IAntiBotManager {
     long getJoinPerSecond();
@@ -18,6 +19,12 @@ public abstract interface IAntiBotManager {
 
     long getAttackDuration();
 
+    DynamicCounterThread getDynamicJoins();
+
+    DynamicCounterThread getDynamicPings();
+
+    DynamicCounterThread getDynamicPackets();
+
     BlackListService getBlackListService();
 
     QueueService getQueueService();
@@ -27,10 +34,6 @@ public abstract interface IAntiBotManager {
     ModeType getModeType();
 
     void setModeType(ModeType type);
-
-    AttackType getAttackType();
-
-    void setAttackType(AttackType attackType);
 
     void disableAll();
 

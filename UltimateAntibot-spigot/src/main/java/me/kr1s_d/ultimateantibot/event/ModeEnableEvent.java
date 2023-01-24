@@ -36,7 +36,6 @@ public class ModeEnableEvent extends Event {
         antiBotManager.getJoinCache().clear();
     }
 
-
     @Override
     public HandlerList getHandlers() {
         return handlerList;

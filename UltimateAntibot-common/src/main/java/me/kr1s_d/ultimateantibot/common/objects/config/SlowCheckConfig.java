@@ -9,7 +9,7 @@ public class SlowCheckConfig {
     private final boolean blacklist;
     private final boolean kick;
     private final boolean enableAntiBotMode;
-    private final boolean isEnabled;
+    private boolean isEnabled;
 
     public SlowCheckConfig(IConfiguration configuration, String path){
         time = configuration.getInt(path + ".time");
@@ -47,5 +47,9 @@ public class SlowCheckConfig {
 
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }

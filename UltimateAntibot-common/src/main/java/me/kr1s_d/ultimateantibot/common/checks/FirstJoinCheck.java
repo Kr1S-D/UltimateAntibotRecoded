@@ -7,7 +7,7 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstJoinCheck extends IManagedCheck {
+public class FirstJoinCheck implements JoinCheck {
     private final UserDataService userDataService;
 
     public FirstJoinCheck(IAntiBotPlugin plugin){
@@ -34,16 +34,6 @@ public class FirstJoinCheck extends IManagedCheck {
 
     }
 
-    @Override
-    public String getCheckName() {
-        return this.getClass().getSimpleName();
-    }
-
-    @Override
-    public double getCheckVersion() {
-        return 4.0;
-    }
-
     public boolean isEnabled() {
         return ConfigManger.isFirstJoinEnabled;
     }
@@ -51,25 +41,5 @@ public class FirstJoinCheck extends IManagedCheck {
     @Override
     public void loadTask() {
 
-    }
-
-    @Override
-    public CheckPriority getCheckPriority() {
-        return CheckPriority.HIGH;
-    }
-
-    @Override
-    public CheckListenedEvent getCheckListenedEvent() {
-        return CheckListenedEvent.PRELOGIN;
-    }
-
-    @Override
-    public void onCancel(String ip, String name) {
-
-    }
-
-    @Override
-    public boolean requireAntiBotMode() {
-        return false;
     }
 }

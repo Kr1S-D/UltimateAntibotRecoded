@@ -5,8 +5,21 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.ModeType;
 
+/**
+ * Tagged as to be removed in the future
+ */
+@Deprecated
 public class AttackTypeDetector extends AbstractDetector {
-    private final IAntiBotManager manager;
+    @Override
+    public int getTickDelay() {
+        return 0;
+    }
+
+    @Override
+    public void tick() {
+
+    }
+    /*private final IAntiBotManager manager;
 
     public AttackTypeDetector(IAntiBotPlugin plugin){
         this.manager = plugin.getAntiBotManager();
@@ -40,7 +53,6 @@ public class AttackTypeDetector extends AbstractDetector {
         long pps = manager.getPingPerSecond();
 
         long min = cps * 15 / 100;
-        //System.out.println(min);
 
         if(pps >= min && cps > 10){
             manager.setAttackType(AttackType.COMBINED);
@@ -48,5 +60,5 @@ public class AttackTypeDetector extends AbstractDetector {
         }
 
         manager.setAttackType(AttackType.JOIN);
-    }
+    }*/
 }

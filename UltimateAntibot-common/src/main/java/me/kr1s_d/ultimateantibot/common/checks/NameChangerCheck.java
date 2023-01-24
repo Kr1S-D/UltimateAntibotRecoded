@@ -9,8 +9,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class NameChangerCheck extends IManagedCheck {
+public class NameChangerCheck implements JoinCheck {
 
     private final IAntiBotPlugin plugin;
     private final BlackListService blackListService;
@@ -19,7 +20,7 @@ public class NameChangerCheck extends IManagedCheck {
     public NameChangerCheck(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.blackListService = plugin.getAntiBotManager().getBlackListService();
-        this.data = new HashMap<>();
+        this.data = new ConcurrentHashMap<>();
         loadTask();
         if (isEnabled()) {
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
@@ -35,10 +36,16 @@ public class NameChangerCheck extends IManagedCheck {
         if (!isEnabled()) {
             return false;
         }
+        if(!plugin.getAntiBotManager().isSomeModeOnline()) return false;
         if (data.containsKey(ip)) {
             Set<String> nicks = data.get(ip);
             nicks.add(name);
-            return nicks.size() >= ConfigManger.nameChangerLimit;
+            boolean res = nicks.size() >= ConfigManger.nameChangerLimit;
+
+            if(res) {
+                data.remove(ip);
+            }
+            return res;
         } else {
             data.put(ip, new HashSet<>());
         }
@@ -51,16 +58,6 @@ public class NameChangerCheck extends IManagedCheck {
     }
 
     @Override
-    public String getCheckName() {
-        return this.getClass().getSimpleName();
-    }
-
-    @Override
-    public double getCheckVersion() {
-        return 4.0;
-    }
-
-    @Override
     public boolean isEnabled() {
         return ConfigManger.isNameChangerEnabled;
     }
@@ -70,23 +67,4 @@ public class NameChangerCheck extends IManagedCheck {
         plugin.scheduleRepeatingTask(data::clear, false, 1000L * ConfigManger.nameChangerTime);
     }
 
-    @Override
-    public CheckPriority getCheckPriority() {
-        return CheckPriority.HIGHEST;
-    }
-
-    @Override
-    public CheckListenedEvent getCheckListenedEvent() {
-        return CheckListenedEvent.PRELOGIN;
-    }
-
-    @Override
-    public void onCancel(String ip, String name) {
-        blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
-    }
-
-    @Override
-    public boolean requireAntiBotMode() {
-        return true;
-    }
 }

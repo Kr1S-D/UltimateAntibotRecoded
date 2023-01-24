@@ -12,17 +12,21 @@ public class StringUtil {
         return string;
     }
 
-    public int countSimilarChars(String anotherString){
-        int i = 0;
+    public static int similarChars(String word1, String word2) {
+        int count = 0;
+        int maxLength = Math.max(word1.length(), word2.length());
 
-        for(int j = 0; j < string.length(); j++){
-            char c1 = string.charAt(j);
-            char c2 = anotherString.charAt(j);
-            if(c1 == c2){
-                i++;
+        for (int i = 0; i < maxLength; i++) {
+            try {
+                if (String.valueOf(word1.charAt(i)).equalsIgnoreCase(String.valueOf(word2.charAt(i)))) {
+                    count++;
+                }
+            }catch (Exception e) {
+
             }
         }
-        return i;
+
+        return count;
     }
 
     public static StringUtil from(String s){

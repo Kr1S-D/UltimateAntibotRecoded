@@ -30,7 +30,6 @@ public class AntiBotManager implements IAntiBotManager {
     private final WhitelistService whitelistService;
     private final QueueService queueService;
     private ModeType modeType;
-    private AttackType attackType;
     private boolean isAntiBotModeOnline;
     private boolean isSlowAntiBotModeOnline;
     private boolean isPacketModeEnabled;
@@ -51,7 +50,6 @@ public class AntiBotManager implements IAntiBotManager {
         this.blackListService = new BlackListService(plugin, queueService, plugin.getBlackList(), logHelper);
         this.whitelistService = new WhitelistService(queueService, plugin.getWhitelist(), logHelper);
         this.modeType = ModeType.OFFLINE;
-        this.attackType = AttackType.NONE;
         this.isAntiBotModeOnline = false;
         this.isSlowAntiBotModeOnline = false;
         this.isPacketModeEnabled = false;
@@ -92,6 +90,21 @@ public class AntiBotManager implements IAntiBotManager {
     }
 
     @Override
+    public DynamicCounterThread getDynamicJoins(){
+        return joinPerSecond;
+    }
+
+    @Override
+    public DynamicCounterThread getDynamicPings() {
+        return pingPerSecond;
+    }
+
+    @Override
+    public DynamicCounterThread getDynamicPackets() {
+        return packetPerSecond;
+    }
+
+    @Override
     public BlackListService getBlackListService() {
         return blackListService;
     }
@@ -113,22 +126,7 @@ public class AntiBotManager implements IAntiBotManager {
 
     @Override
     public void setModeType(ModeType type) {
-        this.modeType = type;
-
-        if(type != ModeType.OFFLINE){
-            this.modeType = ModeType.OFFLINE;
-            this.attackType = AttackType.NONE;
-        }
-    }
-
-    @Override
-    public AttackType getAttackType() {
-        return attackType;
-    }
-
-    @Override
-    public void setAttackType(AttackType attackType) {
-        this.attackType = attackType;
+        this.modeType = ModeType.OFFLINE;
     }
 
     @Override
@@ -138,7 +136,6 @@ public class AntiBotManager implements IAntiBotManager {
         this.isPacketModeEnabled = false;
         this.isPingModeEnabled = false;
         this.modeType = ModeType.OFFLINE;
-        this.attackType = AttackType.NONE;
     }
 
     @Override
@@ -157,8 +154,8 @@ public class AntiBotManager implements IAntiBotManager {
         }
         if(type != ModeType.OFFLINE){
             this.modeType = ModeType.OFFLINE;
-            this.attackType = AttackType.NONE;
         }
+        EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.OFFLINE));
     }
 
     @Override
@@ -303,7 +300,7 @@ public class AntiBotManager implements IAntiBotManager {
                 .replace("%queue%", String.valueOf(queueService.size()))
                 .replace("%whitelist%", String.valueOf(whitelistService.size()))
                 .replace("%blacklist%", String.valueOf(blackListService.size()))
-                .replace("%type%", String.valueOf(attackType.toString()))
+                .replace("%type%", String.valueOf(modeType.toString()))
                 .replace("%packets%", String.valueOf(packetPerSecond.getSlowCount()))
                 .replace("%totalbots%", String.valueOf(Formatter.format(joinPerSecond.getTotal())))
                 .replace("%totalpings%", String.valueOf(Formatter.format(pingPerSecond.getTotal())))

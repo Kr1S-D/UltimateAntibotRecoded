@@ -13,6 +13,7 @@ public class FilesUpdater {
     private final IConfiguration blacklist;
 
     private boolean isDeleted;
+    private boolean upToDate;
     private int i;
 
     public FilesUpdater(IAntiBotPlugin plugin, IConfiguration config, IConfiguration messages, IConfiguration whitelist, IConfiguration blacklist) {
@@ -27,15 +28,15 @@ public class FilesUpdater {
         this.i = 0;
     }
 
-    public void check(double fc, double fm){
+    public void check(double fc, double fm) {
         double cc = getVersion(config);
         double cm = getVersion(messages);
 
-        if(cc == fc && fm == cm){
+        if(cc == fc && fm == cm) {
             return;
         }
 
-        if(cc < 4){
+        if(cc < 4) {
             isDeleted = true;
             config.destroy();
             messages.destroy();
@@ -44,7 +45,8 @@ public class FilesUpdater {
             return;
         }
 
-        if(!(cc != fc) || !(cm != fm)){
+        if(cc != fc || cm != fm){
+            upToDate = true;
             plugin.scheduleRepeatingTask(new UABRunnable() {
                 @Override
                 public boolean isAsync() {
@@ -53,25 +55,31 @@ public class FilesUpdater {
 
                 @Override
                 public long getPeriod() {
-                    return 2000;
+                    return 1000;
                 }
 
                 @Override
                 public void run() {
                     i++;
-                    if(i >= 5) cancel();
-                    if(plugin.getLogHelper() == null) return;
+                    if(i >= 10) cancel();
+                    if(plugin.getLogHelper() == null) {
+                        return;
+                    }
                     plugin.getLogHelper().warn("Unable to read config.yml and messages.yml! Please regenerate them as soon as possible and restart the server!");
                 }
             });
         }
     }
 
-    public boolean requiresReassign(){
+    public boolean requiresReassign() {
         return isDeleted;
     }
 
-    private double getVersion(IConfiguration config){
+    public boolean isUpToDate() {
+        return upToDate;
+    }
+
+    private double getVersion(IConfiguration config) {
         return config.getDouble("version");
     }
 }

@@ -34,7 +34,7 @@ public class AuthCheckReloaded {
     private final Map<String, String> checkInitiator;
     private final VPNService VPNService;
 
-    public AuthCheckReloaded(IAntiBotPlugin plugin){
+    public AuthCheckReloaded(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
         this.checking = new HashMap<>();
@@ -183,7 +183,7 @@ public class AuthCheckReloaded {
      * @param min The min amount of times required to fail this check
      * @return if the ip has failed at least x min times this check
      */
-    private boolean hasFailedThisCheck(String ip, int min){
+    private boolean hasFailedThisCheck(String ip, int min) {
         return failure.getOrDefault(ip, new FancyInteger(0)).get() >= min;
     }
 

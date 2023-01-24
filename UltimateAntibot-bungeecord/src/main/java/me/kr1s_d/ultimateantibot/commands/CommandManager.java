@@ -95,6 +95,5 @@ public class CommandManager extends Command implements TabExecutor {
     public void register(SubCommand subCommand){
         loadedCommands.add(subCommand);
         tabComplete.add(subCommand.getSubCommandId());
-
     }
 }

@@ -5,6 +5,7 @@ import java.util.Base64;
 
 public class SerializeUtil {
     public static String serialize(Object o){
+        if(o == null) return "";
         try {
             ByteArrayOutputStream bo = new ByteArrayOutputStream();
             ObjectOutputStream so = new ObjectOutputStream(bo);
@@ -12,8 +13,7 @@ public class SerializeUtil {
             so.flush();
             return Base64.getEncoder().encodeToString(bo.toByteArray());
         }catch (IOException e){
-            e.printStackTrace();
-            return "";
+            throw new RuntimeException(e);
         }
     }
 
@@ -25,8 +25,7 @@ public class SerializeUtil {
             return b1.readObject();
         }
         catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 

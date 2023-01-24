@@ -11,5 +11,7 @@ public interface IServerPlatform {
 
     void log(LogHelper.LogType type, String log);
 
+    void broadcast(String message);
+
     File getDFolder();
 }

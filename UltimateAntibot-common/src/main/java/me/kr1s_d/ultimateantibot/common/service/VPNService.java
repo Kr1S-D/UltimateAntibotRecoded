@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.ipapi.IPAPIProvider;
-import me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.ProxyCheckProvider;
+import me.kr1s_d.ultimateantibot.common.antivpn.ipapi.IPAPIProvider;
+import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.ProxyCheckProvider;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.IService;
@@ -53,7 +53,6 @@ public class VPNService implements IService {
                 return;
             }
             if(antiBotManager.getBlackListService().isBlackListed(ip)){
-                logHelper.debug("Blacklisted IP!");
                 return;
             }
             if(ConfigManger.isIPApiVerificationEnabled && currentChecks < 45){

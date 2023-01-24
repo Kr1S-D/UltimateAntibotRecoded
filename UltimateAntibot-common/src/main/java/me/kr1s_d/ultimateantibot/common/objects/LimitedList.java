@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class LimitedList<E> implements Iterable<E> {
     private final List<E> list;
@@ -19,12 +20,29 @@ public class LimitedList<E> implements Iterable<E> {
         this.limit = limit;
     }
 
-    public void add(E element){
+    public LimitedList<E> add(E element){
         list.add(0, element);
 
         if(limit()){
             list.remove(list.size() - 1);
         }
+
+        return this;
+    }
+
+    public boolean matches(E element) {
+        return list.contains(element);
+    }
+
+    public boolean matches(Predicate<E> element) {
+        boolean result = false;
+
+        for (E e : list) {
+            if(result) break;
+            result = element.test(e);
+        }
+
+        return result;
     }
 
     public void remove(E element){
@@ -50,5 +68,10 @@ public class LimitedList<E> implements Iterable<E> {
 
     private boolean limit(){
         return size() > limit;
+    }
+
+    @Override
+    public String toString() {
+        return list.toString();
     }
 }

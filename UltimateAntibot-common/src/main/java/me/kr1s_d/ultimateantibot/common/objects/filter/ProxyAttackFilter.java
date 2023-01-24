@@ -10,13 +10,15 @@ import java.util.List;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
-public class LogFilterV2 implements Filter {
-
+public class ProxyAttackFilter implements Filter {
     private final IAntiBotManager antiBotManager;
     private final List<String> blocked;
 
-    public LogFilterV2(IAntiBotPlugin antiBotPlugin) {
+    private final Proxy247Filter proxy247Filter;
+
+    public ProxyAttackFilter(IAntiBotPlugin antiBotPlugin) {
         this.antiBotManager = antiBotPlugin.getAntiBotManager();
+        this.proxy247Filter = new Proxy247Filter(antiBotPlugin);
         this.blocked = new ArrayList<>(Arrays.asList(
                 "InitialHandler has",
                 "Connection reset by peer",
@@ -53,11 +55,13 @@ public class LogFilterV2 implements Filter {
             if(antiBotManager.isPacketModeEnabled()) antiBotManager.increasePacketPerSecond();
             return !record.getMessage().toLowerCase().contains("{0}");
         }
+
         if(isDenied(record.getMessage())){
             antiBotManager.increasePacketPerSecond();
             if(antiBotManager.getPacketPerSecond() > ConfigManger.packetModeTrigger) antiBotManager.enablePacketMode();
         }
-        return true;
+
+        return proxy247Filter.isLoggable(record);
     }
 
 

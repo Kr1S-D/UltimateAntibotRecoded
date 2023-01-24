@@ -78,6 +78,6 @@ public class CheckIDCommand implements SubCommand {
 
     @Override
     public boolean allowedConsole() {
-        return true;
+        return false;
     }
 }

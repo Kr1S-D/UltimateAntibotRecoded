@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.connectioncheck.proxycheck.result;
+package me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.result;
 
 import java.util.HashMap;
 

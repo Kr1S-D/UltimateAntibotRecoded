@@ -1,4 +1,4 @@
-version: 4.1
+version: 4.3
 #   _    _ _ _   _                 _                        _   _ _           _
 #  | |  | | | | (_)               | |           /\         | | (_) |         | |
 #  | |  | | | |_ _ _ __ ___   __ _| |_ ___     /  \   _ __ | |_ _| |__   ___ | |_
@@ -30,12 +30,33 @@ enable-latency-thread: false
 # (!) NOTIFICATION (!)
 #Enable bossbar notification on attack (1.9+)
 enable-bossbar-automatic-notification: true
+#Disable notifications after an attack?
+disable-notifications-after-attack: false
 
 # (!) DISABLE CONSOLE ATTACK MESSAGE (!)
 #
 #If set to true, when you receive an attack on your server the
 #console will not write any warning messages (referring only to UAB messages)
 disable-console-attack-message: false
+
+# (!) AUTO-PURGER (!)
+#By default all auto-purge checks are performed maximum once every 5 minutes according to the set conditions below
+auto-purger:
+  #in the current case, when the blacklist goes up 15k+ IPs and there is no attack it will be cleared
+  #in the second case (AFTER_ATTACK), after an attack if the blacklist contains 15k+ IPs will be cleared
+  blacklist:
+    type: LIMIT #AFTER_ATTACK
+    value: 15000 #amount of ip
+    enabled: true
+  #same as blacklist
+  whitelist:
+    type: LIMIT
+    value: 2500 #amount of ip
+    enabled: false
+  #It will delete logs older than 15 days
+  logs:
+    value: 15 #days
+    enabled: true
 
 #Antibotmode has the utility of mitigating the attack, blacklisting + ip possible,
 antibotmode:
@@ -73,7 +94,6 @@ playtime_for_whitelist: 10 #minutes
 taskmanager:
   clearcache: 60 #seconds
   auth: 300 #seconds
-  packet: 300 #seconds
   register: 300 #seconds
   update: 15 #seconds
 
@@ -81,7 +101,7 @@ checks:
   firstjoin:
     #enable firstjoin
     enabled: true
-  #This check checks the number of accounts entered by the same ip within 60 seconds
+  #This check checks the number of accounts entered by the same ip within 60 seconds during antibot mode
   namechanger:
     #Clear cache time
     time: 200
@@ -109,9 +129,9 @@ checks:
     #you have 1.3 second to join
     between: 1300 #milliseconds
     #BlackList enable condition
-    percent: 95
-    #If player fail this check 10 times will be blacklisted
-    maxfails: 10
+    percent: 90
+    #If player fail this check 25 times will be blacklisted
+    maxfails: 25
     #If a player has to ping the verification,
     #the non-verifying players will have a counter of the times they pinged the
     #server to enter!
@@ -125,16 +145,32 @@ checks:
     #If you use a different character such as a "," just substitute it at the point in the expression below!
     name-regex: "[a-zA-Z0-9_.]*"
     enabled: true
+  invalidname:
+    #If a player who enters contains one of the following strings in his name he will be blocked!
+    invalid:
+      - "MCSTORM_IO"
+      - "MC_BOT_IO"
+    blacklist: true
+    enabled: true
+  strange-register:
+    #The second string after the command will be taken as the password
+    listen:
+      - "/register"
+      - "/reg"
+      - "/l"
+      - "/login"
+    limit: 3 #if 3 players uses the same password will be blacklisted
+    blacklist: true
+    antibotmode: true
+    enabled: true
   slowjoin:
     #This check will check if a player sends a certain packet,
     #which the bots do not send, to 5 bots that do not send it
-    #in 60 it will perform the various actionsù
+    #in 60 it will perform the various actions
     #WARNING
-    #1) Only works on bungeecord || waterfall etc!
-    #2) If you use plugins like Protocolize or Geyser it could give problems so you have to disable it
-    #3) Some bots can bypass this check but it's at least something
+    #If you see any abnormal kicks on your server it is recommended to disable it!
     packet:
-      time: 60 #seconds
+      time: 120 #seconds
       trigger: 5
       #dev only
       condition: 0
@@ -153,10 +189,10 @@ checks:
       antibotmode: true
       enabled: true
 
+
 ######################################
 #               FIREWALL             #
 ######################################
-
 #This is the firewall section, to work correctly it requires the IPSet and IPTables service,
 #otherwise the hook will not be activated.
 #It will only work if the start script has permissions to execute the commands, it may not
@@ -172,7 +208,6 @@ checks:
 #Negative points:
 #Slower on spigot!
 #There will be an increase of CPU usage during ip blacklisting (Especially on low-powered servers)
-#
 firewall:
   enabled: false
   #Unique name of IPSet
@@ -220,7 +255,15 @@ proxycheck:
 #              FILTER                 #
 #######################################
 
+#This is to hide messages when players are kicked by the antibot
+#usually it's best to keep it turned on to remove spam from the console but
+#you can turn it off in case you need to debug something or if you want to see these message.
+hide-spigot-disconnect-message: true
+
 #Custom Message filter only works during a bot/packet/ping attack
 attack-filter:
   - "Another plugin has cancelled the connection for" #luckperms on spigot
   - "The UUID the player is connecting with now is NOT Mojang-assigned" #luckperms on bungeecord
+
+#Custom message console filter (works 24h/7)
+persistent-filter: []

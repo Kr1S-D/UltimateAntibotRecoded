@@ -43,11 +43,36 @@ public class FileUtil {
         return str;
     }
 
+    public static String getEncodedBase64(File file) {
+        String str = "";
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fileReader);
+            str = reader.readLine();
+        } catch (IOException e) {
+            //Logger.error("Error during file Reading! " + fileID);
+            e.printStackTrace();
+        }
+        return str;
+    }
+
     public static File[] getFiles(UABFolder folder){
         File f = new File(ServerUtil.getDataFolder() + "/" + folder.getFolder());
         File[] array = f.listFiles();
 
         return array == null ? new File[]{} : array;
+    }
+
+    public static void writeLine(String fileID, UABFolder folder, String line) {
+        File file = getOrCreateFile(fileID, folder);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(line);
+            writer.close();
+        } catch (IOException e) {
+            //Logger.error("Error during file Writing! " + fileID);
+            e.printStackTrace();
+        }
     }
 
     public enum UABFolder {

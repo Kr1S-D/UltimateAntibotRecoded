@@ -1,13 +1,15 @@
 package me.kr1s_d.ultimateantibot.common.core;
 
+import com.sun.corba.se.spi.activation.Server;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.detectors.AttackTypeDetector;
+import me.kr1s_d.ultimateantibot.common.IServerPlatform;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.DetectorService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 
-import javax.print.DocFlavor;
+import java.util.concurrent.TimeUnit;
 
 public class UltimateAntiBotCore {
     private final IAntiBotPlugin plugin;
@@ -18,16 +20,18 @@ public class UltimateAntiBotCore {
         this.plugin = plugin;
         this.blackListService = plugin.getAntiBotManager().getBlackListService();
         this.whitelistService = plugin.getAntiBotManager().getWhitelistService();
-        new AttackTypeDetector(plugin);
     }
 
     public void load() {
         plugin.getLogHelper().info("&fLoading &cCore...");
+
         plugin.scheduleRepeatingTask(() -> {
             refresh();
             DetectorService.tickDetectors();
         }, false, 1000L);
+
         plugin.scheduleRepeatingTask(plugin.getAntiBotManager().getQueueService()::clear, false, ConfigManger.taskManagerClearCache * 1000L);
+        plugin.scheduleDelayedTask(this::checkAutoPurger, true, 300000L); //5 min
         plugin.scheduleRepeatingTask(() -> {
             if(plugin.getAntiBotManager().isAntiBotModeEnabled()){
                return;
@@ -43,5 +47,49 @@ public class UltimateAntiBotCore {
             return;
         }
         plugin.getAntiBotManager().dispatchConsoleAttackMessage();
+    }
+
+    private void checkAutoPurger() {
+        long currentTimeMillis = System.currentTimeMillis();
+        long elapsedTimeMillis = currentTimeMillis - ServerUtil.getLastAttack();
+        long elapsedTimeMinutes = TimeUnit.MILLISECONDS.toMinutes(elapsedTimeMillis);
+        //se il server è sotto attacco o l'ultimo attacco è stato meno di 10 minuti fà ritorna
+        if(elapsedTimeMinutes < 10 || plugin.getAntiBotManager().isSomeModeOnline()) return;
+
+        //check for blacklist autopurge
+        String blacklistType = ConfigManger.getAutoPurgerParam("blacklist.type");
+        boolean blacklistEnabled = ConfigManger.getAutoPurgerBoolean("blacklist.enabled");
+
+        if (blacklistType != null && blacklistEnabled) {
+            switch (blacklistType) {
+                case "LIMIT":
+                    int required = ConfigManger.getAutoPurgerValue("blacklist.value");
+                    if(plugin.getAntiBotManager().getBlackListService().size() >= required) {
+                        plugin.getAntiBotManager().getBlackListService().clear();
+                    }
+                    break;
+                case "AFTER_ATTACK":
+                    plugin.getAntiBotManager().getBlackListService().clear();
+                    break;
+            }
+        }
+
+        //check for whitelist autopurge
+        String whitelistType = ConfigManger.getAutoPurgerParam("whitelist.type");
+        boolean whitelistEnabled = ConfigManger.getAutoPurgerBoolean("whitelist.enabled");
+
+        if (whitelistType != null && whitelistEnabled) {
+            switch (whitelistType) {
+                case "LIMIT":
+                    int required = ConfigManger.getAutoPurgerValue("whitelist.value");
+                    if(plugin.getAntiBotManager().getWhitelistService().size() >= required) {
+                        plugin.getAntiBotManager().getWhitelistService().clear();
+                    }
+                    break;
+                case "AFTER_ATTACK":
+                    plugin.getAntiBotManager().getWhitelistService().clear();
+                    break;
+            }
+        }
     }
 }
