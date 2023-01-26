@@ -63,11 +63,11 @@ public class RegisterCheck implements ChatCheck {
                     plugin.disconnect(ip, MessageManager.getSafeModeMessage());
                 }
             }
-            plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on RegisterCheck!");
+            plugin.getLogHelper().debug("Detected attack on RegisterCheck!");
         }
-        plugin.getLogHelper().info("IP-PASSWORD --> " + ipPasswordMap);
-        plugin.getLogHelper().info("NICK-PASSWD --> " + nicknamePasswordMap);
-        plugin.getLogHelper().info("PASSTOP --> " + passwordScore);
+        //plugin.getLogHelper().info("IP-PASSWORD --> " + ipPasswordMap);
+        //plugin.getLogHelper().info("NICK-PASSWD --> " + nicknamePasswordMap);
+        //plugin.getLogHelper().info("PASSTOP --> " + passwordScore);
     }
 
     @Override

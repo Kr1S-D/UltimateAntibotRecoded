@@ -87,6 +87,7 @@ public class PacketCheck {
                     antibotManager.enableSlowAntiBotMode();
                 }
                 suspected.clear();
+                iAntiBotPlugin.getLogHelper().debug("[UAB DEBUG] Detected attack on PacketCheck!");
             }
         }, false, 2500L);
     }

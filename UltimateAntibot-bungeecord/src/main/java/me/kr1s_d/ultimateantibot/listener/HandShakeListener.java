@@ -23,7 +23,7 @@ public class HandShakeListener implements Listener {
         Handshake handshake = e.getHandshake();
         String ip = Utils.getIP(e.getConnection());
 
-        if (handshake.getRequestedProtocol() > 2) {
+        if (handshake.getRequestedProtocol() > 2 && antiBotManager.isSomeModeOnline()) {
             handshake.setRequestedProtocol(2); // converting to join
             if (ConfigManger.blacklistInvalidProtocol) {
                 antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER);

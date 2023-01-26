@@ -8,10 +8,12 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import java.util.List;
 
 public class InvalidNameCheck implements JoinCheck {
+    private final IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
     private final List<String> invalidNames;
     
     public InvalidNameCheck(IAntiBotPlugin plugin) {
+        this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
         this.invalidNames = ConfigManger.invalidNamesBlockedEntries;
     }
@@ -20,11 +22,10 @@ public class InvalidNameCheck implements JoinCheck {
     public boolean isDenied(String ip, String name) {
         for(String blacklisted : invalidNames){
             blacklisted = blacklisted.toLowerCase();
-
-            // TODO: 03/09/2022 da registrare 
             
             if(name.toLowerCase().contains(blacklisted)) {
                 antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
+                plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on InvalidNameCheck!");
                 return true;
             }
         }

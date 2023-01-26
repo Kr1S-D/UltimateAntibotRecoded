@@ -162,7 +162,6 @@ public class MainEventListener implements Listener {
         //
         if (accountCheck.isDenied(ip, nickname)) {
             plugin.disconnect(ip, Utils.colora(MessageManager.getAccountOnlineMessage()));
-            plugin.getLogHelper().debug("Account Check Executed!");
             return;
         }
         //

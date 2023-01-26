@@ -36,6 +36,7 @@ public class SuperJoinCheck implements JoinCheck {
 
         if (i.get() > ConfigManger.superJoinLimit) {
             data.remove(ip);
+            plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on SuperJoinCheck!");
             return true;
         }
 

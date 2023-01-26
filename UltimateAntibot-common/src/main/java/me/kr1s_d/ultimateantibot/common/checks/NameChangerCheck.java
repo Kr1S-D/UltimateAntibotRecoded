@@ -14,12 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NameChangerCheck implements JoinCheck {
 
     private final IAntiBotPlugin plugin;
-    private final BlackListService blackListService;
     private final Map<String, Set<String>> data;
 
     public NameChangerCheck(IAntiBotPlugin plugin) {
         this.plugin = plugin;
-        this.blackListService = plugin.getAntiBotManager().getBlackListService();
         this.data = new ConcurrentHashMap<>();
         loadTask();
         if (isEnabled()) {
