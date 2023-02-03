@@ -97,7 +97,7 @@ public class RegisterCheck implements ChatCheck {
 
     private boolean isTrackedRegisterCommand(String message) {
         for (String str : trackedCommands) {
-            if (message.toLowerCase().startsWith(str.toLowerCase()) && hasPassword(message)) return true;
+            if (message.split("\\s+")[0].equalsIgnoreCase(str) && hasPassword(message)) return true;
         }
 
         return false;

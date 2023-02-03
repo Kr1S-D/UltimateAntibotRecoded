@@ -142,7 +142,7 @@ public class MessageManager {
     }
 
     private static String convertToString(List<String> stringList) {
-        return String.join(System.lineSeparator(), stringList);
+        return String.join("\n", stringList);
     }
 
     public static String getMessage(String path) {

@@ -13,14 +13,12 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.utils.Utils;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.event.server.TabCompleteEvent;
 
 public class MainEventListener implements Listener {
     private final IAntiBotPlugin plugin;
@@ -202,15 +200,6 @@ public class MainEventListener implements Listener {
         //Register Check
         //
         registerCheck.onChat(ip, nickname, e.getMessage());
-    }
-
-    @EventHandler
-    public void onTabComplete(TabCompleteEvent e) {
-        if (e.getSender() instanceof ConsoleCommandSender) return;
-        String ip = Utils.getPlayerIP((Player) e.getSender());
-        String nickname = ((Player) e.getSender()).getName();
-
-        registerCheck.onTabComplete(ip, nickname, e.getBuffer());
     }
 
     @EventHandler

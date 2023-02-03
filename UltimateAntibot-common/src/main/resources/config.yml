@@ -94,7 +94,7 @@ playtime_for_whitelist: 10 #minutes
 taskmanager:
   clearcache: 60 #seconds
   auth: 300 #seconds
-  register: 300 #seconds
+  register: 120 #seconds
   update: 15 #seconds
 
 checks:

@@ -223,17 +223,6 @@ public class MainEventListener implements Listener {
     }
 
     @EventHandler
-    public void onTabComplete(TabCompleteEvent e) {
-        String ip = Utils.getIP(e.getSender());
-        String nickname = ((ProxiedPlayer) e.getSender()).getName();
-
-        //
-        //Register check
-        //
-        registerCheck.onTabComplete(ip, nickname, e.getCursor());
-    }
-
-    @EventHandler
     public void onPing(ProxyPingEvent e) {
         String ip = Utils.getIP(e.getConnection());
         //
