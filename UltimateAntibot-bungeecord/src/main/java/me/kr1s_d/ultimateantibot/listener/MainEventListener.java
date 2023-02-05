@@ -97,11 +97,21 @@ public class MainEventListener implements Listener {
             }
         }
         //
+        // NameChangerCheck
+        //
+        if (nameChangerCheck.isDenied(ip, name)) {
+            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
+            e.setCancelReason(blacklistMSG(ip));
+            e.setCancelled(true);
+            return;
+        }
+        //
         //Queue Service
         //
         if (!queueService.isQueued(ip) && !blackListService.isBlackListed(ip) && !whitelistService.isWhitelisted(ip)) {
             queueService.queue(ip);
         }
+
         //
         //Legal Name Check
         //
@@ -115,15 +125,6 @@ public class MainEventListener implements Listener {
         //
         if (firstJoinCheck.isDenied(ip, name)) {
             e.setCancelReason(ComponentBuilder.buildColorized(MessageManager.firstJoinMessage));
-            e.setCancelled(true);
-            return;
-        }
-        //
-        // NameChangerCheck
-        //
-        if (nameChangerCheck.isDenied(ip, name)) {
-            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
-            e.setCancelReason(blacklistMSG(ip));
             e.setCancelled(true);
             return;
         }

@@ -3,8 +3,7 @@ package me.kr1s_d.ultimateantibot.common;
 import java.util.List;
 import java.util.Set;
 
-public interface IConfiguration{
-
+public interface IConfiguration {
     Object get(String path);
 
     String getString(String path);

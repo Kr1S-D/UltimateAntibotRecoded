@@ -89,6 +89,14 @@ public class MainEventListener implements Listener {
             }
         }
         //
+        // NameChangerCheck
+        //
+        if (nameChangerCheck.isDenied(ip, name)) {
+            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
+            return;
+        }
+        //
         //Queue Check
         //
         if (!queueService.isQueued(ip) && !blackListService.isBlackListed(ip) && !whitelistService.isWhitelisted(ip)) {
@@ -106,14 +114,6 @@ public class MainEventListener implements Listener {
         //
         if (firstJoinCheck.isDenied(ip, name)) {
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.firstJoinMessage));
-            return;
-        }
-        //
-        // NameChangerCheck
-        //
-        if (nameChangerCheck.isDenied(ip, name)) {
-            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, blacklistMSG(ip));
             return;
         }
         //

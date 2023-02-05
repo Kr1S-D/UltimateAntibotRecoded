@@ -65,9 +65,6 @@ public class RegisterCheck implements ChatCheck {
             }
             plugin.getLogHelper().debug("Detected attack on RegisterCheck!");
         }
-        //plugin.getLogHelper().info("IP-PASSWORD --> " + ipPasswordMap);
-        //plugin.getLogHelper().info("NICK-PASSWD --> " + nicknamePasswordMap);
-        //plugin.getLogHelper().info("PASSTOP --> " + passwordScore);
     }
 
     @Override

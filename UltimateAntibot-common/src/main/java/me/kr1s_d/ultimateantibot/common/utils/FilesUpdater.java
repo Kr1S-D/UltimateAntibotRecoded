@@ -47,6 +47,11 @@ public class FilesUpdater {
 
         if(cc != fc || cm != fm){
             upToDate = true;
+            isDeleted = true;
+
+            config.rename("old-config");
+            messages.rename("old-messages");
+
             plugin.scheduleRepeatingTask(new UABRunnable() {
                 @Override
                 public boolean isAsync() {
@@ -65,7 +70,7 @@ public class FilesUpdater {
                     if(plugin.getLogHelper() == null) {
                         return;
                     }
-                    plugin.getLogHelper().warn("Unable to read config.yml and messages.yml! Please regenerate them as soon as possible and restart the server!");
+                    plugin.getLogHelper().warn("Unable to read config.yml and messages.yml! It was not possible to read the config.yml and the messages.yml, the two files have been regenerated!");
                 }
             });
         }

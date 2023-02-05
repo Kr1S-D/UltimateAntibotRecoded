@@ -65,7 +65,7 @@ antibotmode:
   #If there are 10 connections in 1 second the antibot mode will be activated!
   trigger: 10
   #Slowmode duration
-  keep-slow: 60
+  keep-slow: 25
   #disconnect joined players
   disconnect: true
 
