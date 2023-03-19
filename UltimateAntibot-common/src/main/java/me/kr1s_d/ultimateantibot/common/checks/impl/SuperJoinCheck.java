@@ -62,6 +62,11 @@ public class SuperJoinCheck implements JoinCheck {
         data.clear();
     }
 
+    @Override
+    public void removeCache(String ip) {
+        data.remove(ip);
+    }
+
     public void loadTask() {
         plugin.scheduleRepeatingTask(data::clear, false, 1000L * ConfigManger.superJoinTime);
     }
