@@ -150,14 +150,16 @@ public class BlackListService implements IService {
         return getProfile(ip);
     }
 
-    public void clear(){
+    public void clear() {
         blacklist.clear();
         firewallService.drop();
+        CheckService.clearCheckCache();
     }
 
     public void unBlacklist(String ip){
         blacklist.remove(ip);
         firewallService.dropIP(ip);
+        CheckService.removeCached(ip);
     }
 
     public boolean isBlackListed(String ip){

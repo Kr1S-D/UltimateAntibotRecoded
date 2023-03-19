@@ -51,6 +51,14 @@ public class AttackTrackerService implements IService {
                     String encoded = FileUtil.getEncodedBase64(file);
                     AttackLog log = SerializeUtil.deserialize(encoded, AttackLog.class);
                     if(log == null) continue;
+                    //remove logs older than config section
+                    if(ConfigManger.getAutoPurgerBoolean("logs.enabled")) {
+                        long pastedDays = TimeUnit.MICROSECONDS.toDays(log.getStopMillis());
+                        if(pastedDays > ConfigManger.getAutoPurgerValue("logs.value")) {
+                            file.delete();
+                            continue;
+                        }
+                    }
                     attackLogList.add(log);
                 }catch (Exception e) {
                     file.delete();
@@ -58,12 +66,6 @@ public class AttackTrackerService implements IService {
                 }
             }
 
-            //remove logs older than 30 days
-            if(!ConfigManger.getAutoPurgerBoolean("logs.enabled")) return;
-            attackLogList.removeIf(log -> {
-                long pastedDays = TimeUnit.MICROSECONDS.toDays(log.getStopMillis());
-                return pastedDays > ConfigManger.getAutoPurgerValue("logs.value");
-            });
         }catch (Exception e) {
             if(attackLogList == null) attackLogList = new ArrayList<>();
             plugin.getLogHelper().error("Unable to load attacklogs files! If error persists contact support!");

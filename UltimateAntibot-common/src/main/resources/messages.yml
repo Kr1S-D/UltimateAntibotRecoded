@@ -1,4 +1,4 @@
-version: 4.1
+version: 4.2
 prefix: "&4&LU&c&LA&4&LB&r &7» "
 onping: #<-- works only on bungeecord!
   normal: "&c&l◆ &f&l$1&7/&c&l$2"
@@ -70,6 +70,7 @@ help:
   - "&c/uab &cblacklist &fadd/remove &f<ip>&7- &fManage blacklist"
   - "&c/uab logs list <amount> &7- &fReturns some info of an attack"
   - "&c/uab logs last <id> &7- Shows last <amount> attacks"
+  - "&c/uab cache status/clear &7- Manage UAB cache"
   - "&c/uab &cfirewall &7- &fShows some firewall info"
   - "&c/uab &ccheck &f<id> &7- &fCheck for blacklisted player"
   - "&c/uab &creload &7- &fReloads the config & messages"

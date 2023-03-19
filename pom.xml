@@ -48,6 +48,10 @@
                                 <pattern>com.google.gson</pattern>
                                 <shadedPattern>me.kr1s_d.ultimateantibot.libs.gson</shadedPattern>
                             </relocation>
+                            <relocation>
+                                <pattern>org.cache2k</pattern>
+                                <shadedPattern>me.kr1s_d.ultimateantibot.libs.cache2k</shadedPattern>
+                            </relocation>
                         </relocations>
                     </configuration>
                     <executions>

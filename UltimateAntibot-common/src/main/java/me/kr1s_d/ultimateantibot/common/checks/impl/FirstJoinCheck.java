@@ -1,6 +1,9 @@
-package me.kr1s_d.ultimateantibot.common.checks;
+package me.kr1s_d.ultimateantibot.common.checks.impl;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
+import me.kr1s_d.ultimateantibot.common.checks.JoinCheck;
+import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
@@ -12,7 +15,10 @@ public class FirstJoinCheck implements JoinCheck {
 
     public FirstJoinCheck(IAntiBotPlugin plugin){
         this.userDataService = plugin.getUserDataService();
+
         if(isEnabled()){
+            loadTask();
+            CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
     }
@@ -30,6 +36,11 @@ public class FirstJoinCheck implements JoinCheck {
     }
 
     @Override
+    public CheckType getType() {
+        return CheckType.FIRST_JOIN;
+    }
+
+    @Override
     public void onDisconnect(String ip, String name) {
 
     }
@@ -39,6 +50,20 @@ public class FirstJoinCheck implements JoinCheck {
     }
 
     @Override
+    public long getCacheSize() {
+        return userDataService.size();
+    }
+
+    @Override
+    public void clearCache() {
+        //not supported here
+    }
+
+    @Override
+    public void removeCache(String ip) {
+        //NOT SUPPORTED HERE
+    }
+
     public void loadTask() {
 
     }

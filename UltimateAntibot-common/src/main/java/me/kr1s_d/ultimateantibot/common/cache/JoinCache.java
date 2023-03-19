@@ -14,7 +14,7 @@ public class JoinCache {
         this.lastIpJoined = new HashMap<>();
     }
 
-    public void addJoined(String ip){
+    public void addJoined(String ip) {
         lastIpJoined.put(ip, System.currentTimeMillis());
     }
 
@@ -22,7 +22,7 @@ public class JoinCache {
         lastIpJoined.remove(ip);
     }
 
-    public void clear(){
+    public void clear() {
         lastIpJoined.clear();
     }
 

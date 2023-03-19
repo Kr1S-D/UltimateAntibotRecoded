@@ -25,7 +25,7 @@ public class CommandManager extends Command implements TabExecutor {
         this.tabComplete = new ArrayList<>();
         this.defaultCommandWrongArgumentMessage = MessageManager.commandWrongArgument;
         this.noPermsMessage  = MessageManager.commandNoPerms;
-        this.noPlayerMessage = "&7You are not a &dPlayer!";
+        this.noPlayerMessage = "&7You are not a &cplayer!";
     }
 
     @Override

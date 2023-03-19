@@ -1,7 +1,10 @@
-package me.kr1s_d.ultimateantibot.common.checks;
+package me.kr1s_d.ultimateantibot.common.checks.impl;
 
+import javafx.application.Platform;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.ChatCheck;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.objects.LimitedList;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
@@ -30,6 +33,11 @@ public class RegisterCheck implements ChatCheck {
         this.nicknamePasswordMap = new HashMap<>();
 
         this.trackedCommands = ConfigManger.registerCheckCommandListeners;
+
+        if (isEnabled()) {
+            loadTask();
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
+        }
     }
 
     @Override
@@ -63,13 +71,23 @@ public class RegisterCheck implements ChatCheck {
                     plugin.disconnect(ip, MessageManager.getSafeModeMessage());
                 }
             }
+
             plugin.getLogHelper().debug("Detected attack on RegisterCheck!");
+            plugin.getLogHelper().debug("[REGISTER CHECK DEBUG] IpPasswordMap " + ipPasswordMap.toString());
+            plugin.getLogHelper().debug("[REGISTER CHECK DEBUG] PasswdScore " + passwordScore.size());
+            plugin.getLogHelper().debug("[REGISTER CHECK DEBUG] NickNamePassword " + nicknamePasswordMap.size());
+
         }
     }
 
     @Override
     public void onTabComplete(String ip, String nickname, String message) {
 
+    }
+
+    @Override
+    public CheckType getType() {
+        return CheckType.REGISTER;
     }
 
     @Override
@@ -84,6 +102,22 @@ public class RegisterCheck implements ChatCheck {
     }
 
     @Override
+    public long getCacheSize() {
+        return ipPasswordMap.size() + passwordScore.size() + nicknamePasswordMap.size();
+    }
+
+    @Override
+    public void removeCache(String ip) {
+        ipPasswordMap.remove(ip);
+    }
+
+    @Override
+    public void clearCache() {
+        ipPasswordMap.clear();
+        passwordScore.clear();
+        nicknamePasswordMap.clear();
+    }
+
     public void loadTask() {
         plugin.scheduleRepeatingTask(() -> {
             ipPasswordMap.clear();

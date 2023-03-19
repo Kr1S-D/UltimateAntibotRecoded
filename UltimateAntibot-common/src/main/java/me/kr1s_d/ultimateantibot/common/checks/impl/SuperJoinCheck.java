@@ -1,6 +1,8 @@
-package me.kr1s_d.ultimateantibot.common.checks;
+package me.kr1s_d.ultimateantibot.common.checks.impl;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
+import me.kr1s_d.ultimateantibot.common.checks.JoinCheck;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
@@ -12,12 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SuperJoinCheck implements JoinCheck {
 
     private final IAntiBotPlugin plugin;
-    private final BlackListService blackListService;
     private final Map<String, FancyInteger> data;
 
     public SuperJoinCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
-        this.blackListService = plugin.getAntiBotManager().getBlackListService();
         this.data = new ConcurrentHashMap<>();
         loadTask();
         if(isEnabled()){
@@ -34,13 +34,12 @@ public class SuperJoinCheck implements JoinCheck {
         i.increase();
         data.put(ip, i);
 
-        if (i.get() > ConfigManger.superJoinLimit) {
-            data.remove(ip);
-            plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on SuperJoinCheck!");
-            return true;
-        }
+        return i.get() > ConfigManger.superJoinLimit;
+    }
 
-        return false;
+    @Override
+    public CheckType getType() {
+        return CheckType.SUPER_JOIN;
     }
 
     @Override
@@ -54,6 +53,15 @@ public class SuperJoinCheck implements JoinCheck {
     }
 
     @Override
+    public long getCacheSize() {
+        return data.size();
+    }
+
+    @Override
+    public void clearCache() {
+        data.clear();
+    }
+
     public void loadTask() {
         plugin.scheduleRepeatingTask(data::clear, false, 1000L * ConfigManger.superJoinTime);
     }

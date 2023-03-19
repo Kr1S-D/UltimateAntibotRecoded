@@ -1,9 +1,11 @@
-package me.kr1s_d.ultimateantibot.common.checks;
+package me.kr1s_d.ultimateantibot.common.checks.impl;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.JoinCheck;
 import me.kr1s_d.ultimateantibot.common.objects.config.SlowCheckConfig;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
@@ -22,8 +24,10 @@ public class AccountCheck implements JoinCheck {
         this.plugin = plugin;
         this.map = new HashMap<>();
         this.config = ConfigManger.getAccountCheckConfig();
-        loadTask();
+
         if(isEnabled()){
+            loadTask();
+            CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
     }
@@ -34,22 +38,28 @@ public class AccountCheck implements JoinCheck {
         Set<String> a = map.getOrDefault(ip, new HashSet<>());
         a.add(name);
         map.put(ip, a);
+
         if (map.get(ip).size() >= ConfigManger.getAccountCheckConfig().getTrigger()) {
             Set<String> subs = map.get(ip);
+
             if (config.isKick()) {
                 subs.forEach(b -> {
                     plugin.disconnect(b, MessageManager.getAccountOnlineMessage());
                 });
             }
+
             if (config.isBlacklist()) {
                 plugin.getAntiBotManager().getBlackListService().blacklist(ip, BlackListReason.TOO_MUCH_NAMES);
             }
+
             if (config.isEnableAntiBotMode()) {
                 plugin.getAntiBotManager().enableSlowAntiBotMode();
             }
+
             subs.clear();
             return true;
         }
+
         return false;
     }
 
@@ -59,8 +69,27 @@ public class AccountCheck implements JoinCheck {
     }
 
     @Override
+    public long getCacheSize() {
+        return map.size();
+    }
+
+    @Override
+    public void clearCache() {
+        map.clear();
+    }
+
+    @Override
+    public void removeCache(String ip) {
+        map.remove(ip);
+    }
+
     public void loadTask() {
         plugin.scheduleRepeatingTask(map::clear, false, 1000L * ConfigManger.taskManagerClearCache);
+    }
+
+    @Override
+    public CheckType getType() {
+        return CheckType.ACCOUNT;
     }
 
     public void onDisconnect(String ip, String name){
