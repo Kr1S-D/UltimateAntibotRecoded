@@ -53,7 +53,7 @@ public class AttackTrackerService implements IService {
                     if(log == null) continue;
                     //remove logs older than config section
                     if(ConfigManger.getAutoPurgerBoolean("logs.enabled")) {
-                        long pastedDays = TimeUnit.MICROSECONDS.toDays(log.getStopMillis());
+                        long pastedDays = TimeUnit.MICROSECONDS.toDays(System.currentTimeMillis() - log.getStopMillis());
                         if(pastedDays > ConfigManger.getAutoPurgerValue("logs.value")) {
                             file.delete();
                             continue;
