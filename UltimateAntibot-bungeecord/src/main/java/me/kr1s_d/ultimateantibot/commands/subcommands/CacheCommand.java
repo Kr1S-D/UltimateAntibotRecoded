@@ -24,9 +24,11 @@ public class CacheCommand implements SubCommand {
                 for (String s : CheckService.getInformationAsMessage()) {
                     commandSender.sendMessage(Utils.colora(s));
                 }
+                break;
             case "clear":
                 CheckService.clearCheckCache();
                 commandSender.sendMessage(Utils.colora(MessageManager.prefix + "&fThe &c&lUAB &fcache has been cleared!"));
+                commandSender.sendMessage(Utils.colora(MessageManager.prefix + "&7PS: The cache of the various checks is cleaned periodically, except that of the first-join which is permanent. Running this command does not improve or worsen the functioning of the antibot in any way!"));
         }
     }
 
@@ -43,7 +45,7 @@ public class CacheCommand implements SubCommand {
     @Override
     public Map<Integer, List<String>> getTabCompleter() {
         Map<Integer, List<String>> map = new HashMap<>();
-        map.put(1, Arrays.asList("list", "info"));
+        map.put(1, Arrays.asList("clear", "status"));
         return map;
     }
 
