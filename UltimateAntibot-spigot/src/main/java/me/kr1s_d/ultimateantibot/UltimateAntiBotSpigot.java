@@ -69,7 +69,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.blacklist = new Config(this, "blacklist");
         this.logHelper = new LogHelper(this);
         FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
-        updater.check(4.3, 4.1);
+        updater.check(4.3, 4.2);
         if (updater.requiresReassign()) {
             this.config = new Config(this, "config");
             this.messages = new Config(this, "messages");
