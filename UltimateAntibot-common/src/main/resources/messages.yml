@@ -1,4 +1,4 @@
-version: 4.2
+version: 4.3
 prefix: "&4&LU&c&LA&4&LB&r &7» "
 onping: #<-- works only on bungeecord!
   normal: "&c&l◆ &f&l$1&7/&c&l$2"

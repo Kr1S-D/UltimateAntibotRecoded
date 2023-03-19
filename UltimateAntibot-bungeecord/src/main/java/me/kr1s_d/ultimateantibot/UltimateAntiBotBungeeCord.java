@@ -68,7 +68,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         this.logHelper = new LogHelper(this);
         FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
-        updater.check(4.3, 4.2);
+        updater.check(4.3, 4.3);
         if (updater.requiresReassign()) {
             this.config = new Config(this, "%datafolder%/config.yml");
             this.messages = new Config(this, "%datafolder%/messages.yml");

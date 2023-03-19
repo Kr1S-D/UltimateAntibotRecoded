@@ -5,6 +5,7 @@ import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.JoinCheck;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
+import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class SuperJoinCheck implements JoinCheck {
         this.data = new ConcurrentHashMap<>();
         loadTask();
         if(isEnabled()){
+            CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
     }
