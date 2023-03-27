@@ -4,7 +4,6 @@ import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 
 import java.util.List;
-import java.util.Map;
 
 public class MessageManager {
     public static IConfiguration configManger;

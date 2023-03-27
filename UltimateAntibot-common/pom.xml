@@ -42,24 +42,28 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.13.4</version>
+            <scope>compile</scope>
         </dependency>
         <!-- ApacheHTTPClient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
+            <scope>compile</scope>
         </dependency>
-        <!-- cache2k -->
+        <!-- caffeine -->
         <dependency>
-            <groupId>org.cache2k</groupId>
-            <artifactId>cache2k-api</artifactId>
-            <version>2.6.1.Final</version>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.9.3</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

@@ -49,8 +49,8 @@
                                 <shadedPattern>me.kr1s_d.ultimateantibot.libs.gson</shadedPattern>
                             </relocation>
                             <relocation>
-                                <pattern>org.cache2k</pattern>
-                                <shadedPattern>me.kr1s_d.ultimateantibot.libs.cache2k</shadedPattern>
+                                <pattern>com.github.benmanes</pattern>
+                                <shadedPattern>me.kr1s_d.ultimateantibot.libs.caffeine</shadedPattern>
                             </relocation>
                         </relocations>
                     </configuration>

@@ -1,5 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.checks.impl;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.JoinCheck;
@@ -11,16 +13,18 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class SuperJoinCheck implements JoinCheck {
-
     private final IAntiBotPlugin plugin;
-    private final Map<String, FancyInteger> data;
+    private final Cache<String, FancyInteger> data;
 
     public SuperJoinCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
-        this.data = new ConcurrentHashMap<>();
-        loadTask();
+        this.data = Caffeine.newBuilder()
+                .expireAfterWrite(ConfigManger.superJoinTime, TimeUnit.SECONDS)
+                .build();
+
         if(isEnabled()){
             CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
@@ -32,9 +36,8 @@ public class SuperJoinCheck implements JoinCheck {
         if (!isEnabled()) {
             return false;
         }
-        FancyInteger i = data.getOrDefault(ip, new FancyInteger(0));
+        FancyInteger i = data.get(ip, k -> new FancyInteger(0));
         i.increase();
-        data.put(ip, i);
 
         return i.get() > ConfigManger.superJoinLimit;
     }
@@ -56,20 +59,17 @@ public class SuperJoinCheck implements JoinCheck {
 
     @Override
     public long getCacheSize() {
-        return data.size();
+        return data.estimatedSize();
     }
 
     @Override
     public void clearCache() {
-        data.clear();
+        data.invalidateAll();
     }
 
     @Override
     public void removeCache(String ip) {
-        data.remove(ip);
+        data.invalidate(ip);
     }
 
-    public void loadTask() {
-        plugin.scheduleRepeatingTask(data::clear, false, 1000L * ConfigManger.superJoinTime);
-    }
 }

@@ -8,6 +8,7 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.objects.filter.ProxyAttackFilter;
+import me.kr1s_d.ultimateantibot.common.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.thread.AttackAnalyzerThread;
@@ -48,10 +49,11 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     private LogHelper logHelper;
     private FirewallService firewallService;
     private UserDataService userDataService;
+    private AttackTrackerService attackTrackerService;
     private VPNService VPNService;
     private Notificator notificator;
     private UltimateAntiBotCore core;
-    private AttackTrackerService attackTrackerService;
+    private SatelliteServer satellite;
     private boolean isRunning;
 
     public void onEnable() {
@@ -102,7 +104,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.userDataService = new UserDataService(this);
         this.userDataService.load();
         ProxyServer.getInstance().getLogger().setFilter(new ProxyAttackFilter(this));
-
+        satellite = new SatelliteServer(this);
         this.notificator = new Notificator();
         this.notificator.init(this);
         new AttackAnalyzerThread(this);

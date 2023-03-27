@@ -1,6 +1,5 @@
 package me.kr1s_d.ultimateantibot.common.checks.impl;
 
-import javafx.application.Platform;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.ChatCheck;

@@ -3,12 +3,13 @@ package me.kr1s_d.ultimateantibot.common.service;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.IService;
+import me.kr1s_d.ultimateantibot.common.objects.profile.WhitelistEntry;
 
 import java.util.*;
 
 public class WhitelistService implements IService {
-
     private final QueueService queueService;
+    private final List<WhitelistEntry> timedWhitelist;
     private final Set<String> whitelist;
     private final IConfiguration whitelistConfig;
     private final LogHelper logHelper;
@@ -16,6 +17,7 @@ public class WhitelistService implements IService {
     public WhitelistService(QueueService queueService, IConfiguration whitelistConfig, LogHelper logHelper){
         this.queueService = queueService;
         this.whitelist = new HashSet<>();
+        this.timedWhitelist = new ArrayList<>();
         this.whitelistConfig = whitelistConfig;
         this.logHelper = logHelper;
     }
@@ -30,6 +32,16 @@ public class WhitelistService implements IService {
             logHelper.error("Error while loading whitelist...");
             e.printStackTrace();
         }
+    }
+
+    public void checkWhitelisted() {
+        timedWhitelist.removeIf(s -> {
+            if(s.canBeRemoved()) {
+                unWhitelist(s.getIp());
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
@@ -55,7 +67,7 @@ public class WhitelistService implements IService {
         whitelistConfig.save();
     }
 
-    public int size(){
+    public int size() {
         return whitelist.size();
     }
 
@@ -64,7 +76,12 @@ public class WhitelistService implements IService {
         queueService.removeQueue(ip);
     }
 
-    public void clear(){
+    public void whitelist(String ip, int minutes) {
+        whitelist.add(ip);
+        timedWhitelist.add(new WhitelistEntry(ip, minutes));
+    }
+
+    public void clear() {
         whitelist.clear();
     }
 

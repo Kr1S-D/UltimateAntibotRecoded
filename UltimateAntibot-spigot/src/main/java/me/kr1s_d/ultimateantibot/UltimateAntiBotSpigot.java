@@ -7,6 +7,7 @@ import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
+import me.kr1s_d.ultimateantibot.common.server.SatelliteServer;
 import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.objects.filter.Bukkit247Filter;
@@ -47,11 +48,11 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     private LogHelper logHelper;
     private FirewallService firewallService;
     private UserDataService userDataService;
+    private AttackTrackerService attackTrackerService;
     private VPNService VPNService;
     private Notificator notificator;
     private UltimateAntiBotCore core;
-
-    private AttackTrackerService attackTrackerService;
+    private SatelliteServer satellite;
     private boolean isRunning;
 
     @Override
@@ -104,6 +105,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         userDataService.load();
         ((Logger) LogManager.getRootLogger()).addFilter(new BukkitAttackFilter(this));
         ((Logger) LogManager.getRootLogger()).addFilter(new Bukkit247Filter(this));
+        satellite = new SatelliteServer(this);
         notificator = new Notificator();
         notificator.init(this);
         new AttackAnalyzerThread(this);

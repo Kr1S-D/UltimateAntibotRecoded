@@ -1,5 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
@@ -16,7 +18,7 @@ public class BlackListService implements IService {
 
     private final FirewallService firewallService;
     private final QueueService queueService;
-    private final Map<String, BlackListProfile> blacklist;
+    private final Cache<String, BlackListProfile> blacklist;
     private final IConfiguration blacklistConfig;
     private final LogHelper logHelper;
 
@@ -28,7 +30,7 @@ public class BlackListService implements IService {
     public BlackListService(IAntiBotPlugin plugin, QueueService queueService, IConfiguration blacklistConfig, LogHelper logHelper){
         this.firewallService = plugin.getFirewallService();
         this.queueService = queueService;
-        this.blacklist = new HashMap<>();
+        this.blacklist = Caffeine.newBuilder().build();
         this.blacklistConfig = blacklistConfig;
         this.logHelper = logHelper;
     }
@@ -57,13 +59,13 @@ public class BlackListService implements IService {
             String name = blacklistConfig.getString("data." + a + ".name");
             blacklist.put(ip, new BlackListProfile(ip, reason, id, name));
         }
-        logHelper.info("&c" + blacklist.size() + " &fIP added to blacklist!");
+        logHelper.info("&c" + blacklist.estimatedSize() + " &fIP added to blacklist!");
     }
 
     @Override
     public void unload() {
         blacklistConfig.set("data", null);
-        for(Map.Entry<String, BlackListProfile> map : new HashMap<>(blacklist).entrySet()){
+        for(Map.Entry<String, BlackListProfile> map : new HashMap<>(blacklist.asMap()).entrySet()){
             try {
                 String ip = toFileString(map.getKey());
                 String reason = map.getValue().getReason();
@@ -80,7 +82,7 @@ public class BlackListService implements IService {
 
     public void save(){
         blacklistConfig.set("data", null);
-        for(Map.Entry<String, BlackListProfile> map : new HashMap<>(blacklist).entrySet()){
+        for(Map.Entry<String, BlackListProfile> map : new HashMap<>(blacklist.asMap()).entrySet()){
             try {
                 String ip = toFileString(map.getKey());
                 String reason = map.getValue().getReason();
@@ -97,13 +99,13 @@ public class BlackListService implements IService {
 
     public List<String> getBlackListedIPS(){
         List<String> a = new ArrayList<>();
-        new HashMap<>(blacklist).forEach((key, value) -> a.add(key));
+        new HashMap<>(blacklist.asMap()).forEach((key, value) -> a.add(key));
         return a;
     }
 
 
     public int size(){
-        return blacklist.size();
+        return (int) blacklist.estimatedSize();
     }
 
     /**
@@ -113,7 +115,7 @@ public class BlackListService implements IService {
      * @param name The name of the player
      */
     public void blacklist(String ip, BlackListReason reason, String name){
-        if(blacklist.containsKey(ip)){
+        if(blacklist.getIfPresent(ip) != null){
             return;
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
@@ -127,7 +129,7 @@ public class BlackListService implements IService {
      * @param reason The Reason for BlackList
      */
     public void blacklist(String ip, BlackListReason reason){
-        if(blacklist.containsKey(ip)){
+        if(blacklist.getIfPresent(ip) != null){
             return;
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason()));
@@ -141,7 +143,7 @@ public class BlackListService implements IService {
      * @param reason The Reason for BlackList
      */
     public BlackListProfile blacklistAndGet(String ip, BlackListReason reason, String name){
-        if(blacklist.containsKey(ip)){
+        if(blacklist.getIfPresent(ip) != null){
             return getProfile(ip);
         }
         blacklist.put(ip, new BlackListProfile(ip, reason.getReason(), name));
@@ -151,23 +153,23 @@ public class BlackListService implements IService {
     }
 
     public void clear() {
-        blacklist.clear();
+        blacklist.invalidateAll();
         firewallService.drop();
         CheckService.clearCheckCache();
     }
 
     public void unBlacklist(String ip){
-        blacklist.remove(ip);
+        blacklist.invalidate(ip);
         firewallService.dropIP(ip);
         CheckService.removeCached(ip);
     }
 
     public boolean isBlackListed(String ip){
-        return blacklist.containsKey(ip);
+        return blacklist.getIfPresent(ip) != null;
     }
 
     public BlackListProfile getProfile(String ip){
-        return blacklist.get(ip);
+        return blacklist.getIfPresent(ip);
     }
 
     /**
@@ -175,7 +177,7 @@ public class BlackListService implements IService {
      * @return Ip of the Player
      */
     public String getIPFromID(String id){
-        for(Map.Entry<String, BlackListProfile> map : blacklist.entrySet()){
+        for(Map.Entry<String, BlackListProfile> map : blacklist.asMap().entrySet()){
             if(map.getValue().getId().equals(id)){
                 return map.getKey();
             }
@@ -188,7 +190,7 @@ public class BlackListService implements IService {
      * @return BlackListProfile of the Player
      */
     public BlackListProfile getBlacklistProfileFromID(String id){
-        for(Map.Entry<String, BlackListProfile> map : blacklist.entrySet()){
+        for(Map.Entry<String, BlackListProfile> map : blacklist.asMap().entrySet()){
             if(map.getValue().getId().equals(id)){
                 return map.getValue();
             }

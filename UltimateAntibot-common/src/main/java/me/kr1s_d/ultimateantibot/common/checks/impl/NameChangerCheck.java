@@ -1,27 +1,29 @@
 package me.kr1s_d.ultimateantibot.common.checks.impl;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.JoinCheck;
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class NameChangerCheck implements JoinCheck {
     private final IAntiBotPlugin plugin;
-    private final Map<String, Set<String>> data;
+    private final Cache<String, Set<String>> data;
 
     public NameChangerCheck(IAntiBotPlugin plugin) {
         this.plugin = plugin;
-        this.data = new ConcurrentHashMap<>();
+        this.data = Caffeine.newBuilder()
+                .expireAfterWrite(ConfigManger.nameChangerTime, TimeUnit.SECONDS)
+                .build();
 
         if(isEnabled()){
-            loadTask();
+            //loadTask();
             CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
@@ -38,7 +40,7 @@ public class NameChangerCheck implements JoinCheck {
         }
         if(!plugin.getAntiBotManager().isSomeModeOnline()) return false;
 
-        Set<String> nicks = data.computeIfAbsent(ip, k -> new CopyOnWriteArraySet<>());
+        Set<String> nicks = data.get(ip, k -> new HashSet<>());
         nicks.add(name);
 
         return nicks.size() >= ConfigManger.nameChangerLimit;
@@ -61,20 +63,20 @@ public class NameChangerCheck implements JoinCheck {
 
     @Override
     public long getCacheSize() {
-        return data.size();
+        return data.estimatedSize();
     }
 
     @Override
     public void clearCache() {
-        data.clear();
+        data.invalidateAll();
     }
 
     @Override
     public void removeCache(String ip) {
-        data.remove(ip);
+        data.invalidate(ip);
     }
 
-    public void loadTask() {
-        plugin.scheduleRepeatingTask(data::clear, false, 1000L * ConfigManger.nameChangerTime);
-    }
+    //public void loadTask() {
+    //    plugin.scheduleRepeatingTask(data::clear, false, 1000L * ConfigManger.nameChangerTime);
+    //}
 }

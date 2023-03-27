@@ -32,6 +32,7 @@ public class FirstJoinCheck implements JoinCheck {
         if(!isEnabled()){
             return false;
         }
+
         return userDataService.isFirstJoin(ip);
     }
 

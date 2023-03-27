@@ -30,15 +30,17 @@ public class UltimateAntiBotCore {
             DetectorService.tickDetectors();
         }, false, 1000L);
 
-        plugin.scheduleRepeatingTask(plugin.getAntiBotManager().getQueueService()::clear, false, ConfigManger.taskManagerClearCache * 1000L);
         plugin.scheduleDelayedTask(this::checkAutoPurger, true, 300000L); //5 min
         plugin.scheduleRepeatingTask(() -> {
-            if(plugin.getAntiBotManager().isAntiBotModeEnabled()){
+            if(plugin.getAntiBotManager().isAntiBotModeEnabled()) {
                return;
             }
+
             for(String blacklisted : blackListService.getBlackListedIPS()){
                 whitelistService.unWhitelist(blacklisted);
             }
+
+            whitelistService.checkWhitelisted();
         }, false, 1000L * ConfigManger.taskManagerClearCache);
     }
 

@@ -3,7 +3,6 @@ package me.kr1s_d.ultimateantibot.common.service;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.FancyPair;
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.utils.RuntimeUtil;
 
 import java.util.ArrayDeque;
