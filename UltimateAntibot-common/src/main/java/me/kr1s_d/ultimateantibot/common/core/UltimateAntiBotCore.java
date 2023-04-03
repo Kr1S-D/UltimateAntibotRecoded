@@ -30,7 +30,7 @@ public class UltimateAntiBotCore {
             DetectorService.tickDetectors();
         }, false, 1000L);
 
-        plugin.scheduleDelayedTask(this::checkAutoPurger, true, 300000L); //5 min
+        plugin.scheduleRepeatingTask(this::checkAutoPurger, true, 300000L); //5 min
         plugin.scheduleRepeatingTask(() -> {
             if(plugin.getAntiBotManager().isAntiBotModeEnabled()) {
                return;

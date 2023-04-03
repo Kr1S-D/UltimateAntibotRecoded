@@ -50,7 +50,9 @@ public class DumpCommand implements SubCommand {
         sender.sendMessage(Utils.colora(MessageManager.prefix + "&fsending request to server, wait please..."));
         plugin.scheduleDelayedTask(() -> {
             if (pasteBinBuilder.isReady()) {
-                sender.sendMessage(new TextComponent(Utils.colora(MessageManager.prefix + "&fDump is ready: " + pasteBinBuilder.getUrl() + " &7(It will reset in a week!)")));
+                sender.sendMessage(new TextComponent(Utils.colora(MessageManager.prefix + "&fDump is ready: &n" + pasteBinBuilder.getUrl() + "&f &7(It will reset in a week!)")));
+            }else{
+                sender.sendMessage(new TextComponent(Utils.colora(MessageManager.prefix + "&fUnable to complete request, try later...")));
             }
         }, true, 2500L);
     }

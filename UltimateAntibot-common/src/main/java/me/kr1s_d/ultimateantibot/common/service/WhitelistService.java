@@ -1,5 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import me.kr1s_d.ultimateantibot.common.UnderAttackMethod;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.IService;
@@ -9,15 +12,16 @@ import java.util.*;
 
 public class WhitelistService implements IService {
     private final QueueService queueService;
-    private final List<WhitelistEntry> timedWhitelist;
-    private final Set<String> whitelist;
+    private final Set<WhitelistEntry> timedWhitelist;
+    private final Cache<String, Boolean> whitelist;
     private final IConfiguration whitelistConfig;
     private final LogHelper logHelper;
 
     public WhitelistService(QueueService queueService, IConfiguration whitelistConfig, LogHelper logHelper){
         this.queueService = queueService;
-        this.whitelist = new HashSet<>();
-        this.timedWhitelist = new ArrayList<>();
+        this.whitelist = Caffeine.newBuilder()
+                .build();
+        this.timedWhitelist = new HashSet<>();
         this.whitelistConfig = whitelistConfig;
         this.logHelper = logHelper;
     }
@@ -25,8 +29,10 @@ public class WhitelistService implements IService {
     @Override
     public void load() {
         try {
-            whitelist.addAll(whitelistConfig.getStringList("data"));
-            logHelper.info("&c" + whitelist.size() + " &fIP added to whitelist!");
+            for (String ip : whitelistConfig.getStringList("data")) {
+                whitelist.put(ip, true);
+            }
+            logHelper.info("&c" + whitelist.estimatedSize() + " &fIP added to whitelist!");
         }
         catch (Exception e){
             logHelper.error("Error while loading whitelist...");
@@ -47,7 +53,11 @@ public class WhitelistService implements IService {
     @Override
     public void unload() {
         try {
-            whitelistConfig.set("data", new ArrayList<>(whitelist));
+            List<String> serialized = new ArrayList<>();
+            for (Map.Entry<String, Boolean> converted : whitelist.asMap().entrySet()) {
+                serialized.add(converted.getKey());
+            }
+            whitelistConfig.set("data", serialized);
         }
         catch (Exception ignored){
             logHelper.error("Error while saving whitelist...");
@@ -56,9 +66,13 @@ public class WhitelistService implements IService {
         whitelistConfig.save();
     }
 
-    public void save(){
+    public void save() {
         try {
-            whitelistConfig.set("data", new ArrayList<>(whitelist));
+            List<String> serialized = new ArrayList<>();
+            for (Map.Entry<String, Boolean> converted : whitelist.asMap().entrySet()) {
+                serialized.add(converted.getKey());
+            }
+            whitelistConfig.set("data", serialized);
         }
         catch (Exception ignored){
             logHelper.error("Error while saving whitelist...");
@@ -68,40 +82,51 @@ public class WhitelistService implements IService {
     }
 
     public int size() {
-        return whitelist.size();
+        return (int) whitelist.estimatedSize();
     }
 
+    @UnderAttackMethod
     public void whitelist(String ip){
-        whitelist.add(ip);
+        whitelist.put(ip, true);
         queueService.removeQueue(ip);
     }
 
+    @UnderAttackMethod
     public void whitelist(String ip, int minutes) {
-        whitelist.add(ip);
+        whitelist.put(ip, true);
         timedWhitelist.add(new WhitelistEntry(ip, minutes));
     }
 
+    @UnderAttackMethod
     public void clear() {
-        whitelist.clear();
+        whitelist.invalidateAll();
     }
 
+    @UnderAttackMethod
     public void unWhitelist(String ip){
-        whitelist.remove(ip);
+        whitelist.invalidate(ip);
     }
 
+    @UnderAttackMethod
     public boolean isWhitelisted(String ip){
-        return whitelist.contains(ip);
+        return whitelist.getIfPresent(ip) != null;
     }
 
+    @UnderAttackMethod
     public void whitelistAll(String... ip){
-        whitelist.addAll(Arrays.asList(ip));
+        for (String i : ip) {
+            whitelist(i);
+        }
     }
 
+    @UnderAttackMethod
     public void removeAll(String... ip){
-        Arrays.asList(ip).forEach(whitelist::remove);
+        for (String s : ip) {
+            unWhitelist(s);
+        }
     }
 
     public Collection<String> getWhitelistedIPS() {
-        return whitelist;
+        return whitelist.asMap().entrySet().stream().collect(ArrayList::new, (accumulator, a) -> accumulator.add(a.getKey()), (a, b) -> {});
     }
 }

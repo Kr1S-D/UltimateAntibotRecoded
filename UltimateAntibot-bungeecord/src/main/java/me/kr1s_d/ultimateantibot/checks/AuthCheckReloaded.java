@@ -10,7 +10,7 @@ import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
-import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
+import me.kr1s_d.ultimateantibot.utils.component.KComponentBuilder;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.event.PreLoginEvent;
@@ -116,7 +116,7 @@ public class AuthCheckReloaded {
         int checkTimer = ThreadLocalRandom.current().nextInt(ConfigManger.authMinMaxTimer[0], ConfigManger.authMinMaxTimer[1]);
         if (hasCompletedPingCheck(ip)) {
             submitTimerTask(ip, checkTimer);
-            e.setCancelReason(ComponentBuilder.buildColorized(MessageManager.getTimerMessage(String.valueOf(checkTimer + 1))));
+            e.setCancelReason(KComponentBuilder.colorized(MessageManager.getTimerMessage(String.valueOf(checkTimer + 1))));
             e.setCancelled(true);
             return;
         }
@@ -126,7 +126,7 @@ public class AuthCheckReloaded {
         //registriamo ip e nome di chi inizia per controllare che siano gli stessi alla fine
         checkInitiator.put(ip, e.getConnection().getName());
         increaseFails(ip, e.getConnection().getName());
-        e.setCancelReason(ComponentBuilder.buildColorized(
+        e.setCancelReason(KComponentBuilder.colorized(
                 MessageManager.getPingMessage(String.valueOf(pingTimer)))
         );
         e.setCancelled(true);

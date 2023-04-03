@@ -4,6 +4,7 @@ import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -23,6 +24,7 @@ public class Config implements IConfiguration {
     private String configName;
 
     public Config(JavaPlugin plugin, String configName) {
+        Player player = null;
         this.plugin = plugin;
         this.configName = configName;
         this.file = new File(plugin.getDataFolder(), configName + ".yml");

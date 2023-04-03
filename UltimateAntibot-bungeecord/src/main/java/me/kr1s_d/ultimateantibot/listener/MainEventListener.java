@@ -12,7 +12,7 @@ import me.kr1s_d.ultimateantibot.common.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
-import me.kr1s_d.ultimateantibot.utils.ComponentBuilder;
+import me.kr1s_d.ultimateantibot.utils.component.KComponentBuilder;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -88,7 +88,7 @@ public class MainEventListener implements Listener {
         if (antiBotManager.getSpeedJoinPerSecond() >= ConfigManger.antiBotModeTrigger) {
             if (!antiBotManager.isAntiBotModeEnabled()) {
                 antiBotManager.enableAntiBotMode();
-                e.setCancelReason(ComponentBuilder.buildColorized(
+                e.setCancelReason(KComponentBuilder.colorized(
                         MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage))
                 ));
                 e.setCancelled(true);
@@ -123,7 +123,7 @@ public class MainEventListener implements Listener {
         //FirstJoinCheck
         //
         if (firstJoinCheck.isDenied(ip, name)) {
-            e.setCancelReason(ComponentBuilder.buildColorized(MessageManager.firstJoinMessage));
+            e.setCancelReason(KComponentBuilder.colorized(MessageManager.firstJoinMessage));
             e.setCancelled(true);
             return;
         }
@@ -155,7 +155,7 @@ public class MainEventListener implements Listener {
         //AntiBotMode Normal
         //
         if (antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()) {
-            e.setCancelReason(ComponentBuilder.buildColorized(
+            e.setCancelReason(KComponentBuilder.colorized(
                     MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage))
             ));
             e.setCancelled(true);
@@ -268,6 +268,6 @@ public class MainEventListener implements Listener {
     }
 
     private BaseComponent blacklistMSG(String ip) {
-        return ComponentBuilder.buildColorized(MessageManager.getBlacklistedMessage(blackListService.getProfile(ip)));
+        return KComponentBuilder.colorized(MessageManager.getBlacklistedMessage(blackListService.getProfile(ip)));
     }
 }

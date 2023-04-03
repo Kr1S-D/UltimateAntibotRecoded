@@ -5,6 +5,7 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.PasteBinBuilder;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -50,6 +51,8 @@ public class DumpCommand implements SubCommand {
         plugin.scheduleDelayedTask(() -> {
             if (pasteBinBuilder.isReady()) {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + "&fDump is ready: " + pasteBinBuilder.getUrl() + " &7(It will reset in a week!)"));
+            }else{
+                sender.sendMessage(Utils.colora(MessageManager.prefix + "&fUnable to complete request, try later..."));
             }
         }, true, 2500L);
     }

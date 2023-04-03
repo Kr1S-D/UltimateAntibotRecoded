@@ -39,7 +39,7 @@ public class CommandManager extends Command implements TabExecutor {
             sender.sendMessage(Utils.colora(MessageManager.prefix + defaultCommandWrongArgumentMessage));
             return;
         }
-        if (args[0].equals(cmd.getSubCommandId()) && args.length == cmd.argsSize()) {
+        if (args[0].equals(cmd.getSubCommandId()) && args.length >= cmd.argsSize()) {
             if (!cmd.allowedConsole() && !(sender instanceof ProxiedPlayer)) {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + noPlayerMessage));
                 return;

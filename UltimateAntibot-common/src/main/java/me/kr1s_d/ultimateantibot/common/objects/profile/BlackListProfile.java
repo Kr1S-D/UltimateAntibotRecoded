@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.objects.profile;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class BlackListProfile {
@@ -58,5 +59,18 @@ public class BlackListProfile {
 
     public String getIp() {
         return ip;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BlackListProfile)) return false;
+        BlackListProfile that = (BlackListProfile) o;
+        return Objects.equals(id, that.id) && Objects.equals(ip, that.ip);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, ip);
     }
 }

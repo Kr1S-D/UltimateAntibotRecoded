@@ -40,7 +40,7 @@ public class FirewallService {
         plugin.scheduleRepeatingTask(() -> {
             String ip = IPQueue.poll();
 
-            if(ip == null || IPQueue.size() == 0){
+            if (ip == null || IPQueue.size() == 0) {
                 return;
             }
 
@@ -50,17 +50,19 @@ public class FirewallService {
         }, true, 20L);
     }
 
-    public void enable(){
-        if(System.getProperty("os.name").toLowerCase().contains("win")) {
+    public void enable() {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
             plugin.getLogHelper().error("Firewall hook is not available for windows!");
             this.isEnabled = false;
             return;
         }
-        if(!isEnabled) return;
+        if (!isEnabled) return;
+        //We avoid that in the event of a crash, something remains in the residual vps
+        shutDownFirewall();
         plugin.getLogHelper().info("Trying to hook in IPTables & IPSet...");
 
         FancyPair<Boolean, String> checkInstallation = checkInstallation();
-        if(!checkInstallation.getElementA()){
+        if (!checkInstallation.getElementA()) {
             plugin.getLogHelper().error("Unable to hook intro IPTables & IPSet!");
             plugin.getLogHelper().error("It looks like they haven't been installed!");
             plugin.getLogHelper().error("Printing error....");
@@ -69,7 +71,7 @@ public class FirewallService {
             return;
         }
 
-        if(!isEnabled) return;
+        if (!isEnabled) return;
         setupFirewall();
         plugin.getLogHelper().info("Hooked intro IPTables & IPSet!");
 
@@ -80,63 +82,63 @@ public class FirewallService {
             int percentCheck = 10;
             int total = plugin.getAntiBotManager().getBlackListService().getBlackListedIPS().size();
 
-            for(String p : plugin.getAntiBotManager().getBlackListService().getBlackListedIPS()){
+            for (String p : plugin.getAntiBotManager().getBlackListService().getBlackListedIPS()) {
                 RuntimeUtil.execute(getBlackListCommand(p));
                 processed++;
 
                 int percent = Math.round((float) processed / total * 100);
-                if(percent >= percentCheck && total > 500){
+                if (percent >= percentCheck && total > 500) {
                     percentCheck += 10;
                     plugin.getLogHelper().info("[FIREWALL] Process status: " + percent + "%");
                 }
             }
 
             plugin.getLogHelper().info("Firewall loading completed...");
-        }catch (Exception e){
+        } catch (Exception e) {
             plugin.getLogHelper().error("Error during firewall initialization!");
         }
     }
 
-    public void shutDownFirewall(){
-        if(!isEnabled) return;
-        for(String cmd : configuration.getStringList("firewall.shutdown-commands")){
+    public void shutDownFirewall() {
+        if (!isEnabled) return;
+        for (String cmd : configuration.getStringList("firewall.shutdown-commands")) {
             String cmd1 = cmd.replace("%t%", String.valueOf(timeout)).replace("%options%", "maxelem 200000 timeout").replace("%set%", ipSetID);
             RuntimeUtil.execute(cmd1);
         }
     }
 
     public void firewall(String ip) {
-        if(!isEnabled) return;
+        if (!isEnabled) return;
         IPQueue.add(ip);
     }
 
-    public void dropIP(String ip){
-        if(!isEnabled) return;
+    public void dropIP(String ip) {
+        if (!isEnabled) return;
         unBlacklist(ip);
     }
 
     public void drop() {
-        if(!isEnabled) return;
-        if(!resetOnBlackListClear) return;
+        if (!isEnabled) return;
+        if (!resetOnBlackListClear) return;
         plugin.runTask(() -> RuntimeUtil.execute("ipset flush " + ipSetID), true);
         blacklisted = 0;
     }
 
-    public String getFirewallStatus(){
+    public String getFirewallStatus() {
         return isEnabled ? "ENABLED" : "DISABLED";
     }
 
-    public int getIPQueue(){
+    public int getIPQueue() {
         return IPQueue.size();
     }
 
-    public long getBlacklistedIP(){
+    public long getBlacklistedIP() {
         return blacklisted;
     }
 
     private void setupFirewall() {
         RuntimeUtil.execute("ipset destroy " + ipSetID);
-        for(String str : configuration.getStringList("firewall.setup-commands")){
+        for (String str : configuration.getStringList("firewall.setup-commands")) {
             String cmd = str.replace("%t%", String.valueOf(timeout)).replace("%options%", "maxelem 200000 timeout").replace("%set%", ipSetID);
             RuntimeUtil.execute(cmd);
         }
@@ -159,7 +161,7 @@ public class FirewallService {
 
     private void unBlacklist(String ip) {
         ip = ip.replace("/", "");
-        for(String str : unBlacklistCommand) {
+        for (String str : unBlacklistCommand) {
             String cmd = str.replace("%ip%", ip).replace("%t%", String.valueOf(timeout)).replace("%options%", "timeout").replace("%set%", ipSetID);
             RuntimeUtil.execute(cmd);
         }

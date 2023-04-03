@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.common.service;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import me.kr1s_d.ultimateantibot.common.UnderAttackMethod;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
@@ -104,6 +105,7 @@ public class BlackListService implements IService {
     }
 
 
+    @UnderAttackMethod
     public int size(){
         return (int) blacklist.estimatedSize();
     }
@@ -114,6 +116,7 @@ public class BlackListService implements IService {
      * @param reason The Reason for BlackList
      * @param name The name of the player
      */
+    @UnderAttackMethod
     public void blacklist(String ip, BlackListReason reason, String name){
         if(blacklist.getIfPresent(ip) != null){
             return;
@@ -128,6 +131,7 @@ public class BlackListService implements IService {
      * @param ip The IP to BlackList
      * @param reason The Reason for BlackList
      */
+    @UnderAttackMethod
     public void blacklist(String ip, BlackListReason reason){
         if(blacklist.getIfPresent(ip) != null){
             return;
@@ -142,6 +146,7 @@ public class BlackListService implements IService {
      * @param ip The IP to BlackList
      * @param reason The Reason for BlackList
      */
+    @UnderAttackMethod
     public BlackListProfile blacklistAndGet(String ip, BlackListReason reason, String name){
         if(blacklist.getIfPresent(ip) != null){
             return getProfile(ip);
@@ -152,22 +157,26 @@ public class BlackListService implements IService {
         return getProfile(ip);
     }
 
+    @UnderAttackMethod
     public void clear() {
         blacklist.invalidateAll();
         firewallService.drop();
         CheckService.clearCheckCache();
     }
 
+    @UnderAttackMethod
     public void unBlacklist(String ip){
         blacklist.invalidate(ip);
         firewallService.dropIP(ip);
         CheckService.removeCached(ip);
     }
 
+    @UnderAttackMethod
     public boolean isBlackListed(String ip){
         return blacklist.getIfPresent(ip) != null;
     }
 
+    @UnderAttackMethod
     public BlackListProfile getProfile(String ip){
         return blacklist.getIfPresent(ip);
     }
