@@ -3,8 +3,8 @@ package me.kr1s_d.ultimateantibot.common;
 import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.service.*;
-import me.kr1s_d.ultimateantibot.common.thread.AnimationThread;
-import me.kr1s_d.ultimateantibot.common.thread.LatencyThread;
+import me.kr1s_d.ultimateantibot.common.core.thread.AnimationThread;
+import me.kr1s_d.ultimateantibot.common.core.thread.LatencyThread;
 
 public interface IAntiBotPlugin {
     void reload();

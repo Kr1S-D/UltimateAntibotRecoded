@@ -19,8 +19,7 @@ public class NameChangerCheck implements JoinCheck {
     public NameChangerCheck(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.data = Caffeine.newBuilder()
-                //.maximumSize(5000)
-                //.initialCapacity(5000)
+                .initialCapacity(5000)
                 .expireAfterWrite(ConfigManger.nameChangerTime, TimeUnit.SECONDS)
                 .build();
 

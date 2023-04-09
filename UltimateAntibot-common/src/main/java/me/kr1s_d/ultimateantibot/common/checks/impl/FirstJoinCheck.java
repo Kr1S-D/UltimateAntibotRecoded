@@ -33,7 +33,7 @@ public class FirstJoinCheck implements JoinCheck {
             return false;
         }
 
-        return userDataService.isFirstJoin(ip);
+        return userDataService.isFirstJoin(ip, name);
     }
 
     @Override

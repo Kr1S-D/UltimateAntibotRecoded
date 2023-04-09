@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.tasks;
+package me.kr1s_d.ultimateantibot.common.core.tasks;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;

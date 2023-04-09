@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.server.packet;
+package me.kr1s_d.ultimateantibot.common.core.server.packet;
 
 import java.io.DataOutputStream;
 

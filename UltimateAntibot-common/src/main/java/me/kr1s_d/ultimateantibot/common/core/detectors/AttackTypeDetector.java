@@ -1,9 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.detectors;
-
-import me.kr1s_d.ultimateantibot.common.AttackType;
-import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
-import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.ModeType;
+package me.kr1s_d.ultimateantibot.common.core.detectors;
 
 /**
  * Tagged as to be removed in the future

@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.detectors;
+package me.kr1s_d.ultimateantibot.common.core.detectors;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;

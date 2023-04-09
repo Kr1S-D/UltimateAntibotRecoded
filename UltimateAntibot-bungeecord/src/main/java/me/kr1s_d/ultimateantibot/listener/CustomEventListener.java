@@ -3,7 +3,7 @@ package me.kr1s_d.ultimateantibot.listener;
 import me.kr1s_d.ultimateantibot.common.AttackState;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.ModeType;
-import me.kr1s_d.ultimateantibot.common.detectors.FastJoinBypassDetector;
+import me.kr1s_d.ultimateantibot.common.core.detectors.FastJoinBypassDetector;
 import me.kr1s_d.ultimateantibot.common.service.AttackTrackerService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
@@ -17,7 +17,6 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public class CustomEventListener implements Listener {
-
     private final IAntiBotPlugin plugin;
     private final FastJoinBypassDetector bypassDetector;
 

@@ -10,6 +10,7 @@ public class ServerUtil {
     private static IServerPlatform platform;
     public static long blacklistPercentage = 0;
     private static long lastAttack;
+    public static long lastStartAttack;
 
     public static void setPlatform(IServerPlatform platform) {
         ServerUtil.platform = platform;

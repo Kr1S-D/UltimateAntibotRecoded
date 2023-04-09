@@ -7,11 +7,12 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.impl.*;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.*;
-import me.kr1s_d.ultimateantibot.common.tasks.AutoWhitelistTask;
+import me.kr1s_d.ultimateantibot.common.core.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import me.kr1s_d.ultimateantibot.utils.component.KComponentBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -66,6 +67,12 @@ public class MainEventListener implements Listener {
             ServerUtil.blacklistPercentage = Math.round((float) blackListService.size() / totals * 100);
         }
         antiBotManager.increaseJoinPerSecond();
+
+        //anti crash on attack start for first 5s
+        if((System.currentTimeMillis() - ServerUtil.lastStartAttack) < 5000) {
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, MessageManager.fastJoinQueueMessage);
+            return;
+        }
 
         //
         //BlackList & Whitelist Checks

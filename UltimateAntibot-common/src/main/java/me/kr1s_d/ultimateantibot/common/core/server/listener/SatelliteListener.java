@@ -1,19 +1,17 @@
-package me.kr1s_d.ultimateantibot.common.server.listener;
+package me.kr1s_d.ultimateantibot.common.core.server.listener;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.UABRunnable;
-import me.kr1s_d.ultimateantibot.common.server.packet.AlertMessagePacket;
-import me.kr1s_d.ultimateantibot.common.server.packet.SatellitePacket;
-import me.kr1s_d.ultimateantibot.common.server.packet.VerificationPacket;
-import me.kr1s_d.ultimateantibot.common.tasks.TimedWhitelistTask;
+import me.kr1s_d.ultimateantibot.common.core.server.packet.AlertMessagePacket;
+import me.kr1s_d.ultimateantibot.common.core.server.packet.SatellitePacket;
+import me.kr1s_d.ultimateantibot.common.core.server.packet.VerificationPacket;
+import me.kr1s_d.ultimateantibot.common.core.tasks.TimedWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 
-import javax.swing.table.TableRowSorter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.List;
 
 public class SatelliteListener extends UABRunnable {

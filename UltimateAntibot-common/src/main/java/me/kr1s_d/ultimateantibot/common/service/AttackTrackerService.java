@@ -3,10 +3,7 @@ package me.kr1s_d.ultimateantibot.common.service;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.IService;
 import me.kr1s_d.ultimateantibot.common.objects.attack.AttackLog;
-import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
-import me.kr1s_d.ultimateantibot.common.utils.DateUtil;
-import me.kr1s_d.ultimateantibot.common.utils.FileUtil;
-import me.kr1s_d.ultimateantibot.common.utils.SerializeUtil;
+import me.kr1s_d.ultimateantibot.common.utils.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -106,6 +103,7 @@ public class AttackTrackerService implements IService {
         nextAttackID++;
         current = new AttackLog(nextAttackID, DateUtil.getFullDateAndTime());
         current.recordStart(plugin.getAntiBotManager().getBlackListService().size(), plugin.getAntiBotManager());
+        ServerUtil.lastStartAttack = System.currentTimeMillis();
     }
 
     public void onAttackStop() {

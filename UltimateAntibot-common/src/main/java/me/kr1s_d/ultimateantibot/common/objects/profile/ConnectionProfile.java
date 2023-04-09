@@ -1,24 +1,27 @@
 package me.kr1s_d.ultimateantibot.common.objects.profile;
 
-import me.kr1s_d.ultimateantibot.common.server.packet.SatellitePacket;
+import me.kr1s_d.ultimateantibot.common.core.server.packet.SatellitePacket;
 
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionProfile implements Serializable, SatellitePacket {
+    private static final long serialVersionUID = 7293619371231515414L;
     private String ip;
     private String nickname;
-    private long firstJoin;
+    private long firstJoinDate;
     private long lastJoin;
-
     private long minutePlayed;
+
+    private boolean firstJoin;
 
     public ConnectionProfile(String ip, String nickname) {
         this.ip = ip;
         this.nickname = nickname;
         this.lastJoin = System.currentTimeMillis();
-        this.firstJoin = System.currentTimeMillis();
+        this.firstJoinDate = System.currentTimeMillis();
         this.minutePlayed = 0;
+        this.firstJoin = true;
     }
 
     public void onJoin(String nickname) {
@@ -46,12 +49,12 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         this.nickname = nickname;
     }
 
-    public long getFirstJoin() {
-        return firstJoin;
+    public long getFirstJoinDate() {
+        return firstJoinDate;
     }
 
-    public void setFirstJoin(long firstJoin) {
-        this.firstJoin = firstJoin;
+    public void setFirstJoinDate(long firstJoinDate) {
+        this.firstJoinDate = firstJoinDate;
     }
 
     public long getLastJoin() {
@@ -64,6 +67,14 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
 
     public long getMinutePlayed() {
         return minutePlayed;
+    }
+
+    public boolean isFirstJoin() {
+        return firstJoin;
+    }
+
+    public void setFirstJoin(boolean firstJoin) {
+        this.firstJoin = firstJoin;
     }
 
     public void setMinutePlayed(long minutePlayed) {
@@ -84,7 +95,7 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         try {
             out.writeUTF(ip);
             out.writeUTF(nickname);
-            out.writeLong(firstJoin);
+            out.writeLong(firstJoinDate);
             out.writeLong(lastJoin);
             out.writeLong(minutePlayed);
         } catch (IOException e) {
@@ -97,7 +108,7 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         return "ConnectionProfile{" +
                 "ip='" + ip + '\'' +
                 ", nickname='" + nickname + '\'' +
-                ", firstJoin=" + firstJoin +
+                ", firstJoin=" + firstJoinDate +
                 ", lastJoin=" + lastJoin +
                 ", minutePlayed=" + minutePlayed +
                 '}';

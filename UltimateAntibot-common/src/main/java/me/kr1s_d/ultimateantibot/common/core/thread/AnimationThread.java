@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.thread;
+package me.kr1s_d.ultimateantibot.common.core.thread;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 

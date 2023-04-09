@@ -8,7 +8,7 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.impl.*;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.*;
-import me.kr1s_d.ultimateantibot.common.tasks.AutoWhitelistTask;
+import me.kr1s_d.ultimateantibot.common.core.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
@@ -70,6 +70,13 @@ public class MainEventListener implements Listener {
         }
         antiBotManager.increaseJoinPerSecond();
 
+        //anti crash on attack start for first 5s
+        if((System.currentTimeMillis() - ServerUtil.lastStartAttack) < 5000) {
+            e.setCancelReason(KComponentBuilder.colorized(MessageManager.fastJoinQueueMessage));
+            e.setCancelled(true);
+            return;
+        }
+
         //
         //BlackList & Whitelist Checks
         //
@@ -95,6 +102,7 @@ public class MainEventListener implements Listener {
                 return;
             }
         }
+
         //
         // NameChangerCheck
         //
@@ -104,6 +112,7 @@ public class MainEventListener implements Listener {
             e.setCancelled(true);
             return;
         }
+
         //
         //Queue Service
         //
@@ -119,6 +128,7 @@ public class MainEventListener implements Listener {
             e.setCancelled(true);
             return;
         }
+
         //
         //FirstJoinCheck
         //
@@ -127,6 +137,7 @@ public class MainEventListener implements Listener {
             e.setCancelled(true);
             return;
         }
+
         //
         // Invalid Name Check
         //
@@ -135,6 +146,7 @@ public class MainEventListener implements Listener {
             e.setCancelled(true);
             return;
         }
+
         //
         // SuperJoinCheck
         //
@@ -144,6 +156,7 @@ public class MainEventListener implements Listener {
             e.setCancelled(true);
             return;
         }
+
         //
         //Auth Check
         //
@@ -151,6 +164,7 @@ public class MainEventListener implements Listener {
             authCheck.onJoin(e, ip);
             return;
         }
+
         //
         //AntiBotMode Normal
         //
@@ -190,6 +204,7 @@ public class MainEventListener implements Listener {
             plugin.disconnect(ip, MessageManager.getSafeModeMessage());
             return;
         }
+
         //If isn't whitelisted
         if (!antiBotManager.getWhitelistService().isWhitelisted(ip)) {
             //Add to last join

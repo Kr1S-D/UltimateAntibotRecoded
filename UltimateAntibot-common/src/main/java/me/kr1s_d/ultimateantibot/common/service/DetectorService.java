@@ -1,6 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
-import me.kr1s_d.ultimateantibot.common.detectors.AbstractDetector;
+import me.kr1s_d.ultimateantibot.common.core.detectors.AbstractDetector;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 
 import java.util.ArrayList;

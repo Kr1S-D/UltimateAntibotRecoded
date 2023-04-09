@@ -3,9 +3,7 @@ package me.kr1s_d.ultimateantibot.common.checks.impl;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.JoinCheck;
-import me.kr1s_d.ultimateantibot.common.server.packet.VerificationPacket;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
-import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.ArrayList;
 import java.util.List;
