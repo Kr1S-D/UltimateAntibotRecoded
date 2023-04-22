@@ -13,7 +13,7 @@ import java.util.List;
 public class FirstJoinCheck implements JoinCheck {
     private final UserDataService userDataService;
 
-    public FirstJoinCheck(IAntiBotPlugin plugin){
+    public FirstJoinCheck(IAntiBotPlugin plugin) {
         this.userDataService = plugin.getUserDataService();
 
         if(isEnabled()){
@@ -29,7 +29,7 @@ public class FirstJoinCheck implements JoinCheck {
      * @return - false if player can join or true if is first join
      */
     public boolean isDenied(String ip, String name) {
-        if(!isEnabled()){
+        if(!isEnabled()) {
             return false;
         }
 

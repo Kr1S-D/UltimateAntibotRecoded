@@ -22,7 +22,7 @@ public class SuperJoinCheck implements JoinCheck {
     public SuperJoinCheck(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.data = Caffeine.newBuilder()
-                .initialCapacity(5000)
+                .initialCapacity(2500)
                 .expireAfterWrite(ConfigManger.superJoinTime, TimeUnit.SECONDS)
                 .build();
 

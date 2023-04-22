@@ -128,7 +128,6 @@ public class MainEventListener implements Listener {
             e.setCancelled(true);
             return;
         }
-
         //
         //FirstJoinCheck
         //
