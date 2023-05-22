@@ -21,16 +21,16 @@ public class Utils {
         return millis * 20L / 1000;
     }
 
-    public static String getPlayerIP(Player player){
-        return player.getAddress().getAddress().getHostAddress();
+    public static String getPlayerIP(Player player) {
+        return "/" + player.getAddress().getAddress().getHostAddress();
     }
 
     public static String getInetSocketAddressIP(InetSocketAddress address){
-        return address.getAddress().getHostAddress();
+        return "/" + address.getAddress().getHostAddress();
     }
 
     public static String getInetAddressIP(InetAddress address){
-        return address.getHostAddress();
+        return "/" + address.getHostAddress();
     }
 
     public static String colora(String str){
