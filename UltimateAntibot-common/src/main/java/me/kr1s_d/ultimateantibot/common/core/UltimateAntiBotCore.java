@@ -1,6 +1,5 @@
 package me.kr1s_d.ultimateantibot.common.core;
 
-import com.sun.corba.se.spi.activation.Server;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.IServerPlatform;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
