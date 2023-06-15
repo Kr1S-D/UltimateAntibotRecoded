@@ -2,7 +2,6 @@ package me.kr1s_d.ultimateantibot.common.utils;
 
 import me.kr1s_d.ultimateantibot.common.IServerPlatform;
 import me.kr1s_d.ultimateantibot.common.UABRunnable;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.io.File;
 
