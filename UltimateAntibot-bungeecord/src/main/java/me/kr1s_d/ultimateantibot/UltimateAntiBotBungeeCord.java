@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotPlugin, IServerPlatform {
     private static UltimateAntiBotBungeeCord instance;
@@ -74,6 +75,15 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
             this.whitelist = new Config(this, "%datafolder%/whitelist.yml");
             this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         }
+
+        Logger logger;
+        try {
+            logger =io.github.waterfallmc.waterfall.log4j.WaterfallLogger.create();
+        } catch (NoClassDefFoundError safeToIgnore) {
+            logger =ProxyServer.getInstance().getLogger();
+        }
+        logger.setFilter(new ProxyAttackFilter(this));
+
         try {
             ConfigManger.init(this.config);
             MessageManager.init(this.messages);
