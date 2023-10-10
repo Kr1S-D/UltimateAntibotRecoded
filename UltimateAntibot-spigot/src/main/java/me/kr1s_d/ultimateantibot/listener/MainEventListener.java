@@ -70,7 +70,7 @@ public class MainEventListener implements Listener {
 
         //anti crash on attack start for first 5s
         if((System.currentTimeMillis() - ServerUtil.lastStartAttack) < 5000) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, MessageManager.fastJoinQueueMessage);
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.fastJoinQueueMessage));
             return;
         }
 

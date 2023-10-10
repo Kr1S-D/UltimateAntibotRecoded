@@ -84,7 +84,7 @@ public class AuthCheckReloaded{
 
     public void onJoin(PreLoginEvent e, String ip) {
         if (isCompletingPingCheck(ip)) {
-            int currentIPPings = pingMap.get(ip).get();
+            int currentIPPings = pingMap.computeIfAbsent(ip, j -> new FancyInteger(0)).get();
             int pingRequired = pingData.getOrDefault(ip, 0);
             if (pingRequired != 0 && currentIPPings == pingRequired) {
                 //0#133

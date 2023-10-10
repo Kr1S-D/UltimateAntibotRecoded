@@ -81,7 +81,7 @@ public class BlackListService implements IService {
         blacklistConfig.save();
     }
 
-    public void save(){
+    public void save() {
         blacklistConfig.set("data", null);
         for(Map.Entry<String, BlackListProfile> map : new HashMap<>(blacklist.asMap()).entrySet()){
             try {

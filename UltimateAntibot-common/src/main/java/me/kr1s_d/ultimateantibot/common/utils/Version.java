@@ -52,7 +52,7 @@ public class Version {
         if(versionStr.startsWith("v1_20")){
             return 120;
         }
-        return 0;
+        return 999;
     }
 
     public static String getVersionStr(){

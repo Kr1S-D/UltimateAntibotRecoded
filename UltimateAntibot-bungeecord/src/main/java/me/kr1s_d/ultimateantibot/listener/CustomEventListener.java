@@ -63,7 +63,7 @@ public class CustomEventListener implements Listener {
                 plugin.getAntiBotManager().getBlackListService().save();
                 plugin.getUserDataService().unload();
                 plugin.getWhitelist().save();
-            }, true, 1000L);
+            }, false, 1000L);
         }, false, 1000L * 3);
     }
 

@@ -238,7 +238,7 @@ firewall:
 #Another anti vpn check (free) provided by: https://ip-api.com/
 #Disable this check if you are using proxycheck.io
 ip-api:
-  enabled: true
+  enabled: false #disabled by default for user that don't know how to use it
 
 #This check allows you to verify your users during bot attacks!
 #The site offers a free plan that you can access by signing up which gives you access to 1k requests per day.
