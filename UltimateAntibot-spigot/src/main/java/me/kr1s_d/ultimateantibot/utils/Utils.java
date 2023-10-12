@@ -21,6 +21,10 @@ public class Utils {
         return millis * 20L / 1000;
     }
 
+    public static long convertToMillis(long ticks){
+        return ticks * (1000L / 20);
+    }
+
     public static String getPlayerIP(Player player) {
         return "/" + player.getAddress().getAddress().getHostAddress();
     }

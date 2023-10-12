@@ -4,22 +4,25 @@ import me.kr1s_d.commandframework.CommandManager;
 import me.kr1s_d.ultimateantibot.commands.*;
 import me.kr1s_d.ultimateantibot.common.*;
 import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
-import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
-import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.core.server.SatelliteServer;
-import me.kr1s_d.ultimateantibot.common.service.*;
-import me.kr1s_d.ultimateantibot.common.utils.*;
-import me.kr1s_d.ultimateantibot.objects.filter.Bukkit247Filter;
-import me.kr1s_d.ultimateantibot.objects.filter.BukkitAttackFilter;
 import me.kr1s_d.ultimateantibot.common.core.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.core.thread.AttackAnalyzerThread;
 import me.kr1s_d.ultimateantibot.common.core.thread.LatencyThread;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
+import me.kr1s_d.ultimateantibot.common.helper.ServerType;
+import me.kr1s_d.ultimateantibot.common.service.AttackTrackerService;
+import me.kr1s_d.ultimateantibot.common.service.FirewallService;
+import me.kr1s_d.ultimateantibot.common.service.UserDataService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
+import me.kr1s_d.ultimateantibot.common.utils.*;
 import me.kr1s_d.ultimateantibot.listener.CustomEventListener;
 import me.kr1s_d.ultimateantibot.listener.MainEventListener;
 import me.kr1s_d.ultimateantibot.listener.PingListener;
 import me.kr1s_d.ultimateantibot.objects.Config;
-import me.kr1s_d.ultimateantibot.common.UABRunnable;
+import me.kr1s_d.ultimateantibot.objects.filter.Bukkit247Filter;
+import me.kr1s_d.ultimateantibot.objects.filter.BukkitAttackFilter;
+import me.kr1s_d.ultimateantibot.utils.BukkitWithFoliaScheduler;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import org.apache.logging.log4j.LogManager;
@@ -29,15 +32,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 
 public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotPlugin, IServerPlatform {
 
     private static UltimateAntiBotSpigot instance;
-    private BukkitScheduler scheduler;
+    private BukkitWithFoliaScheduler betascheduler;
     private IConfiguration config;
     private IConfiguration messages;
     private IConfiguration whitelist;
@@ -52,6 +53,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
     private VPNService VPNService;
     private Notificator notificator;
     private UltimateAntiBotCore core;
+    @SuppressWarnings("unused")
     private SatelliteServer satellite;
     private boolean isRunning;
 
@@ -63,7 +65,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         PerformanceHelper.init(ServerType.SPIGOT);
         RuntimeUtil.setup(this);
         ServerUtil.setPlatform(this);
-        this.scheduler = Bukkit.getScheduler();
+        this.betascheduler = new BukkitWithFoliaScheduler(this);
         this.config = new Config(this, "config");
         this.messages = new Config(this, "messages");
         this.whitelist = new Config(this, "whitelist");
@@ -132,7 +134,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         commandManager.register(new FirewallCommand(this));
         commandManager.register(new AttackLogCommand(this));
         commandManager.register(new CacheCommand());
-        commandManager.setDefaultCommandWrongArgumentMessage(MessageManager.commandWrongArgument);
+        commandManager.setWrongArgumentMessage(MessageManager.commandWrongArgument);
         commandManager.setNoPlayerMessage("&fYou are not a &cplayer!");
         //commandManager.register(new SatelliteCommand(this));
         Bukkit.getPluginManager().registerEvents(new PingListener(this), this);
@@ -170,68 +172,32 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
 
     @Override
     public void runTask(Runnable task, boolean isAsync) {
-        if (isAsync) {
-            scheduler.runTaskAsynchronously(this, task);
-        } else {
-            scheduler.runTask(this, task);
-        }
+        betascheduler.run(task, isAsync);
     }
 
     @Override
     public void runTask(UABRunnable runnable) {
-        BukkitTask bukkitTask = null;
-
-        if (runnable.isAsync()) {
-            bukkitTask = scheduler.runTaskAsynchronously(this, runnable);
-        } else {
-            bukkitTask = scheduler.runTask(this, runnable);
-        }
-
-        runnable.setTaskID(bukkitTask.getTaskId());
+        runnable.setTaskID(betascheduler.run(runnable, runnable.isAsync()));
     }
 
     @Override
     public void scheduleDelayedTask(Runnable runnable, boolean async, long milliseconds) {
-        if (async) {
-            scheduler.runTaskLaterAsynchronously(this, runnable, Utils.convertToTicks(milliseconds));
-        } else {
-            scheduler.runTaskLater(this, runnable, Utils.convertToTicks(milliseconds));
-        }
+        betascheduler.scheduleDelayed(runnable, async, milliseconds, true);
     }
 
     @Override
     public void scheduleDelayedTask(UABRunnable runnable) {
-        BukkitTask bukkitTask = null;
-
-        if (runnable.isAsync()) {
-            bukkitTask = scheduler.runTaskLaterAsynchronously(this, runnable, Utils.convertToTicks(runnable.getPeriod()));
-        } else {
-            bukkitTask = scheduler.runTaskLater(this, runnable, Utils.convertToTicks(runnable.getPeriod()));
-        }
-
-        runnable.setTaskID(bukkitTask.getTaskId());
+        runnable.setTaskID(betascheduler.scheduleDelayed(runnable, runnable.isAsync(), runnable.getPeriod(), true));
     }
 
     @Override
     public void scheduleRepeatingTask(Runnable runnable, boolean async, long repeatMilliseconds) {
-        if (async) {
-            scheduler.runTaskTimerAsynchronously(this, runnable, 0, Utils.convertToTicks(repeatMilliseconds));
-        } else {
-            scheduler.runTaskTimer(this, runnable, 0, Utils.convertToTicks(repeatMilliseconds));
-        }
+        betascheduler.scheduleRepeat(runnable, async, 0, repeatMilliseconds, true);
     }
 
     @Override
     public void scheduleRepeatingTask(UABRunnable runnable) {
-        BukkitTask bukkitTask = null;
-
-        if (runnable.isAsync()) {
-            bukkitTask = scheduler.runTaskTimerAsynchronously(this, runnable, 0, Utils.convertToTicks(runnable.getPeriod()));
-        } else {
-            bukkitTask = scheduler.runTaskTimer(this, runnable, 0, Utils.convertToTicks(runnable.getPeriod()));
-        }
-
-        runnable.setTaskID(bukkitTask.getTaskId());
+        runnable.setTaskID(betascheduler.scheduleRepeat(runnable, runnable.isAsync(), 0,  runnable.getPeriod(), true));
     }
 
     @Override
@@ -345,7 +311,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
 
     @Override
     public void cancelTask(int id) {
-        Bukkit.getScheduler().cancelTask(id);
+        betascheduler.cancel(id);
     }
 
     @Override

@@ -37,6 +37,14 @@
 
     <repositories>
         <repository>
+            <id>papermc-folia</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -47,6 +55,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -60,9 +74,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>me.kr1s_d</groupId>
+            <groupId>com.github.Kr1S-D</groupId>
             <artifactId>CommandFramework</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>master-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

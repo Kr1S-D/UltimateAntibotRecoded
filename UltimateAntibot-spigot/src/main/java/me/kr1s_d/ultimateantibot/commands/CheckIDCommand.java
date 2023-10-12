@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -65,12 +66,12 @@ public class CheckIDCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 2;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         Map<Integer, List<String>> map = new HashMap<>();
         map.put(1, Collections.singletonList("<id to check>"));
         return map;

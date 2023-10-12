@@ -5,6 +5,7 @@ import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.Version;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -47,12 +48,12 @@ public class ToggleNotificationCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 2;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         Map<Integer, List<String>> map = new HashMap<>();
         map.put(1, Arrays.asList("actionbar", "title", "bossbar"));
         return map;

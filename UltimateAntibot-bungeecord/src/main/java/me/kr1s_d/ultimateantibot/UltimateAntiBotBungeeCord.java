@@ -173,7 +173,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
 
     @Override
     public void runTask(UABRunnable runnable) {
-        ScheduledTask task = null;
+        ScheduledTask task;
 
         if (runnable.isAsync()) {
             task = this.scheduler.runAsync(this, runnable);

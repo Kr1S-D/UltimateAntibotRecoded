@@ -4,6 +4,7 @@ import me.kr1s_d.commandframework.objects.SubCommand;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -33,12 +34,12 @@ public class ReloadCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 1;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         return null;
     }
 

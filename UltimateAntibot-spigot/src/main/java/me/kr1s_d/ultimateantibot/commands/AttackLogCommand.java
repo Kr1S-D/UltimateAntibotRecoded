@@ -11,6 +11,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class AttackLogCommand implements SubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        int value = -1;
+        int value;
 
         try {
             value = Integer.parseInt(args[2]);
@@ -62,7 +63,7 @@ public class AttackLogCommand implements SubCommand {
         if(args[1].equals("list")) {
             sender.sendMessage(Utils.colora(MessageManager.prefix + "&fHere is a list of the last &c" + value + " &fattacks"));
             List<AttackLog> lastAttacks = plugin.getAttackTrackerService().getLastAttacks(value);
-            if(lastAttacks.size() == 0) {
+            if(lastAttacks.isEmpty()) {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + "&fThere are no attacks to show!"));
                 return;
             }
@@ -81,12 +82,12 @@ public class AttackLogCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 3;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         Map<Integer, List<String>> map = new HashMap<>();
         map.put(1, Arrays.asList("list", "info"));
         return map;
