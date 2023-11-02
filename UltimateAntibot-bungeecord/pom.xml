@@ -8,7 +8,7 @@
     <parent>
         <groupId>me.kr1s_d.ultimateantibot</groupId>
         <artifactId>UltimateAntibot</artifactId>
-        <version>4.0.8-ABYSS</version>
+        <version>4.0.9-ABYSS</version>
     </parent>
 
     <artifactId>UltimateAntibot-bungeecord</artifactId>
@@ -37,6 +37,10 @@
 
     <repositories>
         <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -50,13 +54,12 @@
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.17-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>1.20-R0.1</version>
         </dependency>
         <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-protocol</artifactId>
-            <version>1.17-R0.1-SNAPSHOT</version>
+            <groupId>io.github.waterfallmc</groupId>
+            <artifactId>waterfall-api</artifactId>
+            <version>1.20-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -7,7 +7,7 @@
     <parent>
         <groupId>me.kr1s_d.ultimateantibot</groupId>
         <artifactId>UltimateAntibot</artifactId>
-        <version>4.0.8-ABYSS</version>
+        <version>4.0.9-ABYSS</version>
     </parent>
 
     <artifactId>UltimateAntibot-common</artifactId>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4</version>
+            <version>2.14.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- ApacheHTTPClient -->

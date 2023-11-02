@@ -3,10 +3,14 @@ package me.kr1s_d.ultimateantibot.objects;
 import com.google.common.collect.Sets;
 import me.kr1s_d.ultimateantibot.common.BarColor;
 import me.kr1s_d.ultimateantibot.common.BarStyle;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.chat.ComponentSerializer;
 
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +18,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DynamicBar {
-
         private static final AtomicInteger barID = new AtomicInteger(1);
 
         private final UUID uuid;
@@ -22,17 +25,16 @@ public class DynamicBar {
         private float progress = 1;
         private BarColor barColor;
         private BarStyle barStyle;
-
         private String compiledTitle;
-
         private boolean visible = true;
+        private boolean checkBrokenBar = false;
 
         private final Set<ProxiedPlayer> players = Sets.newHashSet();
 
         public DynamicBar(String title, BarColor barColor, BarStyle barStyle) {
             this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));
             this.title = title;
-            this.compiledTitle = ComponentSerializer.toString(new TextComponent(this.title));
+            this.compiledTitle = title;
             this.barColor = barColor;
             this.barStyle = barStyle;
         }
@@ -41,16 +43,43 @@ public class DynamicBar {
             return title;
         }
 
-        public void setTitle(String title) {
+        public void updateBossBar(String title) {
+            if(checkBrokenBar) return;
             this.title = title;
-            this.compiledTitle = ComponentSerializer.toString(new TextComponent(this.title));
+            this.compiledTitle = title;
 
             if (visible) {
                 net.md_5.bungee.protocol.packet.BossBar packet = new net.md_5.bungee.protocol.packet.BossBar(uuid, 3);
-                packet.setTitle(this.compiledTitle);
+                updateBossBar(packet, new TextComponent(title));
                 this.players.forEach(player -> player.unsafe().sendPacket(packet));
             }
         }
+
+    private void updateBossBar(Object bossBar, BaseComponent title) {
+        try {
+            Class<?> bossBarClass = bossBar.getClass();
+
+            // Try BaseComponentMethod
+            try {
+                Method baseComponent = bossBarClass.getDeclaredMethod("setTitle", BaseComponent.class);
+                baseComponent.invoke(bossBar, new TextComponent(title));
+            } catch (NoSuchMethodException ex) {
+                // Try StringMethod
+                try {
+                    Method setTitleMethodWithString = bossBarClass.getDeclaredMethod("setTitle", String.class);
+                    setTitleMethodWithString.invoke(bossBar, ComponentSerializer.toString(title));
+                } catch (NoSuchMethodException stringMethodNotFound) {
+                    // Nessuno dei due metodi è disponibile
+                    ServerUtil.log(LogHelper.LogType.ERROR, "Unable to set bossbar title, missing method?");
+                    ServerUtil.log(LogHelper.LogType.ERROR, "Disabling bossbar function...");
+                    checkBrokenBar = true;
+                    players.clear();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
         public BarColor getBarColor() {
             return barColor;
@@ -86,7 +115,8 @@ public class DynamicBar {
             return progress;
         }
 
-        public void setProgress(float progress) {
+        public void updateProgress(float progress) {
+            if(checkBrokenBar) return;
             this.progress = progress;
 
             if (visible) {
@@ -101,6 +131,7 @@ public class DynamicBar {
         }
 
         public void addPlayer(ProxiedPlayer player) {
+            if(checkBrokenBar) return;
             this.players.add(player);
 
             if (visible && player.isConnected()) {
@@ -109,6 +140,7 @@ public class DynamicBar {
         }
 
         public void removePlayer(ProxiedPlayer player) {
+            if(checkBrokenBar) return;
             this.players.remove(player);
 
             if (visible && player.isConnected()) {
@@ -137,7 +169,7 @@ public class DynamicBar {
 
         private net.md_5.bungee.protocol.packet.BossBar getAddPacket() {
             net.md_5.bungee.protocol.packet.BossBar packet = new net.md_5.bungee.protocol.packet.BossBar(uuid, 0);
-            packet.setTitle(this.compiledTitle);
+            updateBossBar(packet, new TextComponent(this.compiledTitle));
             packet.setColor(this.barColor.ordinal());
             packet.setDivision(this.barStyle.ordinal());
             packet.setHealth(this.progress);

@@ -56,7 +56,7 @@ public class Notificator implements INotificator {
         player.sendMessage(new TextComponent(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledActionbar)));
     }
 
-    public static void toggleTitle(ProxiedPlayer player){
+    public static void toggleTitle(ProxiedPlayer player) {
         if(titles.contains(player)){
             titles.remove(player);
         }else {
@@ -72,11 +72,11 @@ public class Notificator implements INotificator {
     }
 
 
-    public void sendActionbar(String str){
+    public void sendActionbar(String str) {
         actionbars.forEach(ac -> ac.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ServerUtil.colorize(str))));
     }
 
-    public void sendTitle(String title, String subtitle){
+    public void sendTitle(String title, String subtitle) {
         Title t = ProxyServer.getInstance().createTitle();
         t.title(new TextComponent(ServerUtil.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(title))));
         t.subTitle(new TextComponent(ServerUtil.colorize(UltimateAntiBotBungeeCord.getInstance().getAntiBotManager().replaceInfo(subtitle))));
@@ -88,16 +88,16 @@ public class Notificator implements INotificator {
 
     @Override
     public void sendBossBarMessage(String str, float health) {
-        bar.setTitle(ServerUtil.colorize(str));
-        bar.setProgress(health);
+        bar.updateBossBar(ServerUtil.colorize(str));
+        bar.updateProgress(health);
     }
 
     public void init(IAntiBotPlugin plugin){
         plugin.scheduleRepeatingTask(() -> {
-            if(plugin.getAntiBotManager().isSomeModeOnline()){
+            if(plugin.getAntiBotManager().isSomeModeOnline()) {
                 sendTitle(MessageManager.titleTitle, plugin.getAntiBotManager().replaceInfo(MessageManager.titleSubtitle));
             }
-            if(plugin.getAntiBotManager().isPacketModeEnabled()){
+            if(plugin.getAntiBotManager().isPacketModeEnabled()) {
                 sendActionbar(plugin.getAntiBotManager().replaceInfo(MessageManager.actionbarPackets));
                 return;
             }

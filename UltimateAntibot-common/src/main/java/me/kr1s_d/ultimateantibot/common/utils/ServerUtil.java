@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.common.utils;
 
 import me.kr1s_d.ultimateantibot.common.IServerPlatform;
 import me.kr1s_d.ultimateantibot.common.UABRunnable;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.io.File;
@@ -38,5 +39,9 @@ public class ServerUtil {
 
     public static String colorize(String text){
         return platform.colorize(text);
+    }
+
+    public static void log(LogHelper.LogType logType, String message) {
+        platform.log(logType, message);
     }
 }
