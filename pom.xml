@@ -33,6 +33,14 @@
                     <configuration>
                         <relocations>
                             <relocation>
+                                <pattern>org.checkerframework</pattern>
+                                <shadedPattern>me.kr1s_d.ultimateantibot.libs.checkerframework</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>com.google.errorprone</pattern>
+                                <shadedPattern>me.kr1s_d.ultimateantibot.libs.google.errorprone</shadedPattern>
+                            </relocation>
+                            <relocation>
                                 <pattern>org.apache.commons</pattern>
                                 <shadedPattern>me.kr1s_d.ultimateantibot.libs.apache.commons</shadedPattern>
                             </relocation>
