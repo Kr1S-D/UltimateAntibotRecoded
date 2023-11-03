@@ -361,7 +361,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     }
 
     @Override
-    public AttackTrackerService getAttackTrackerService(){
+    public AttackTrackerService getAttackTrackerService() {
         return attackTrackerService;
     }
 

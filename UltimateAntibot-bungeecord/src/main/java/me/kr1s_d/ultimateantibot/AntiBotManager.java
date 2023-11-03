@@ -125,10 +125,6 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public void setModeType(ModeType type) {
         this.modeType = type;
-
-        if(type != ModeType.OFFLINE){
-            this.modeType = ModeType.OFFLINE;
-        }
     }
 
     @Override

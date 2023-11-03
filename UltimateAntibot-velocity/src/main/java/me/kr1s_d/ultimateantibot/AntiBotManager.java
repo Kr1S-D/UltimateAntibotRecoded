@@ -1,21 +1,20 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
-import me.kr1s_d.ultimateantibot.common.core.detectors.AttackDurationDetector;
-import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.ModeType;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.ModeType;
+import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
+import me.kr1s_d.ultimateantibot.common.core.detectors.AttackDurationDetector;
+import me.kr1s_d.ultimateantibot.common.core.thread.DynamicCounterThread;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
-import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
-import me.kr1s_d.ultimateantibot.common.core.thread.DynamicCounterThread;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.Formatter;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.event.ModeEnableEvent;
-import me.kr1s_d.ultimateantibot.task.ModeDisableTask;
+import me.kr1s_d.ultimateantibot.scheduler.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
 
 public class AntiBotManager implements IAntiBotManager {
@@ -35,9 +34,9 @@ public class AntiBotManager implements IAntiBotManager {
     private boolean isPingModeEnabled;
     private final LogHelper logHelper;
     private final JoinCache joinCache;
-    private final VPNService VPNService;
+    private final me.kr1s_d.ultimateantibot.common.service.VPNService VPNService;
 
-    public AntiBotManager(IAntiBotPlugin plugin){
+    public AntiBotManager(IAntiBotPlugin plugin) {
         this.iAntiBotPlugin = plugin;
         this.logHelper = plugin.getLogHelper();
         this.joinPerSecond = new DynamicCounterThread(plugin);
@@ -58,7 +57,6 @@ public class AntiBotManager implements IAntiBotManager {
     }
 
     @Override
-    @Deprecated
     public long getJoinPerSecond() {
         return joinPerSecond.getSlowCount();
     }
@@ -154,6 +152,7 @@ public class AntiBotManager implements IAntiBotManager {
         if(type != ModeType.OFFLINE){
             this.modeType = ModeType.OFFLINE;
         }
+
         EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.OFFLINE));
     }
 
@@ -177,10 +176,11 @@ public class AntiBotManager implements IAntiBotManager {
     @Override
     public void increasePacketPerSecond() {
         packetPerSecond.increase();
+        increaseConnectionPerSecond();
     }
 
     @Override
-    public void increaseConnectionPerSecond() {
+    public void increaseConnectionPerSecond(){
         connectionPerSecond.increase();
     }
 
@@ -211,7 +211,6 @@ public class AntiBotManager implements IAntiBotManager {
         isSlowAntiBotModeOnline = false;
         isPingModeEnabled = false;
         isPacketModeEnabled = false;
-
         iAntiBotPlugin.scheduleDelayedTask(
                 new ModeDisableTask(iAntiBotPlugin, ModeType.ANTIBOT),
                 false, 1000L * ConfigManger.antiBotModeKeep
@@ -308,6 +307,5 @@ public class AntiBotManager implements IAntiBotManager {
                 .replace("%prefix%", iAntiBotPlugin.getAnimationThread().getEmote() + " " + MessageManager.prefix)
                 .replace("%underverification%", String.valueOf(VPNService.getUnderVerificationSize()))
                 ;
-
     }
 }

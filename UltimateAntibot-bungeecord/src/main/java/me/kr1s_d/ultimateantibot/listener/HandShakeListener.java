@@ -11,7 +11,6 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.protocol.packet.Handshake;
 
 public class HandShakeListener implements Listener {
-
     private final IAntiBotManager antiBotManager;
 
     public HandShakeListener(IAntiBotPlugin plugin){

@@ -6,7 +6,7 @@
 
     <groupId>me.kr1s_d.ultimateantibot</groupId>
     <artifactId>UltimateAntibot</artifactId>
-    <version>4.0.9-ABYSS</version>
+    <version>4.1.0-ABYSS</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -82,5 +82,6 @@
         <module>ultimateantibot-common</module>
         <module>ultimateantibot-spigot</module>
         <module>ultimateantibot-bungeecord</module>
+        <module>ultimateantibot-velocity</module>
     </modules>
 </project>

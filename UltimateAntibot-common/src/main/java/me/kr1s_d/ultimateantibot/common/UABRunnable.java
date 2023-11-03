@@ -17,7 +17,7 @@ public abstract class UABRunnable implements Runnable {
         this.taskID = taskID;
     }
 
-    public void cancel(){
+    public void cancel() {
         ServerUtil.cancelTask(this);
     }
 }
