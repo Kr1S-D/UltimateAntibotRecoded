@@ -3,7 +3,6 @@ package me.kr1s_d.ultimateantibot.commands.subcommands;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import me.kr1s_d.ultimateantibot.Notificator;
-import me.kr1s_d.ultimateantibot.commands.LegacyCommandSource;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
@@ -20,7 +19,7 @@ public class ToggleNotificationCommand implements SubCommand {
     }
 
     @Override
-    public void execute(LegacyCommandSource sender, String[] args) {
+    public void execute(CommandSource sender, String[] args) {
         if (args[1].equals("actionbar")) {
             Notificator.toggleActionBar((Player) sender);
         } else {

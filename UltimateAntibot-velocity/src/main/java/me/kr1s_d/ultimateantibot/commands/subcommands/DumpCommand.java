@@ -3,7 +3,6 @@ package me.kr1s_d.ultimateantibot.commands.subcommands;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.plugin.PluginContainer;
 import me.kr1s_d.ultimateantibot.UltimateAntiBotVelocity;
-import me.kr1s_d.ultimateantibot.commands.LegacyCommandSource;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -27,7 +26,7 @@ public class DumpCommand implements SubCommand {
     }
 
     @Override
-    public void execute(LegacyCommandSource sender, String[] args) {
+    public void execute(CommandSource sender, String[] args) {
         PasteBinBuilder pasteBinBuilder = PasteBinBuilder.builder();
         pasteBinBuilder.addLine("Name: " + UltimateAntiBotVelocity.getInstance().getServer().getVersion().getName());
         pasteBinBuilder.addLine("Version: " + UltimateAntiBotVelocity.getInstance().getServer().getVersion().getVersion());

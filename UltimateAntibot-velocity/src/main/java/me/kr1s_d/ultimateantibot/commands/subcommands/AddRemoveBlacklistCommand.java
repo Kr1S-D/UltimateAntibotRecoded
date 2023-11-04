@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import com.velocitypowered.api.command.CommandSource;
-import me.kr1s_d.ultimateantibot.commands.LegacyCommandSource;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
@@ -25,7 +24,7 @@ public class AddRemoveBlacklistCommand implements SubCommand {
     }
 
     @Override
-    public void execute(LegacyCommandSource sender, String[] args) {
+    public void execute(CommandSource sender, String[] args) {
         if (args[1].equalsIgnoreCase("add")) {
             iAntiBotManager.getBlackListService().blacklist("/" + args[2], BlackListReason.ADMIN);
             iAntiBotManager.getWhitelistService().unWhitelist("/" + args[2]);

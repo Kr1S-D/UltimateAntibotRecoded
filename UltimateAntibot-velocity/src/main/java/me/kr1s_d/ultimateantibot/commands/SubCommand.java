@@ -8,7 +8,7 @@ import java.util.Map;
 public interface SubCommand {
     String getSubCommandId();
 
-    void execute(LegacyCommandSource sender, String[] args);
+    void execute(CommandSource sender, String[] args);
 
     String getPermission();
 

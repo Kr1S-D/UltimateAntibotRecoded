@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import com.velocitypowered.api.command.CommandSource;
-import me.kr1s_d.ultimateantibot.commands.LegacyCommandSource;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -19,7 +18,7 @@ public class CacheCommand implements SubCommand {
     }
 
     @Override
-    public void execute(LegacyCommandSource commandSender, String[] strings) {
+    public void execute(CommandSource commandSender, String[] strings) {
         switch (strings[1]) {
             case "status":
                 for (String s : CheckService.getInformationAsMessage()) {

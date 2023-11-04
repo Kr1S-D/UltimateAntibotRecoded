@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import com.velocitypowered.api.command.CommandSource;
-import me.kr1s_d.ultimateantibot.commands.LegacyCommandSource;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
@@ -27,7 +26,7 @@ public class ClearCommand implements SubCommand {
     }
 
     @Override
-    public void execute(LegacyCommandSource sender, String[] args) {
+    public void execute(CommandSource sender, String[] args) {
         if(args[1].equals("whitelist")){
             antiBotManager.getWhitelistService().clear();
             sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.getCommandCleared("whiteList")));

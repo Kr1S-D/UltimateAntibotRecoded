@@ -2,7 +2,6 @@ package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
-import me.kr1s_d.ultimateantibot.commands.LegacyCommandSource;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.objects.attack.AttackLog;
@@ -10,8 +9,6 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import me.kr1s_d.ultimateantibot.utils.component.KComponentBuilder;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 
@@ -35,7 +32,7 @@ public class AttackLogCommand implements SubCommand {
     }
 
     @Override
-    public void execute(LegacyCommandSource sender, String[] args) {
+    public void execute(CommandSource sender, String[] args) {
         int value = -1;
 
         try {

@@ -1,6 +1,5 @@
 package me.kr1s_d.ultimateantibot.commands;
 
-import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
@@ -28,7 +27,7 @@ public class CommandWrapper implements SimpleCommand {
 
     @Override
     public void execute(Invocation invocation) {
-        CommandSource sender = invocation.source();
+        com.velocitypowered.api.command.CommandSource sender = invocation.source();
         String[] args = invocation.arguments();
         if(args.length == 0){
             sender.sendMessage(Utils.colora(MessageManager.prefix + defaultCommandWrongArgumentMessage));
@@ -45,7 +44,7 @@ public class CommandWrapper implements SimpleCommand {
                 return;
             }
             if (sender.hasPermission(cmd.getPermission())) {
-                cmd.execute((LegacyCommandSource) sender, args);
+                cmd.execute(sender, args);
             } else {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + noPermsMessage));
             }

@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
 import com.velocitypowered.api.command.CommandSource;
-import me.kr1s_d.ultimateantibot.commands.LegacyCommandSource;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -23,7 +22,7 @@ public class ReloadCommand implements SubCommand {
     }
 
     @Override
-    public void execute(LegacyCommandSource sender, String[] strings) {
+    public void execute(CommandSource sender, String[] strings) {
         plugin.reload();
         sender.sendMessage(Utils.colora(MessageManager.prefix + MessageManager.reloadMessage));
     }
