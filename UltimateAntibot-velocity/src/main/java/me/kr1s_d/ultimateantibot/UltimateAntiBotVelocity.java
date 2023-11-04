@@ -1,6 +1,8 @@
 package me.kr1s_d.ultimateantibot;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
@@ -10,6 +12,8 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.scheduler.ScheduledTask;
 import com.velocitypowered.api.scheduler.Scheduler;
+import me.kr1s_d.ultimateantibot.commands.CommandWrapper;
+import me.kr1s_d.ultimateantibot.commands.subcommands.*;
 import me.kr1s_d.ultimateantibot.common.*;
 import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
 import me.kr1s_d.ultimateantibot.common.core.server.SatelliteServer;
@@ -24,14 +28,16 @@ import me.kr1s_d.ultimateantibot.common.service.FirewallService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.*;
+import me.kr1s_d.ultimateantibot.filter.Velocity247Filter;
+import me.kr1s_d.ultimateantibot.filter.VelocityAttackFilter;
 import me.kr1s_d.ultimateantibot.listener.CustomEventListener;
-import me.kr1s_d.ultimateantibot.listener.HandShakeListener;
 import me.kr1s_d.ultimateantibot.listener.MainEventListener;
 import me.kr1s_d.ultimateantibot.listener.PingListener;
-import me.kr1s_d.ultimateantibot.utils.Config;
 import me.kr1s_d.ultimateantibot.scheduler.TaskScheduler;
 import me.kr1s_d.ultimateantibot.utils.ColorUtils;
+import me.kr1s_d.ultimateantibot.utils.Config;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -82,6 +88,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
     public void onProxyInitialization(ProxyInitializeEvent event) {
         instance = this;
         this.isRunning = true;
+        this.scheduler = server.getScheduler();
         PerformanceHelper.init(ServerType.VELOCITY);
         RuntimeUtil.setup(this);
         ServerUtil.setPlatform(this);
@@ -125,7 +132,8 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         this.core.load();
         this.userDataService = new UserDataService(this);
         this.userDataService.load();
-        //server.getInstance().getLogger().setFilter(new ProxyAttackFilter(this));
+        ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new VelocityAttackFilter(this));
+        ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new Velocity247Filter(this));
         satellite = new SatelliteServer(this);
         this.notificator = new Notificator();
         this.notificator.init(this);
@@ -138,22 +146,25 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
                 .replace("$3", String.valueOf(Version.getCores()))
                 .replace("$4", String.valueOf(PerformanceHelper.getPerformanceMode())));
         this.logHelper.info("§fThe §cabyss&f is ready to swallow all the bots!");
-        //CommandManager commandManager = new CommandManager(this, "ultimateantibot", "", "ab", "uab");
-        //commandManager.register(new AddRemoveBlacklistCommand(this));
-        //commandManager.register(new AddRemoveWhitelistCommand(this));
-        //commandManager.register(new ClearCommand(this));
-        //commandManager.register(new DumpCommand(this));
-        //commandManager.register(new HelpCommand(this));
-        //commandManager.register(new StatsCommand(this));
-        //commandManager.register(new ToggleNotificationCommand());
-        //commandManager.register(new CheckIDCommand(this));
-        //commandManager.register(new ReloadCommand(this));
-        //commandManager.register(new FirewallCommand(this));
-        //commandManager.register(new AttackLogCommand(this));
-        //commandManager.register(new CacheCommand());
-        //commandManager.setDefaultCommandWrongArgumentMessage(MessageManager.commandWrongArgument);
-        //commandManager.register(new SatelliteCommand(this));
-        //ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);
+        CommandManager commandManager = server.getCommandManager();
+        CommandMeta commandMeta = commandManager.metaBuilder("uab")
+                .aliases("ultimateantibot")
+                .plugin(this)
+                .build();
+        CommandWrapper wrapper = new CommandWrapper(this);
+        wrapper.register(new AddRemoveBlacklistCommand(this));
+        wrapper.register(new AddRemoveWhitelistCommand(this));
+        wrapper.register(new ClearCommand(this));
+        wrapper.register(new DumpCommand(this));
+        wrapper.register(new HelpCommand(this));
+        wrapper.register(new StatsCommand(this));
+        wrapper.register(new ToggleNotificationCommand());
+        wrapper.register(new CheckIDCommand(this));
+        wrapper.register(new ReloadCommand(this));
+        wrapper.register(new FirewallCommand(this));
+        wrapper.register(new AttackLogCommand(this));
+        wrapper.register(new CacheCommand());
+        commandManager.register(commandMeta, wrapper);
         server.getEventManager().register(this, new PingListener(this));
         server.getEventManager().register(this, new MainEventListener(this));
         server.getEventManager().register(this, new CustomEventListener(this));

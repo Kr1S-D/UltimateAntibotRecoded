@@ -55,6 +55,7 @@ public class Config implements IConfiguration {
             }
         } catch (IOException e) {
             this.plugin.log(LogHelper.LogType.INFO,"Unable to create configuration file '" + file + "'!");
+            e.printStackTrace();
         }
     }
 
@@ -62,9 +63,10 @@ public class Config implements IConfiguration {
         String replacedFile = replaceDataFolder(file);
 
         try {
-            configuration.save(file);
+            configuration.save(replacedFile);
         } catch (IOException e) {
             this.plugin.log(LogHelper.LogType.INFO,"Unable to save configuration file '" + replacedFile + "'!");
+            e.printStackTrace();
         }
     }
 

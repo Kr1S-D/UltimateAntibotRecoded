@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.objects.filter;
+package me.kr1s_d.ultimateantibot.filter;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
@@ -11,15 +11,13 @@ import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.message.Message;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-
-public class BukkitAttackFilter implements Filter {
+public class VelocityAttackFilter implements Filter {
     private final IAntiBotManager antiBotManager;
     private final List<String> blocked;
 
-    public BukkitAttackFilter(IAntiBotPlugin antiBotPlugin) {
+    public VelocityAttackFilter(IAntiBotPlugin antiBotPlugin) {
         this.antiBotManager = antiBotPlugin.getAntiBotManager();
         this.blocked = new ArrayList<>();
         FilterUtils.populateDefaultFilter(blocked);

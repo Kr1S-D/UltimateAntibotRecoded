@@ -1,25 +1,24 @@
 package me.kr1s_d.ultimateantibot.commands;
 
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.proxy.Player;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.TabExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class CommandManager extends Command implements TabExecutor {
+public class CommandWrapper implements SimpleCommand {
     private final List<SubCommand> loadedCommands;
     private final List<String> tabComplete;
     private String defaultCommandWrongArgumentMessage;
     private String noPermsMessage;
     private String noPlayerMessage;
 
-    public CommandManager(IAntiBotPlugin iAntiBotPlugin, String name, String permission, String... aliases) {
-        super(name, permission, aliases);
+    public CommandWrapper(IAntiBotPlugin iAntiBotPlugin) {
         this.loadedCommands = new ArrayList<>();
         this.tabComplete = new ArrayList<>();
         this.defaultCommandWrongArgumentMessage = MessageManager.commandWrongArgument;
@@ -28,7 +27,9 @@ public class CommandManager extends Command implements TabExecutor {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(Invocation invocation) {
+        CommandSource sender = invocation.source();
+        String[] args = invocation.arguments();
         if(args.length == 0){
             sender.sendMessage(Utils.colora(MessageManager.prefix + defaultCommandWrongArgumentMessage));
             return;
@@ -39,12 +40,12 @@ public class CommandManager extends Command implements TabExecutor {
             return;
         }
         if (args[0].equals(cmd.getSubCommandId()) && args.length >= cmd.argsSize()) {
-            if (!cmd.allowedConsole() && !(sender instanceof ProxiedPlayer)) {
+            if (!cmd.allowedConsole() && !(sender instanceof Player)) {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + noPlayerMessage));
                 return;
             }
             if (sender.hasPermission(cmd.getPermission())) {
-                cmd.execute(sender, args);
+                cmd.execute((LegacyCommandSource) sender, args);
             } else {
                 sender.sendMessage(Utils.colora(MessageManager.prefix + noPermsMessage));
             }
@@ -53,9 +54,11 @@ public class CommandManager extends Command implements TabExecutor {
         }
     }
 
-
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> suggest(Invocation invocation) {
+        String[] args = invocation.arguments();
+
+        if(args.length == 0) return getPrimarySubCommands();
         SubCommand subCommand = getSubCommandFromArgs(args[0]);
         if (subCommand != null && args[0].equals(subCommand.getSubCommandId())) {
             if (subCommand.getTabCompleter() != null && subCommand.getTabCompleter().get(args.length - 1) != null) {
@@ -67,6 +70,7 @@ public class CommandManager extends Command implements TabExecutor {
         if (args.length == 1) {
             return tabComplete;
         }
+
         return Utils.calculatePlayerNames();
     }
 
@@ -89,6 +93,10 @@ public class CommandManager extends Command implements TabExecutor {
             }
         }
         return null;
+    }
+
+    private List<String> getPrimarySubCommands() {
+        return loadedCommands.stream().map(SubCommand::getSubCommandId).collect(Collectors.toList());
     }
 
     public void register(SubCommand subCommand){

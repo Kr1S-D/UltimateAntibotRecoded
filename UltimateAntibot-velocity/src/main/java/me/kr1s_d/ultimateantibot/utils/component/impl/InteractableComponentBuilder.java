@@ -27,4 +27,8 @@ public class InteractableComponentBuilder {
     public void send(Player player) {
         player.sendMessage(component);
     }
+
+    public TextComponent getComponent() {
+        return component;
+    }
 }

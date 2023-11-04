@@ -3,6 +3,7 @@ package me.kr1s_d.ultimateantibot.common.objects.filter;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+import me.kr1s_d.ultimateantibot.common.utils.FilterUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,33 +20,8 @@ public class ProxyAttackFilter implements Filter {
     public ProxyAttackFilter(IAntiBotPlugin antiBotPlugin) {
         this.antiBotManager = antiBotPlugin.getAntiBotManager();
         this.proxy247Filter = new Proxy247Filter(antiBotPlugin);
-        this.blocked = new ArrayList<>(Arrays.asList(
-                "InitialHandler has",
-                "Connection reset by peer",
-                "Unexpected packet received",
-                "read timed out",
-                "could not decode packet",
-                "to process",
-                "Empty Packet!",
-                "corrupted",
-                "has pinged",
-                "has connected",
-                "in packet",
-                "bad packet ID",
-                "bad packet",
-                "encountered exception",
-                "com.mojang.authlib",
-                "lost connection: Timed out",
-                "lost connection: Disconnected",
-                "Took too long to log in",
-                "disconnected with",
-                "read time out",
-                "Connect reset by peer",
-                "overflow in packet",
-                "pipeline",
-                "The received encoded string",
-                "is longer than maximum allowed"
-        ));
+        this.blocked = new ArrayList<>();
+        FilterUtils.populateDefaultFilter(blocked);
         blocked.addAll(antiBotPlugin.getConfigYml().getStringList("attack-filter"));
     }
 

@@ -36,9 +36,24 @@ public class ColorUtils {
         colorMap.put("&n", "<underlined>");
         colorMap.put("&o", "<italic>");
         colorMap.put("&r", "<reset>");
+        colorMap.put("&A", "<green>");
+        colorMap.put("&B", "<aqua>");
+        colorMap.put("&C", "<red>");
+        colorMap.put("&D", "<light_purple>");
+        colorMap.put("&E", "<yellow>");
+        colorMap.put("&F", "<white>");
+        colorMap.put("&K", "<obfuscated>");
+        colorMap.put("&L", "<bold>");
+        colorMap.put("&M", "<strikethrough>");
+        colorMap.put("&N", "<underlined>");
+        colorMap.put("&O", "<italic>");
+        colorMap.put("&R", "<reset>");
     }
 
     public static Component format(String text) {
+        if(true) {
+            return Component.text(text.replace("&", "§"));
+        }
         for (Map.Entry<String, String> entry : colorMap.entrySet()) {
             text = text.replace(entry.getKey(), entry.getValue());
         }
@@ -53,6 +68,9 @@ public class ColorUtils {
     }
 
     public static  <T> T format(String text, Function<String, T> computeAs) {
+        if(true) {
+            return computeAs.apply(text.replace("&", "§"));
+        }
         for (Map.Entry<String, String> entry : colorMap.entrySet()) {
             text = text.replace(entry.getKey(), entry.getValue());
         }
