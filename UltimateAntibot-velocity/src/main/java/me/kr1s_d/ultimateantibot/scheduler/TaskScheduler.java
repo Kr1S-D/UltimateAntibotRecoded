@@ -13,6 +13,7 @@ public class TaskScheduler {
     public static void cancelTrackedTask(long taskID) {
         checkTasks();
         ScheduledTask task = scheduled.getOrDefault(taskID, null);
+        if(task == null) return;
         scheduled.remove(taskID);
         task.cancel();
     }
