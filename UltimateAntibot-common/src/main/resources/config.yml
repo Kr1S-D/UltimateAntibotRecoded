@@ -56,92 +56,110 @@ auto-purger:
     value: 15 #days
     enabled: true
 
-#Antibotmode has the utility of mitigating the attack, blacklisting + ip possible,
+# (!) ANTIBOT-MODE (!)
+#
+#The antibot mode is the mode that aims to blacklist as many IPs as possible in order to reduce the amount of bots,
+#arriving at the server (especially if you have the firewall service active)
 antibotmode:
-  #Duration of the anti-botmode when activated
+  #This parameter indicates how long the antibot mode must last at least; if at the end of the time the attack persists it will be activated again
   keep: 15 #seconds
-  #If there are 10 connections in 1 second the antibot mode will be activated!
+  #This parameter indicates how many connections there must be to the server for the antibot mode to be activated, ignores players in the whitelist
   trigger: 10
-  #Slowmode duration
+  #This parameter indicates how long the slow antibot mode that is activated when a slow bot attack is detected should last
   keep-slow: 25
-  #disconnect joined players
+  #This parameter indicates whether when the antibot mode is activated it should expel players who entered 10 minutes earlier as they could be bots
   disconnect: true
 
-#Pingmode allows player connections to your server!
+# (!) PING-MODE (!)
+#
+#PING-MODE is a mode that is activated when a ping attack is detected (i.e. when there are many players updating the server list),
+#this can cause some slowdowns but has now already been fixed by bungeecord, velocity etc...
+#remains an alternative only on spigot but could lead to errors when trying to block the player's ping
 pingmode:
-  #Duration of the ping-mode when activated
+  #This parameter indicates how long the mode must remain active, during this mode players will still be able to enter the server unless a bot attack is detected together with the ping attack in which case entry for players will also be blocked
   keep: 10
-  #How many pings in 1 second does it take to activate the protection?
+  #This parameter indicates how many pings there must be in a second to activate this mode, normally a server with many players has many pings per second if this mode is activated I often advise you to increase this parameter to 500/1000 as very large servers do not suffer of ping attacks
   trigger: 100
   #MotdKiller Protection
-  #Send the server logo during a ping attack?
+  #This method allows you to not send the server image when pinging (false means that it does not send the server logo so it is activated),
+  #however on spigot via the API it can lead to errors in the console (which are not dangerous but just annoying).
+  #If you often receive attacks of this type and your server cannot handle them, you should know that this attack is very similar to a DDos.
+  #I recommend you use firewall protection (not that of the plugin but an external one that is not a plugin) or anti DDos.
   send_info: false
 
-#Works Only on Bungeecord Waterfall ect...
+# (!) PACKETMODE (!)
+#
+#This mode deals with blocking the errors that the server produces when there is an attack of malformed packets (basically blocked by the server itself but which produce errors that can cause slowdowns or crashes)
+#During this mode, as in the others, the error filter will be activated and can be modified in the final part of the config
 packetmode:
-  #Duration of handshakemode
+  #This parameter indicates how long the mode should run after it detects the attack
   keep: 15
-  #How many blocked packets in 1 second for enable?
+  #This parameter indicates the minimum number of packets received in the last second to activate this mode
   trigger: 15
-  #if the handshake has an invalid protocol do I have to blacklist it?
+  #This parameter indicates whether to blacklist an IP that has sent a malformed packet
   blacklist-invalid-protocol: true
 
-#Minimum online time to be whitelisted
+#This parameter indicates how long a player must be online on the server to be whitelisted and therefore able to enter during attacks
 playtime_for_whitelist: 10 #minutes
 
+#I suggest not touching this section
 taskmanager:
   clearcache: 60 #seconds
   auth: 300 #seconds
   register: 120 #seconds
   update: 15 #seconds
 
+# (!) CHECKS (!)
+#
+#In this section there are all the plugin checks that are editable
 checks:
+  #This check is responsible for blocking a player when he enters for the first time by asking him to log back into the server,
+  #in this way in the case of a bot attack the server will not suffer initial slowdowns due to the few bots that enter in the initial part
   firstjoin:
-    #enable firstjoin
+    #This parameter allows you to activate or deactivate this check
     enabled: true
-  #This check checks the number of accounts entered by the same ip within 60 seconds during antibot mode
+  #This check controls the number of accounts connected simultaneously to the server from the same IP, blocking them based on the conditions below
   namechanger:
-    #Clear cache time
-    time: 200
-    #max accounts to blackist
+    #How often information is deleted from memory (avoiding using too much memory for useless data)
+    time: 200 #seconds
+    #How many accounts must be connected simultaneously from the same IP in order to blacklist them?
     limit: 3
-    #enable?
+    #This parameter allows you to activate or deactivate this check
     enabled: true
-  #If an ip joins 35 times in 300 seconds
+  #This control allows you to blacklist bots that connect too often, in this case it will block all IPs that connect more than 35 times in 300 seconds
   superjoin:
-    #Clear cache time
+    #This parameter indicates how long the bot must make connections
     time: 300
-    #max joins in 300 seconds to get blacklisted
+    #This parameter indicates how many connections there must be from the bot to be blocked
     limit: 35
-    #enable?
+    #This parameter allows you to activate or deactivate this check
     enabled: true
+  #This check allows players not on the whitelist to enter during a bot attack
+  #Its operation is as follows, the player will be asked to ping or connect to the server x times and if this player does not make a
+  #mistake the process will be able to enter the server
   auth:
     #Clear cache time
     time: 300
-    #Allows users to whitelist
-    #Through min-max ping
+    #This parameter indicates the ping interval that will be asked of a player on average
     ping: 4-7
-    #Min max TimerCheck
+    #This parameter indicates the interval of seconds that the player will be asked to enter the server
     timer: 3-7
-    #When the time for verification runs out,
-    #you have 1.3 second to join
+    #This parameter indicates how much time the player has to enter the server when completing the check
     between: 1300 #milliseconds
-    #BlackList enable condition
+    #Since this check is expensive and can cause slowdowns, it will only be activated when 90% (in this case) of the attack's IPs are blocked in order to check a few hundred players who will therefore be able to connect and play
     percent: 90
-    #If player fail this check 25 times will be blacklisted
+    #This parameter indicates the number of times a player must fail the check to be blacklisted
     maxfails: 25
-    #If a player has to ping the verification,
-    #the non-verifying players will have a counter of the times they pinged the
-    #server to enter!
-    #On bungeecord will use protocol name
-    #On spigot will use the motd
-    #Editable in messages.yml
+    #This setting allows the player to view how many pings he has made to the server via the MOTD (spigot) or via a text next to the number of online players (bungeecord),
+    #this is therefore called PING INTERFACE and can be deactivated.
+    #It is also possible to modify the messages that will appear to the player in the messages.yml file
     ping_interface: true
   legalname:
     #All nicknames with a length less than or equal to 16 and containing
     #characters such as "_" and "." the point is supported for geyser players to enter the server
     #If you use a different character such as a "," just substitute it at the point in the expression below!
     name-regex: "[a-zA-Z0-9_.]*"
+    #This parameter allows you to activate or deactivate this check
     enabled: true
   invalidname:
     #If a player who enters contains one of the following strings in his name he will be blocked!
@@ -149,6 +167,7 @@ checks:
       - "MCSTORM_IO"
       - "MC_BOT_IO"
     blacklist: true
+    #This parameter allows you to activate or deactivate this check
     enabled: true
   strange-register:
     #The second string after the command will be taken as the password
@@ -160,6 +179,7 @@ checks:
     limit: 3 #if 3 players uses the same password will be blacklisted
     blacklist: true
     antibotmode: true
+    #This parameter allows you to activate or deactivate this check
     enabled: true
   slowjoin:
     #This check will check if a player sends a certain packet,
@@ -175,6 +195,7 @@ checks:
       blacklist: false
       kick: true
       antibotmode: true
+      #This parameter allows you to activate or deactivate this check
       enabled: true
     #if from same ip 4 accounts are online
     #will perform the various actions
@@ -185,6 +206,7 @@ checks:
       blacklist: true
       kick: true
       antibotmode: true
+      #This parameter allows you to activate or deactivate this check
       enabled: true
 
 
