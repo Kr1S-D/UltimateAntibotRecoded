@@ -44,12 +44,12 @@ public class SatelliteCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 1;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         return null;
     }
 

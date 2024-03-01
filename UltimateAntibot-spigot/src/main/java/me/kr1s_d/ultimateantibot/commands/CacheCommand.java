@@ -5,6 +5,7 @@ import me.kr1s_d.commandframework.utils.CommandMapBuilder;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -36,12 +37,12 @@ public class CacheCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 2;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         return CommandMapBuilder.builder()
                 .set(1, Arrays.asList("status", "clear"))
                 .getMap();

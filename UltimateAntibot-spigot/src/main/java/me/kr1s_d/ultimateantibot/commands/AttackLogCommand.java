@@ -11,6 +11,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -81,12 +82,12 @@ public class AttackLogCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 3;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         Map<Integer, List<String>> map = new HashMap<>();
         map.put(1, Arrays.asList("list", "info"));
         return map;

@@ -5,6 +5,7 @@ import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -46,12 +47,12 @@ public class ClearCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 2;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         Map<Integer, List<String>> map = new HashMap<>();
         map.put(1, Arrays.asList("whitelist", "blacklist"));
         return map;

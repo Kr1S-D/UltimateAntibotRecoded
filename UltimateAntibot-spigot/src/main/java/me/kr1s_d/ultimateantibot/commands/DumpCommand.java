@@ -7,6 +7,7 @@ import me.kr1s_d.ultimateantibot.common.utils.PasteBinBuilder;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -63,12 +64,12 @@ public class DumpCommand implements SubCommand {
     }
 
     @Override
-    public int argsSize() {
+    public int minArgs() {
         return 1;
     }
 
     @Override
-    public Map<Integer, List<String>> getTabCompleter() {
+    public Map<Integer, List<String>> getTabCompleter(CommandSender commandSender, Command command, String s, String[] strings) {
         return null;
     }
 
