@@ -9,7 +9,7 @@ public enum PerformanceMode {
     private final boolean a;
     private final int b;
 
-    PerformanceMode(boolean isLatencyThreadEnabled, int antiBotModeTrigger){
+    PerformanceMode(boolean isLatencyThreadEnabled, int antiBotModeTrigger) {
         this.a = isLatencyThreadEnabled;
         this.b = antiBotModeTrigger;
     }

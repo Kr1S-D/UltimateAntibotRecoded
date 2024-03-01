@@ -43,4 +43,9 @@ public class ServerUtil {
     public static void log(LogHelper.LogType logType, String message) {
         platform.log(logType, message);
     }
+
+    public static void debug(String s) {
+        platform.getLogHelper().debug(s);
+    }
+
 }

@@ -17,13 +17,11 @@ import java.util.Map;
 public class UserDataService implements IService {
     private final IAntiBotPlugin plugin;
     private final LogHelper logHelper;
-    //private List<String> firstJoin;
     private Cache<String, ConnectionProfile> profiles;
 
     public UserDataService(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.logHelper = plugin.getLogHelper();
-        //this.firstJoin = new ArrayList<>();
         this.profiles = Caffeine.newBuilder()
                 .build();
     }
@@ -31,15 +29,7 @@ public class UserDataService implements IService {
     @Override
     public void load() {
         try {
-            //String encodedUsers = FileUtil.getEncodedBase64("users.dat", FileUtil.UABFolder.DATA);
             String encodedConnections = FileUtil.getEncodedBase64("profiles.dat", FileUtil.UABFolder.DATA);
-            //if (encodedUsers == null && encodedConnections == null) {
-            //    return;
-            //}
-            //if (encodedUsers != null) {
-                //firstJoin = SerializeUtil.deserialize(encodedUsers, ArrayList.class);
-                //if (firstJoin == null) firstJoin = new ArrayList<>();
-            //}
             if (encodedConnections != null) {
                 //load saved data as list
                 List<ConnectionProfile> serialized = SerializeUtil.deserialize(encodedConnections, ArrayList.class);
@@ -58,14 +48,12 @@ public class UserDataService implements IService {
                 }
             }
         } catch (Exception e) {
-            //if (firstJoin == null) firstJoin = new ArrayList<>();
             logHelper.error("Unable to load serialized files! If error persists contact support please!");
         }
     }
 
     @Override
     public void unload() {
-        //FileUtil.writeBase64("users.dat", FileUtil.UABFolder.DATA, firstJoin);
         //convert cache to a list of connectionprofile
         List<ConnectionProfile> profiles = new ArrayList<>();
         //fill list with current data
@@ -76,6 +64,13 @@ public class UserDataService implements IService {
 
     public void registerJoin(String ip, String nickname) {
         ConnectionProfile profile = profiles.get(ip, k -> new ConnectionProfile(ip, nickname));
+        if(profile == null) {
+            profiles.invalidate(ip);
+            profile = new ConnectionProfile(ip, nickname);
+            profiles.put(ip, profile);
+            logHelper.error("Null profile found while player joined, creating new one, if this error persist please contact the developer!");
+            return;
+        }
         profile.onJoin(ip);
     }
 
@@ -95,7 +90,7 @@ public class UserDataService implements IService {
     @UnderAttackMethod
     public boolean isFirstJoin(String ip, String nickname) {
         ConnectionProfile profile = profiles.get(ip, k -> new ConnectionProfile(ip, nickname));
-
+        if(profile == null) return true;
         if(profile.isFirstJoin()) {
             profile.setFirstJoin(false);
             return true;

@@ -13,5 +13,7 @@ public interface IServerPlatform {
 
     void broadcast(String message);
 
+    LogHelper getLogHelper();
+
     File getDFolder();
 }

@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public class JoinCache {
     private final Map<String, Long> lastIpJoined;
 
-    public JoinCache(){
+    public JoinCache() {
         this.lastIpJoined = new HashMap<>();
     }
 

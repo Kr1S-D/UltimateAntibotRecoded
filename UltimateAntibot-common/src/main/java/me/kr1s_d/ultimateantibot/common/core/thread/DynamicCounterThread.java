@@ -32,6 +32,10 @@ public class DynamicCounterThread {
         if(plugin.getAntiBotManager().isSomeModeOnline()) total++;
     }
 
+    public void decrease() {
+        count--;
+    }
+
     public long getTotal() {
         return this.total;
     }

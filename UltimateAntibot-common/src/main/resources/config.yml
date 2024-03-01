@@ -14,8 +14,8 @@ version: 4.3
 #it results in a spam of useless messages in the console :(
 debug: false
 
-#UltimateAntibot V4 brings with it great improvements, ways of adapting the antibot
-#to the performance of the machine based on its performance have been created.
+# (!) ANTIBOT ADAPTING MODE (!)
+#This parameter adapts the antibot by modifying some parameters based on the performance of your server and on your playerbase
 detect-server-performance: true
 
 # (!) WARNING (!)

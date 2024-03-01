@@ -80,6 +80,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         try {
             ConfigManger.init(config);
             MessageManager.init(messages);
+            PerformanceHelper.init(ServerType.SPIGOT);
         } catch (Exception e) {
             logHelper.error("Error during config.yml & messages.yml loading!");
             return;
@@ -115,7 +116,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthors().toString())
                 .replace("$3", String.valueOf(Version.getCores()))
-                .replace("$4", String.valueOf(PerformanceHelper.getPerformanceMode()))
+                .replace("$4", String.valueOf(PerformanceHelper.get()))
         );
         logHelper.info("&fThe &cabyss&f is ready to swallow all the bots!");
         CommandManager commandManager = new CommandManager("ultimateantibot", "", "ab", "uab");

@@ -109,6 +109,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         try {
             ConfigManger.init(this.config);
             MessageManager.init(this.messages);
+            PerformanceHelper.init(ServerType.VELOCITY);
         } catch (Exception e) {
             this.logHelper.error("Error during config.yml & messages.yml loading!");
             return;
@@ -144,7 +145,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
                 .replace("$1", VERSION)
                 .replace("$2", AUTHOR)
                 .replace("$3", String.valueOf(Version.getCores()))
-                .replace("$4", String.valueOf(PerformanceHelper.getPerformanceMode())));
+                .replace("$4", String.valueOf(PerformanceHelper.get())));
         this.logHelper.info("§fThe §cabyss&f is ready to swallow all the bots!");
         CommandManager commandManager = server.getCommandManager();
         CommandMeta commandMeta = commandManager.metaBuilder("uab")

@@ -9,21 +9,21 @@ public class LatencyThread {
     private String result;
     private double count;
 
-    public LatencyThread(IAntiBotPlugin iAntiBotPlugin){
+    public LatencyThread(IAntiBotPlugin iAntiBotPlugin) {
         iAntiBotPlugin.getLogHelper().debug("Enabled " + this.getClass().getSimpleName() + "!");
         this.result = "§cdisabled (see config)";
         this.count = 0;
         long nsv = 1250000000;
-        if(PerformanceHelper.getRunning().equals(ServerType.SPIGOT)) {
+        if (PerformanceHelper.getRunning().equals(ServerType.SPIGOT)) {
             this.result = "§cdisabled (on bukkit)";
             return;
         }
-        if(PerformanceHelper.isEnabled() && !PerformanceHelper.getPerformanceMode().isLatencyThreadEnabled()){
+        if (PerformanceHelper.isEnabled() && !PerformanceHelper.get().isLatencyThreadEnabled()) {
             iAntiBotPlugin.getLogHelper().warn("Since you have the performance mode enabled, we found that the latency thread must be disabled, otherwise it could create stability problems (read config), to enable it, you must disable it in the config section 'detect-server-performance', and activate the 'enable-latency-thread'");
-            this.result = "§c(disabled (detect-server-performance: true))";
+            this.result = "§c(disabled due (detect-server-performance: true))";
             return;
         }
-        if(ConfigManger.enableLatencyThread) {
+        if (ConfigManger.enableLatencyThread) {
             new Thread(() -> {
                 while (iAntiBotPlugin.isRunning()) {
                     long first = System.nanoTime();

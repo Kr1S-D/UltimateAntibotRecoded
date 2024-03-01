@@ -56,7 +56,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     public void onEnable() {
         instance = this;
         this.isRunning = true;
-        PerformanceHelper.init(ServerType.BUNGEECORD);
         RuntimeUtil.setup(this);
         ServerUtil.setPlatform(this);
         long a = System.currentTimeMillis();
@@ -77,6 +76,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         try {
             ConfigManger.init(this.config);
             MessageManager.init(this.messages);
+            PerformanceHelper.init(ServerType.BUNGEECORD);
         } catch (Exception e) {
             this.logHelper.error("Error during config.yml & messages.yml loading!");
             return;
@@ -111,7 +111,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
                 .replace("$1", getDescription().getVersion())
                 .replace("$2", getDescription().getAuthor())
                 .replace("$3", String.valueOf(Version.getCores()))
-                .replace("$4", String.valueOf(PerformanceHelper.getPerformanceMode())));
+                .replace("$4", String.valueOf(PerformanceHelper.get())));
         this.logHelper.info("&fThe &cabyss&f is ready to swallow all the bots!");
         CommandManager commandManager = new CommandManager(this, "ultimateantibot", "", "ab", "uab");
         commandManager.register(new AddRemoveBlacklistCommand(this));
