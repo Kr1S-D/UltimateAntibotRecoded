@@ -3,9 +3,9 @@ package me.kr1s_d.ultimateantibot.common.antivpn.ipapi;
 import com.google.gson.Gson;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.antivpn.VPNProvider;
+import me.kr1s_d.ultimateantibot.common.core.tasks.TimedWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.core.tasks.TimedWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
 import java.io.IOException;

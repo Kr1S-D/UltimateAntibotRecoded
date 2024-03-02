@@ -7,7 +7,10 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.CommandSender;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ClearCommand implements SubCommand {
 

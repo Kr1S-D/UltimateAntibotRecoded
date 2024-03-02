@@ -2,7 +2,9 @@ package me.kr1s_d.ultimateantibot.common.objects.profile;
 
 import me.kr1s_d.ultimateantibot.common.core.server.packet.SatellitePacket;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionProfile implements Serializable, SatellitePacket {

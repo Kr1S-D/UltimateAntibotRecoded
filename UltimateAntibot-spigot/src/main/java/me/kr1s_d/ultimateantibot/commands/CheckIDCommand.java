@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.commands;
 
 import me.kr1s_d.commandframework.objects.SubCommand;
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;

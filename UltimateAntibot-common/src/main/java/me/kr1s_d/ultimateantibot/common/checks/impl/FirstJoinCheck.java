@@ -7,9 +7,6 @@ import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FirstJoinCheck implements JoinCheck {
     private final UserDataService userDataService;
 

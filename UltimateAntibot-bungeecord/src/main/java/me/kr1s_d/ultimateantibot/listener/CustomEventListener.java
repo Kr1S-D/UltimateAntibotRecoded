@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.listener;
 
+import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.common.AttackState;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.ModeType;
@@ -10,7 +11,6 @@ import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.event.AttackStateEvent;
 import me.kr1s_d.ultimateantibot.event.DuringAttackIPJoinEvent;
 import me.kr1s_d.ultimateantibot.event.ModeEnableEvent;
-import me.kr1s_d.ultimateantibot.Notificator;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;

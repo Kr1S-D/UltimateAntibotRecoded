@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.utils;
 
+import me.kr1s_d.ultimateantibot.UltimateAntiBotVelocity;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.UltimateAntiBotVelocity;
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration;
 
 import java.io.File;

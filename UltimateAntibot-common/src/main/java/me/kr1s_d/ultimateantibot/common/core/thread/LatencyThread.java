@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.common.core.thread;
 
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.helper.ServerType;
-import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 public class LatencyThread {

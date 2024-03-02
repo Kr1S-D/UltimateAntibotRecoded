@@ -1,11 +1,11 @@
 package me.kr1s_d.ultimateantibot.common.antivpn.proxycheck;
 
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.antivpn.VPNProvider;
 import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.result.ProxyResults;
-import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.core.tasks.TimedWhitelistTask;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
 public class ProxyCheckProvider implements VPNProvider {

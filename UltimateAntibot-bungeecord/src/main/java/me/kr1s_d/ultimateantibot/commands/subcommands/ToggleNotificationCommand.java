@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.commands.subcommands;
 
+import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.commands.SubCommand;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
-import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

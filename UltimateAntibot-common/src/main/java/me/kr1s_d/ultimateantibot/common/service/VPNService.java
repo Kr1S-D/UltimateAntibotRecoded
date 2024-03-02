@@ -1,14 +1,15 @@
 package me.kr1s_d.ultimateantibot.common.service;
 
-import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.antivpn.ipapi.IPAPIProvider;
-import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.ProxyCheckProvider;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.IService;
+import me.kr1s_d.ultimateantibot.common.antivpn.ipapi.IPAPIProvider;
+import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.ProxyCheckProvider;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class VPNService implements IService {

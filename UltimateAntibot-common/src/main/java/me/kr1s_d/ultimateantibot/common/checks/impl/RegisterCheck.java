@@ -11,7 +11,10 @@ import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RegisterCheck implements ChatCheck {
     private final IAntiBotPlugin plugin;

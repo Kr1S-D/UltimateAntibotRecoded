@@ -1,10 +1,13 @@
 package me.kr1s_d.ultimateantibot.common;
 
 import me.kr1s_d.ultimateantibot.common.core.UltimateAntiBotCore;
-import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.core.thread.AnimationThread;
 import me.kr1s_d.ultimateantibot.common.core.thread.LatencyThread;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.service.AttackTrackerService;
+import me.kr1s_d.ultimateantibot.common.service.FirewallService;
+import me.kr1s_d.ultimateantibot.common.service.UserDataService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
 
 public interface IAntiBotPlugin {
     void reload();

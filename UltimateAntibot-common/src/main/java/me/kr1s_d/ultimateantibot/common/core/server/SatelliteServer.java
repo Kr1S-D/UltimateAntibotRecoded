@@ -3,9 +3,9 @@ package me.kr1s_d.ultimateantibot.common.core.server;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.core.server.listener.SatelliteListener;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.objects.profile.ConnectionProfile;
-import me.kr1s_d.ultimateantibot.common.core.server.listener.SatelliteListener;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 
 import java.io.BufferedReader;

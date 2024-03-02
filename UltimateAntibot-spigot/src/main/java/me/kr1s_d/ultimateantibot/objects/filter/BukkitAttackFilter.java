@@ -11,7 +11,6 @@ import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.message.Message;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

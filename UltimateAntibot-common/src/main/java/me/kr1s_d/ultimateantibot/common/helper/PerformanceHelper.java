@@ -1,6 +1,5 @@
 package me.kr1s_d.ultimateantibot.common.helper;
 
-import me.kr1s_d.ultimateantibot.common.IServerPlatform;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.common.utils.Version;

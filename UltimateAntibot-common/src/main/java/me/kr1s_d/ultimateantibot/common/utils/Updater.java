@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
-import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;

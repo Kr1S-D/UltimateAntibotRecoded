@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.listener;
 
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.event.PlayerHandshakeEvent;

@@ -1,16 +1,16 @@
 package me.kr1s_d.ultimateantibot;
 
-import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
-import me.kr1s_d.ultimateantibot.common.core.detectors.AttackDurationDetector;
-import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.ModeType;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.service.BlackListService;
-import me.kr1s_d.ultimateantibot.common.service.VPNService;
-import me.kr1s_d.ultimateantibot.common.service.QueueService;
-import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
+import me.kr1s_d.ultimateantibot.common.ModeType;
+import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
+import me.kr1s_d.ultimateantibot.common.core.detectors.AttackDurationDetector;
 import me.kr1s_d.ultimateantibot.common.core.thread.DynamicCounterThread;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import me.kr1s_d.ultimateantibot.common.service.BlackListService;
+import me.kr1s_d.ultimateantibot.common.service.QueueService;
+import me.kr1s_d.ultimateantibot.common.service.VPNService;
+import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.Formatter;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;

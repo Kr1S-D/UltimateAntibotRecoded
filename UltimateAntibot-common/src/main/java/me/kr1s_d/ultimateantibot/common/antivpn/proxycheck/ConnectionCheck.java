@@ -2,8 +2,8 @@ package me.kr1s_d.ultimateantibot.common.antivpn.proxycheck;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.result.ProxyResults;
 import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.query.HTTPQuery;
+import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.result.ProxyResults;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.io.IOException;

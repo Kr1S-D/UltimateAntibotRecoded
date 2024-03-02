@@ -2,13 +2,13 @@ package me.kr1s_d.ultimateantibot.common.service;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import me.kr1s_d.ultimateantibot.common.UnderAttackMethod;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
-import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
-import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.IService;
+import me.kr1s_d.ultimateantibot.common.UnderAttackMethod;
+import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
+import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 
 import java.util.ArrayList;
 import java.util.HashMap;

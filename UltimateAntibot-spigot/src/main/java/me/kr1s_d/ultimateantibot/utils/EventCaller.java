@@ -2,8 +2,6 @@ package me.kr1s_d.ultimateantibot.utils;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotSpigot;
 import org.bukkit.Bukkit;
-import org.bukkit.Statistic;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 public class EventCaller {

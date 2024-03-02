@@ -3,7 +3,6 @@ package me.kr1s_d.ultimateantibot.objects.filter;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
-import me.kr1s_d.ultimateantibot.objects.Config;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.Filter;

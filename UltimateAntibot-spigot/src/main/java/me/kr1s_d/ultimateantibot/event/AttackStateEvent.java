@@ -1,9 +1,9 @@
 package me.kr1s_d.ultimateantibot.event;
 
 import me.kr1s_d.ultimateantibot.common.AttackState;
-import me.kr1s_d.ultimateantibot.common.ModeType;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.ModeType;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

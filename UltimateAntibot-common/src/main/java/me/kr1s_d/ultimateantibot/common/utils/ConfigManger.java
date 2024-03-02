@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
-import me.kr1s_d.ultimateantibot.common.objects.config.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.objects.config.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.objects.config.SlowCheckConfig;
 
 import java.util.List;

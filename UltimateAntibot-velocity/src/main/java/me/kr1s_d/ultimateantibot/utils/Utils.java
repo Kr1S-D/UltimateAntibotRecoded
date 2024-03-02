@@ -1,8 +1,8 @@
 package me.kr1s_d.ultimateantibot.utils;
 
 import com.velocitypowered.api.proxy.Player;
-import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.UltimateAntiBotVelocity;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import net.kyori.adventure.text.Component;
 
 import java.net.InetAddress;

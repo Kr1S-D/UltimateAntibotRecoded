@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class LimitedList<E> implements Iterable<E> {
     private final List<E> list;
