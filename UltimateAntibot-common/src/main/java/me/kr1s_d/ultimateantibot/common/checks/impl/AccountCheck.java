@@ -84,7 +84,7 @@ public class AccountCheck implements JoinCheck {
     }
 
     public void loadTask() {
-        plugin.scheduleRepeatingTask(map::clear, false, 1000L * ConfigManger.taskManagerClearCache);
+        plugin.scheduleRepeatingTask(map::clear, false, 1000L * 300L); //300 sec
     }
 
     @Override
