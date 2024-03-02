@@ -60,6 +60,11 @@
                                 <pattern>com.github.benmanes</pattern>
                                 <shadedPattern>me.kr1s_d.ultimateantibot.libs.caffeine</shadedPattern>
                             </relocation>
+                            <!-- Velocity Relocation -->
+                            <relocation>
+                                <pattern>org.yaml.snakeyaml</pattern>
+                                <shadedPattern>me.kr1s_d.ultimateantibot.libs.snakeyaml</shadedPattern>
+                            </relocation>
                         </relocations>
                     </configuration>
                     <executions>
