@@ -7,14 +7,12 @@ import me.kr1s_d.ultimateantibot.common.UnderAttackMethod;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
 
 public class QueueService implements IService {
     private final Cache<String, Boolean> queue;
     private long lastCleanUP;
 
-    public QueueService(){
+    public QueueService() {
         this.queue = Caffeine.newBuilder()
                 .expireAfterWrite(Duration.ofSeconds(ConfigManger.taskManagerClearCache))
                 .build();
@@ -22,7 +20,8 @@ public class QueueService implements IService {
     }
 
     @Override
-    public void load() {}
+    public void load() {
+    }
 
     @Override
     public void unload() {
@@ -30,22 +29,22 @@ public class QueueService implements IService {
     }
 
     @UnderAttackMethod
-    public boolean isQueued(String ip){
+    public boolean isQueued(String ip) {
         return queue.getIfPresent(ip) != null;
     }
 
     @UnderAttackMethod
-    public void queue(String ip){
+    public void queue(String ip) {
         queue.put(ip, true);
     }
 
     @UnderAttackMethod
-    public void removeQueue(String ip){
+    public void removeQueue(String ip) {
         queue.invalidate(ip);
     }
 
     public int size() {
-        if(System.currentTimeMillis() - lastCleanUP >= 20000) {
+        if (System.currentTimeMillis() - lastCleanUP >= 20000) {
             queue.cleanUp();
             lastCleanUP = System.currentTimeMillis();
         }

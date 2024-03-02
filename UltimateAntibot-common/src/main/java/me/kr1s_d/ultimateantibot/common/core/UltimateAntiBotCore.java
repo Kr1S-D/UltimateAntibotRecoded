@@ -28,18 +28,18 @@ public class UltimateAntiBotCore {
             DetectorService.tickDetectors();
         }, false, 1000L);
 
-        plugin.scheduleRepeatingTask(this::checkAutoPurger, true, 300000L); //5 min
         plugin.scheduleRepeatingTask(() -> {
             if(plugin.getAntiBotManager().isAntiBotModeEnabled()) {
                return;
             }
 
-            for(String blacklisted : blackListService.getBlackListedIPS()){
+            for(String blacklisted : blackListService.getBlackListedIPS()) {
                 whitelistService.unWhitelist(blacklisted);
             }
 
             whitelistService.checkWhitelisted();
-        }, false, 1000L * ConfigManger.taskManagerClearCache);
+            checkAutoPurger();
+        }, false, 1000L * 300); //5m
     }
 
     public void refresh() {
@@ -53,7 +53,7 @@ public class UltimateAntiBotCore {
         long currentTimeMillis = System.currentTimeMillis();
         long elapsedTimeMillis = currentTimeMillis - ServerUtil.getLastAttack();
         long elapsedTimeMinutes = TimeUnit.MILLISECONDS.toMinutes(elapsedTimeMillis);
-        //se il server è sotto attacco o l'ultimo attacco è stato meno di 10 minuti fà ritorna
+        //if the server is under attack or the last attack was less than 10 minutes ago it returns
         if(elapsedTimeMinutes < 10 || plugin.getAntiBotManager().isSomeModeOnline()) return;
 
         //check for blacklist autopurge
