@@ -252,6 +252,11 @@ public class MainEventListener implements Listener {
     public void onSwitch(ServerSwitchEvent e) {
         String ip = Utils.getIP(e.getPlayer());
 
+        if(e.getFrom() == null) {
+            plugin.getLogHelper().debug("[EVENT] Server first connection for " + ip);
+            return;
+        }
+
         //decrease to prevent false flags for a lot of joins
         if(antiBotManager.getWhitelistService().isWhitelisted(ip) && antiBotManager.getJoinCache().isJoined(ip)) {
             antiBotManager.getDynamicJoins().decrease();
