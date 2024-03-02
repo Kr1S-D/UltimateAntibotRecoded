@@ -104,7 +104,7 @@ playtime_for_whitelist: 10 #minutes
 
 #I suggest not touching this section
 taskmanager:
-  clearcache: 120 #seconds
+  clearcache: 60 #seconds
   auth: 300 #seconds
   register: 120 #seconds
   update: 15 #seconds
@@ -118,11 +118,11 @@ checks:
   firstjoin:
     #This parameter allows you to activate or deactivate this check
     enabled: true
-  #This check controls the number of accounts connected simultaneously to the server from the same IP, blocking them based on the conditions below
+  #This check checks how many names the bot tried to enter the server with, blocking IPs that change their names too many times, it works only during an attack
   namechanger:
     #How often information is deleted from memory (avoiding using too much memory for useless data)
     time: 200 #seconds
-    #How many accounts must be connected simultaneously from the same IP in order to blacklist them?
+    #This parameter indicates how many names the IP must change to be blacklisted
     limit: 3
     #This parameter allows you to activate or deactivate this check
     enabled: true
@@ -189,18 +189,18 @@ checks:
     #If you see any abnormal kicks on your server it is recommended to disable it!
     packet:
       time: 120 #seconds
+      #This parameter indicates how many players do not need to send the packet to activate slow antibot mode
       trigger: 5
-      #dev only
-      condition: 0
+      condition: 0 #ignored here
       blacklist: false
       kick: true
       antibotmode: true
       #This parameter allows you to activate or deactivate this check
       enabled: true
-    #if from same ip 4 accounts are online
-    #will perform the various actions
+    #This check controls the number of accounts connected simultaneously to the server from the same IP, blocking them based on the conditions below
     account:
       time: 0 #ignored here
+      #How many accounts must be connected simultaneously from the same IP in order to blacklist them?
       trigger: 4
       condition: 0 #ignored here
       blacklist: true
