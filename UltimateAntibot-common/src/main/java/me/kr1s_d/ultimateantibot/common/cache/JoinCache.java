@@ -1,17 +1,21 @@
 package me.kr1s_d.ultimateantibot.common.cache;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public class JoinCache {
-    private final Map<String, Long> lastIpJoined;
+    private final Cache<String, Long> lastIpJoined;
 
     public JoinCache() {
-        this.lastIpJoined = new HashMap<>();
+        this.lastIpJoined = Caffeine.newBuilder()
+                .expireAfterWrite(ConfigManger.joinCacheJoinMinutes, TimeUnit.MINUTES)
+                .build();
     }
 
     public void addJoined(String ip) {
@@ -19,24 +23,29 @@ public class JoinCache {
     }
 
     public void removeJoined(String ip){
-        lastIpJoined.remove(ip);
+        lastIpJoined.invalidate(ip);
     }
 
     public void clear() {
-        lastIpJoined.clear();
+        lastIpJoined.invalidateAll();
     }
 
-    public List<String> getJoined(int minSec) {
+    public List<String> getJoined() {
         List<String> ip = new ArrayList<>();
 
-        for(Map.Entry<String, Long> map : lastIpJoined.entrySet()){
+        for(Map.Entry<String, Long> map : lastIpJoined.asMap().entrySet()) {
             int second = (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - map.getValue());
 
-            if(second <= minSec){
+            if(second <= ConfigManger.joinCacheJoinMinutes){
                 ip.add(map.getKey());
             }
         }
 
         return ip;
+    }
+
+    public boolean isJoined(String ip) {
+        List<String> joined = getJoined();
+        return joined.contains(ip);
     }
 }

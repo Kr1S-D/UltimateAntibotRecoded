@@ -241,7 +241,6 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
                 .repeat(runnable.getPeriod(), TimeUnit.MILLISECONDS)
                 .schedule();
 
-
         runnable.setTaskID((int) TaskScheduler.trackTask(task));
     }
 

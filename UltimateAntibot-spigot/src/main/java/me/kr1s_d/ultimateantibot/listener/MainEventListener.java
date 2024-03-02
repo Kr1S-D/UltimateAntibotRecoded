@@ -82,6 +82,7 @@ public class MainEventListener implements Listener {
             return;
         }
         if (whitelistService.isWhitelisted(ip)) {
+            antiBotManager.getDynamicJoins().decrease();
             return;
         }
         //
@@ -182,8 +183,8 @@ public class MainEventListener implements Listener {
             antiBotManager.getJoinCache().addJoined(ip);
             //Auto Whitelist Task
             plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
-            //Remove from JoinCache after 30 Seconds
-            plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip), false, 1000L * 30);
+            //Remove from JoinCache after 30 Seconds (committed since cache added auto removal in JoinCache)
+            //plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip), false, 1000L * 30);
             //
             //Connection check (ProxyCheck.io or ip-api.com)
             //

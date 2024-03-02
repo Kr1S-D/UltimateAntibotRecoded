@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.SplittableRandom;
 
 public class ConfigManger {
+    public static int joinCacheJoinMinutes = 2;
     private static IConfiguration CONFIG;
 
     public static double version;

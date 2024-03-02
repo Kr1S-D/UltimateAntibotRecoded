@@ -67,7 +67,7 @@ antibotmode:
   trigger: 10
   #This parameter indicates how long the slow antibot mode that is activated when a slow bot attack is detected should last
   keep-slow: 25
-  #This parameter indicates whether when the antibot mode is activated it should expel players who entered 10 minutes earlier as they could be bots
+  #This parameter indicates whether when the antibot mode is activated it should kick players who entered 5 minutes earlier as they could be bots
   disconnect: true
 
 # (!) PING-MODE (!)
@@ -104,7 +104,7 @@ playtime_for_whitelist: 10 #minutes
 
 #I suggest not touching this section
 taskmanager:
-  clearcache: 60 #seconds
+  clearcache: 120 #seconds
   auth: 300 #seconds
   register: 120 #seconds
   update: 15 #seconds
@@ -208,7 +208,6 @@ checks:
       antibotmode: true
       #This parameter allows you to activate or deactivate this check
       enabled: true
-
 
 ######################################
 #               FIREWALL             #

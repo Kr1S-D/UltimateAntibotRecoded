@@ -7,6 +7,7 @@ import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.connection.PreLoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.PlayerSettingsChangedEvent;
+import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.proxy.ProxyPingEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.kr1s_d.ultimateantibot.Notificator;
@@ -92,6 +93,7 @@ public class MainEventListener {
             return;
         }
         if (whitelistService.isWhitelisted(ip)) {
+            antiBotManager.getDynamicJoins().decrease();
             return;
         }
 
@@ -207,8 +209,8 @@ public class MainEventListener {
             antiBotManager.getJoinCache().addJoined(ip);
             //Auto Whitelist Task
             plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
-            //Remove from JoinCache after 30 Seconds
-            plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip), false, 1000L * 30);
+            //Remove from JoinCache after 30 Seconds (committed since cache added auto removal in JoinCache)
+            //plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip), false, 1000L * 30);
             //
             //Connection check (ProxyCheck.io or ip-api.com)
             //
@@ -242,6 +244,25 @@ public class MainEventListener {
         if (ServerUtil.blacklistPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()) {
             authCheck.onPing(e, ip);
         }
+    }
+
+    @Subscribe
+    public void onSwitch(ServerConnectedEvent e) {
+        String ip = Utils.getIP(e.getPlayer());
+        //return in case is the first server connection and not a server switch
+        if(!e.getPreviousServer().isPresent()) {
+            plugin.getLogHelper().debug("[EVENT] Server first connection for " + ip);
+            return;
+        }
+
+        //decrease to prevent false flags for a lot of joins
+        if(antiBotManager.getWhitelistService().isWhitelisted(ip) && antiBotManager.getJoinCache().isJoined(ip)) {
+            antiBotManager.getDynamicJoins().decrease();
+            //removed from joined to prevent multiple decreases due server switching
+            antiBotManager.getJoinCache().removeJoined(ip);
+        }
+
+        plugin.getLogHelper().debug("[EVENT] Server switch for " + ip);
     }
 
     @Subscribe
