@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
 import me.kr1s_d.ultimateantibot.common.objects.FancyLong;
+import me.kr1s_d.ultimateantibot.common.objects.PonderateEntry;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,5 +28,18 @@ public class MathUtil {
 
     public static FancyLong min(FancyLong a, FancyLong b){
         return new FancyLong(Math.min(a.get(), b.get()));
+    }
+
+
+    public static double ponderate(PonderateEntry... params) {
+        double sumValuesTimesWeights = 0;
+        double sumWeights = 0;
+
+        for (PonderateEntry entry : params) {
+            sumValuesTimesWeights += entry.getValue() * entry.getWeight();
+            sumWeights += entry.getWeight();
+        }
+
+        return sumValuesTimesWeights / sumWeights;
     }
 }

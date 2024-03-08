@@ -3,6 +3,7 @@ package me.kr1s_d.ultimateantibot.common.core;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.DetectorService;
+import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
@@ -13,11 +14,13 @@ public class UltimateAntiBotCore {
     private final IAntiBotPlugin plugin;
     private final BlackListService blackListService;
     private final WhitelistService whitelistService;
+    private final UserDataService userDataService;
 
     public UltimateAntiBotCore(IAntiBotPlugin plugin){
         this.plugin = plugin;
         this.blackListService = plugin.getAntiBotManager().getBlackListService();
         this.whitelistService = plugin.getAntiBotManager().getWhitelistService();
+        this.userDataService = plugin.getUserDataService();
     }
 
     public void load() {
