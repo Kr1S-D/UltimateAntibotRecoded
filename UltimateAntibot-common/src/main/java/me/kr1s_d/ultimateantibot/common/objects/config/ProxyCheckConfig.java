@@ -19,7 +19,7 @@ public class ProxyCheckConfig {
         return checkFastJoin;
     }
 
-    public boolean isEnabled(){
-        return key.length() == 27;
+    public boolean isEnabled() {
+        return !(key.equals("enter-here-your-key") || key.isEmpty());
     }
 }
