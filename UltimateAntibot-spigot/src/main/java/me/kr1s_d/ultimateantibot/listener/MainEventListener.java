@@ -225,6 +225,7 @@ public class MainEventListener implements Listener {
     @EventHandler
     public void onUnLogin(PlayerQuitEvent e) {
         String ip = Utils.getPlayerIP(e.getPlayer());
+        Notificator.onQuit(e.getPlayer());
         //
         //Account Check
         //

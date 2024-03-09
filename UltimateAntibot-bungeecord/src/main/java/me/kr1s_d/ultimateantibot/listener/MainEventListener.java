@@ -269,6 +269,7 @@ public class MainEventListener implements Listener {
     @EventHandler
     public void onUnLogin(PlayerDisconnectEvent e) {
         String ip = Utils.getIP(e.getPlayer());
+        Notificator.onQuit(e.getPlayer());
         //
         //Packet Check
         //

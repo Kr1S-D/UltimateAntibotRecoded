@@ -56,6 +56,12 @@ public class Notificator implements INotificator {
         player.sendMessage(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledTitle));
     }
 
+    public static void onQuit(Player player) {
+        titles.remove(player);
+        bar.removePlayer(player);
+        actionbars.remove(player);
+    }
+
     public static void disableAllNotifications() {
         actionbars.clear();
         bar.getPlayers().forEach(p -> bar.removePlayer(p.getPlayer()));

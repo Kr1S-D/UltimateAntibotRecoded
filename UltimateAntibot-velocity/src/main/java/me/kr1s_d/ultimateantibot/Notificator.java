@@ -42,6 +42,12 @@ public class Notificator implements INotificator {
         actionbars.add(player);
     }
 
+    public static void onQuit(Player player) {
+        titles.remove(player);
+        bar.remove(player);
+        actionbars.remove(player);
+    }
+
     public static void toggleBossBar(Player player){
         if(bar.contains(player)){
             bar.remove(player);

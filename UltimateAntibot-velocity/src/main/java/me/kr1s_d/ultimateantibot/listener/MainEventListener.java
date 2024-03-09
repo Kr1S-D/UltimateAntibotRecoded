@@ -268,6 +268,7 @@ public class MainEventListener {
     @Subscribe
     public void onUnLogin(DisconnectEvent e) {
         String ip = Utils.getIP(e.getPlayer());
+        Notificator.onQuit(e.getPlayer());
         //
         //Packet Check
         //

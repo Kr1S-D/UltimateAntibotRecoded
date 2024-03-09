@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Notificator implements INotificator {
-
     private static final List<ProxiedPlayer> actionbars = new ArrayList<>();
     private static final List<ProxiedPlayer> titles = new ArrayList<>();
     private static final DynamicBar bar = new DynamicBar("&fWaiting for a new attack!", BarColor.RED, BarStyle.SOLID);
@@ -65,12 +64,17 @@ public class Notificator implements INotificator {
         player.sendMessage(new TextComponent(ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledTitle)));
     }
 
+    public static void onQuit(ProxiedPlayer player) {
+        titles.remove(player);
+        bar.removePlayer(player);
+        actionbars.remove(player);
+    }
+
     public static void disableAllNotifications() {
         actionbars.clear();
         bar.removeAll();
         titles.clear();
     }
-
 
     public void sendActionbar(String str) {
         actionbars.forEach(ac -> ac.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ServerUtil.colorize(str))));
