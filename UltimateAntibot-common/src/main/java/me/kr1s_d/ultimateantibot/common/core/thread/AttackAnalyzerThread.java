@@ -57,19 +57,19 @@ public class AttackAnalyzerThread {
     }
 
 
-    private double calculatePercentage(double prima, double dopo){
-        if(prima == dopo){
+    private double calculatePercentage(double before, double after) {
+        if (before == after) {
             return 0;
         }
-        if(dopo == 0){
-            dopo = 1;
+        if (after == 0) {
+            after = 1;
         }
-        if(prima == 0){
-            prima = 1;
+        if (before == 0) {
+            before = 1;
         }
-        double d1 = dopo - prima;
-        double las = Math.round((d1 / prima) * 100L);
-        if(las < 0){
+        double d1 = after - before;
+        double las = Math.round((d1 / before) * 100L);
+        if (las < 0) {
             las *= -1;
         }
         return las;
