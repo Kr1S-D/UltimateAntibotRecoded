@@ -26,7 +26,7 @@ detect-server-performance: true
 enable-latency-thread: false
 
 # (!) NOTIFICATION (!)
-#Enable bossbar notification on attack (1.9+)
+#Enable bossbar notification on attack (only on 1.9+ clients)
 enable-bossbar-automatic-notification: true
 #Disable notifications after an attack?
 disable-notifications-after-attack: false
