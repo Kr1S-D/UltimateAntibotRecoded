@@ -114,7 +114,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         new AttackAnalyzerThread(this);
         logHelper.info("&fLoaded &cUltimateAntiBot!");
         logHelper.sendLogo();
-        logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: $4"
+        logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: &f$4"
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthors().toString())
                 .replace("$3", String.valueOf(Version.getCores()))

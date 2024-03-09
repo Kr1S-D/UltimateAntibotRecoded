@@ -113,7 +113,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         new AttackAnalyzerThread(this);
         this.logHelper.info("&fLoaded &cUltimateAntiBot!");
         this.logHelper.sendLogo();
-        this.logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: $4"
+        this.logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: &f$4"
                 .replace("$1", getDescription().getVersion())
                 .replace("$2", getDescription().getAuthor())
                 .replace("$3", String.valueOf(Version.getCores()))
