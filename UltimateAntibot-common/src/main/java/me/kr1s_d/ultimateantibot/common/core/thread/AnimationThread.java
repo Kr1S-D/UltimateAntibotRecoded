@@ -8,26 +8,32 @@ import java.util.Map;
 public class AnimationThread {
 
     private final Map<Integer, String> animationMap;
-    private String emote;
-    private int increase;
+    private String currentEmote;
+    private int counter;
 
-    public AnimationThread(IAntiBotPlugin iAntiBotPlugin){
-        iAntiBotPlugin.getLogHelper().debug("Enabled AnimationThread!");
-        this.increase = 1;
+    public AnimationThread(IAntiBotPlugin antiBotPlugin){
+        antiBotPlugin.getLogHelper().debug("Enabled AnimationThread!");
+        this.counter = 1;
         this.animationMap = new HashMap<>();
+        initializeAnimationMap();
+
+        antiBotPlugin.scheduleRepeatingTask(this::updateEmote, true, 125L);
+    }
+
+    private void initializeAnimationMap() {
         animationMap.put(1, "▛");
         animationMap.put(2, "▜");
         animationMap.put(3, "▟");
         animationMap.put(4, "▙");
-
-        iAntiBotPlugin.scheduleRepeatingTask(() -> {
-            emote = animationMap.get(increase);
-            if(increase == 4) this.increase = 0;
-            increase++;
-        }, true, 125L);
     }
 
+    private void updateEmote() {
+        currentEmote = animationMap.get(counter);
+        counter = (counter % 4) + 1;
+    }
+
+
     public String getEmote() {
-        return emote;
+        return currentEmote;
     }
 }
