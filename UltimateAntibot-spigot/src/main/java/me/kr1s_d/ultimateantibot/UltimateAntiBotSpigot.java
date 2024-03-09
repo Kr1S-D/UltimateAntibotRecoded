@@ -64,7 +64,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.isRunning = true;
         PerformanceHelper.init(ServerType.SPIGOT);
         RuntimeUtil.setup(this);
-        ServerUtil.setPlatform(this);
+        ServerUtil.setInstance(this);
         this.scheduler = Bukkit.getScheduler();
         this.config = new Config(this, "config");
         this.messages = new Config(this, "messages");

@@ -9,7 +9,7 @@ import me.kr1s_d.ultimateantibot.common.service.FirewallService;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 
-public interface IAntiBotPlugin {
+public interface IAntiBotPlugin extends IServerPlatform {
     void reload();
 
     void runTask(Runnable task, boolean isAsync);

@@ -1,11 +1,12 @@
 package me.kr1s_d.ultimateantibot.common.objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class LimitedList<E> implements Iterable<E> {
+public class LimitedList<E> implements Iterable<E>, Serializable {
     private final List<E> list;
     private final int limit;
 

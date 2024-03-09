@@ -63,7 +63,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         instance = this;
         this.isRunning = true;
         RuntimeUtil.setup(this);
-        ServerUtil.setPlatform(this);
+        ServerUtil.setInstance(this);
         long a = System.currentTimeMillis();
         this.scheduler = ProxyServer.getInstance().getScheduler();
         this.config = new Config(this, "%datafolder%/config.yml");

@@ -91,7 +91,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         this.scheduler = server.getScheduler();
         PerformanceHelper.init(ServerType.VELOCITY);
         RuntimeUtil.setup(this);
-        ServerUtil.setPlatform(this);
+        ServerUtil.setInstance(this);
         long a = System.currentTimeMillis();
         this.config = new Config("%datafolder%/config.yml");
         this.messages = new Config("%datafolder%/messages.yml");

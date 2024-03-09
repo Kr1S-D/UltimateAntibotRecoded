@@ -1,20 +1,21 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
-import me.kr1s_d.ultimateantibot.common.IServerPlatform;
+import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.UABRunnable;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 
 import java.io.File;
 
 public class ServerUtil {
-    private static IServerPlatform platform;
+    private static IAntiBotPlugin instance;
     public static long blacklistPercentage = 0;
     private static long lastAttack;
     public static long lastStartAttack;
 
-    public static void setPlatform(IServerPlatform platform) {
-        ServerUtil.platform = platform;
+    public static void setInstance(IAntiBotPlugin instance) {
+        ServerUtil.instance = instance;
     }
+
 
     public static long getLastAttack() {
         return lastAttack;
@@ -25,27 +26,30 @@ public class ServerUtil {
     }
 
     public static void cancelTask(UABRunnable runnable){
-        platform.cancelTask(runnable.getTaskID());
+        instance.cancelTask(runnable.getTaskID());
     }
 
     public static File getDataFolder(){
-        return platform.getDFolder();
+        return instance.getDFolder();
     }
 
     public static void broadcast(String message) {
-        platform.broadcast(message);
+        instance.broadcast(message);
     }
 
     public static String colorize(String text){
-        return platform.colorize(text);
+        return instance.colorize(text);
     }
 
     public static void log(LogHelper.LogType logType, String message) {
-        platform.log(logType, message);
+        instance.log(logType, message);
     }
 
     public static void debug(String s) {
-        platform.getLogHelper().debug(s);
+        instance.getLogHelper().debug(s);
     }
 
+    public static IAntiBotPlugin getInstance() {
+        return instance;
+    }
 }
