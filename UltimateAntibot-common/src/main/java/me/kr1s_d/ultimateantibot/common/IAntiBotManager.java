@@ -1,12 +1,15 @@
 package me.kr1s_d.ultimateantibot.common;
 
 import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
+import me.kr1s_d.ultimateantibot.common.core.detectors.AttackWatcherDetector;
 import me.kr1s_d.ultimateantibot.common.core.thread.DynamicCounterThread;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 
-public abstract interface IAntiBotManager {
+import java.util.List;
+
+public interface IAntiBotManager {
 
     long getJoinPerSecond();
 
@@ -31,10 +34,6 @@ public abstract interface IAntiBotManager {
     QueueService getQueueService();
 
     WhitelistService getWhitelistService();
-
-    ModeType getModeType();
-
-    void setModeType(ModeType type);
 
     void disableAll();
 
@@ -71,6 +70,10 @@ public abstract interface IAntiBotManager {
     boolean canDisable(ModeType modeType);
 
     JoinCache getJoinCache();
+
+    AttackWatcherDetector getAttackDetector();
+
+    List<ModeType> getEnabledModes();
 
     String replaceInfo(String str);
 }
