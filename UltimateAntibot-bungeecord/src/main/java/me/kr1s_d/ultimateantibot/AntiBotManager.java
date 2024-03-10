@@ -61,7 +61,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.isPingModeEnabled = false;
         this.joinCache = new JoinCache();
         this.VPNService = plugin.getVPNService();
-        this.attackDetector = new AttackWatcherDetector(plugin);
+        this.attackDetector = new AttackWatcherDetector(this);
     }
 
     @Override
