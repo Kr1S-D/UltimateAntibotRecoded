@@ -126,7 +126,7 @@ checks:
     limit: 3
     #This parameter allows you to activate or deactivate this check
     enabled: true
-  #This control allows you to blacklist bots that connect too often, in this case it will block all IPs that connect more than 35 times in 300 seconds
+  #This check allows you to blacklist bots that connect too often, in this case it will block all IPs that connect more than 35 times in 300 seconds
   superjoin:
     #This parameter indicates how long the bot must make connections
     time: 300
@@ -221,7 +221,7 @@ checks:
 #you are doing is highly discouraged and could cause lag problems.
 #
 #Positive points:
-#After about 5 minutes of attack the number of connections per second will be lowered to 50/100
+#After about 2-5 minutes of attack the number of connections per second will be reduced by 90/95%
 #The time depends on the number of IPs to be blacklisted
 #
 #Negative points:
