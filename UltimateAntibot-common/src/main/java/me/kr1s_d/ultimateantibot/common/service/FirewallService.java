@@ -40,7 +40,7 @@ public class FirewallService {
         plugin.scheduleRepeatingTask(() -> {
             String ip = IPQueue.poll();
 
-            if (ip == null || IPQueue.size() == 0) {
+            if (ip == null) {
                 return;
             }
 
@@ -85,6 +85,7 @@ public class FirewallService {
             for (String p : plugin.getAntiBotManager().getBlackListService().getBlackListedIPS()) {
                 RuntimeUtil.execute(getBlackListCommand(p));
                 processed++;
+                blacklisted++;
 
                 int percent = Math.round((float) processed / total * 100);
                 if (percent >= percentCheck && total > 500) {
