@@ -7,9 +7,7 @@ import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 
-import java.util.List;
-
-public interface IAntiBotManager {
+public abstract interface IAntiBotManager {
 
     long getJoinPerSecond();
 
@@ -34,6 +32,10 @@ public interface IAntiBotManager {
     QueueService getQueueService();
 
     WhitelistService getWhitelistService();
+
+    ModeType getModeType();
+
+    void setModeType(ModeType type);
 
     void disableAll();
 
@@ -72,8 +74,6 @@ public interface IAntiBotManager {
     JoinCache getJoinCache();
 
     AttackWatcherDetector getAttackDetector();
-
-    List<ModeType> getEnabledModes();
 
     String replaceInfo(String str);
 }

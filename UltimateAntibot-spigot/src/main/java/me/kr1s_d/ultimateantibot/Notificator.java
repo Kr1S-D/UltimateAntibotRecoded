@@ -94,8 +94,7 @@ public class Notificator implements INotificator {
             if(plugin.getAntiBotManager().isSomeModeOnline()){
                 sendTitle(MessageManager.titleTitle, plugin.getAntiBotManager().replaceInfo(MessageManager.titleSubtitle));
             }
-            //priority to antibotmode notifications
-            if(plugin.getAntiBotManager().isPacketModeEnabled() && !plugin.getAntiBotManager().isAntiBotModeEnabled()){
+            if(plugin.getAntiBotManager().isPacketModeEnabled()){
                 sendActionbar(plugin.getAntiBotManager().replaceInfo(MessageManager.actionbarPackets));
                 return;
             }
