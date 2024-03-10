@@ -32,8 +32,9 @@ public class VelocityAttackFilter implements Filter {
         }
 
         if (antiBotManager.isSomeModeOnline()) {
-            if(antiBotManager.isPacketModeEnabled()) antiBotManager.increasePacketPerSecond();
-            return record.toLowerCase().contains("uab") ? Result.ACCEPT : Result.DENY; //only allow uab msg
+            Result denied = isDenied(record);
+            if(antiBotManager.isPacketModeEnabled() && denied.equals(Result.DENY)) antiBotManager.increasePacketPerSecond();
+            return denied;
         }
 
         return Result.NEUTRAL;
