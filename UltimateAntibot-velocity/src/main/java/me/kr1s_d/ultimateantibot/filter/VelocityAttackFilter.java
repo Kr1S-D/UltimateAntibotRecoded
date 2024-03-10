@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.filter;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.FilterUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
@@ -25,6 +26,20 @@ public class VelocityAttackFilter implements Filter {
     }
 
     public Result checkMessage(String record) {
+        if(!antiBotManager.isPacketModeEnabled() && isDenied(record).equals(Result.DENY)) {
+            antiBotManager.increasePacketPerSecond();
+            if(antiBotManager.getPacketPerSecond() > ConfigManger.packetModeTrigger) antiBotManager.enablePacketMode();
+        }
+
+        if (antiBotManager.isSomeModeOnline()) {
+            if(antiBotManager.isPacketModeEnabled()) antiBotManager.increasePacketPerSecond();
+            return record.toLowerCase().contains("uab") ? Result.ACCEPT : Result.DENY;
+        }
+
+        return Result.NEUTRAL;
+    }
+
+    public Result isDenied(String record) {
         if(antiBotManager.isAntiBotModeEnabled()) {
             for (String str : blocked) {
                 if (record.contains(str)) {
