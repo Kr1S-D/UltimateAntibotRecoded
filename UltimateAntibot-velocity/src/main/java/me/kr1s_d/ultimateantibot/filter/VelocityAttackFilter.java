@@ -26,15 +26,14 @@ public class VelocityAttackFilter implements Filter {
     }
 
     public Result checkMessage(String record) {
-        if(!antiBotManager.isPacketModeEnabled() && isDenied(record).equals(Result.DENY)) {
-            antiBotManager.increasePacketPerSecond();
-            if(antiBotManager.getPacketPerSecond() > ConfigManger.packetModeTrigger) antiBotManager.enablePacketMode();
+        if (antiBotManager.isSomeModeOnline()) {
+            if(antiBotManager.isPacketModeEnabled()) antiBotManager.increasePacketPerSecond();
+            return isDenied(record);
         }
 
-        if (antiBotManager.isSomeModeOnline()) {
-            Result denied = isDenied(record);
-            if(antiBotManager.isPacketModeEnabled() && denied.equals(Result.DENY)) antiBotManager.increasePacketPerSecond();
-            return denied;
+        if(isDenied(record).equals(Result.DENY)) {
+            antiBotManager.increasePacketPerSecond();
+            if(antiBotManager.getPacketPerSecond() > ConfigManger.packetModeTrigger) antiBotManager.enablePacketMode();
         }
 
         return Result.NEUTRAL;
