@@ -96,12 +96,13 @@ public class Notificator implements INotificator {
         bar.updateProgress(health);
     }
 
-    public void init(IAntiBotPlugin plugin){
+    public void init(IAntiBotPlugin plugin) {
         plugin.scheduleRepeatingTask(() -> {
             if(plugin.getAntiBotManager().isSomeModeOnline()) {
                 sendTitle(MessageManager.titleTitle, plugin.getAntiBotManager().replaceInfo(MessageManager.titleSubtitle));
             }
-            if(plugin.getAntiBotManager().isPacketModeEnabled()) {
+            //should give priority to antibotmode for notifications
+            if(plugin.getAntiBotManager().isPacketModeEnabled() && !plugin.getAntiBotManager().isAntiBotModeEnabled()) {
                 sendActionbar(plugin.getAntiBotManager().replaceInfo(MessageManager.actionbarPackets));
                 return;
             }
