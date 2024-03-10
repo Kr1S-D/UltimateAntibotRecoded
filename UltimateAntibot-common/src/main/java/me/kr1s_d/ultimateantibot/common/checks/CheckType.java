@@ -7,7 +7,7 @@ public enum CheckType {
     LEGAL_NAME,
     NAME_CHANGER,
     REGISTER,
-    SIMILAR_NAME,
+    CONNECTION_ANALYZE,
     SLOW_JOIN,
     SUPER_JOIN;
 }

@@ -1,7 +1,7 @@
 package me.kr1s_d.ultimateantibot.common;
 
 public enum AttackType {
-    JOIN,
+    JOIN_NO_PING,
     MOTD,
     COMBINED,
     INVALID_PACKETS,

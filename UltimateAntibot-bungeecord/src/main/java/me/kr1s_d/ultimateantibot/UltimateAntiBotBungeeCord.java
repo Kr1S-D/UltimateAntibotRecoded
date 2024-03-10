@@ -62,7 +62,6 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
     public void onEnable() {
         instance = this;
         this.isRunning = true;
-        RuntimeUtil.setup(this);
         ServerUtil.setInstance(this);
         long a = System.currentTimeMillis();
         this.scheduler = ProxyServer.getInstance().getScheduler();
@@ -102,10 +101,10 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.firewallService.enable();
         this.latencyThread = new LatencyThread(this);
         this.animationThread = new AnimationThread(this);
-        this.core = new UltimateAntiBotCore(this);
-        this.core.load();
         this.userDataService = new UserDataService(this);
         this.userDataService.load();
+        this.core = new UltimateAntiBotCore(this);
+        this.core.load();
         ProxyServer.getInstance().getLogger().setFilter(new ProxyAttackFilter(this));
         satellite = new SatelliteServer(this);
         this.notificator = new Notificator();

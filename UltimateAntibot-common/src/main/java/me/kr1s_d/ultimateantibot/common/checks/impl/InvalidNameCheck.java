@@ -44,7 +44,7 @@ public class InvalidNameCheck implements JoinCheck {
 
     @Override
     public CheckType getType() {
-        return CheckType.INVALID_NAME;
+        return CheckType.BLACKLISTED_NAME;
     }
 
     @Override

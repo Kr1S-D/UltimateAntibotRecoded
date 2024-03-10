@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-public class AuthCheckReloaded{
+public class AuthCheckReloaded {
     private final IAntiBotPlugin plugin;
     private final IAntiBotManager antibotManager;
     private final Map<String, AuthCheckType> checking;

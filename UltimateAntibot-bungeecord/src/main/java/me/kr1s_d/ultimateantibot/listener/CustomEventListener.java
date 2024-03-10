@@ -29,15 +29,15 @@ public class CustomEventListener implements Listener {
     }
 
     @EventHandler
-    public void onAttack(ModeEnableEvent e){
-        for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()){
-            if(player.hasPermission("uab.notification.automatic")){
+    public void onAttack(ModeEnableEvent e) {
+        for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+            if (player.hasPermission("uab.notification.automatic")) {
                 Notificator.automaticNotification(player);
             }
         }
 
-        if(e.getEnabledMode().equals(ModeType.ANTIBOT) || e.getEnabledMode().equals(ModeType.SLOW)){
-            if(ConfigManger.antibotDisconnect) {
+        if (e.getEnabledMode().equals(ModeType.ANTIBOT) || e.getEnabledMode().equals(ModeType.SLOW)) {
+            if (ConfigManger.antibotDisconnect) {
                 e.disconnectBots();
             }
         }

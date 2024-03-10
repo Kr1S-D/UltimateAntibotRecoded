@@ -13,7 +13,7 @@ public class FirstJoinCheck implements JoinCheck {
     public FirstJoinCheck(IAntiBotPlugin plugin) {
         this.userDataService = plugin.getUserDataService();
 
-        if(isEnabled()){
+        if(isEnabled()) {
             loadTask();
             CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");

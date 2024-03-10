@@ -19,7 +19,7 @@ public class ModeDisableTask implements Runnable {
 
     @Override
     public void run() {
-        if(antiBotPlugin.getAntiBotManager().canDisable(disableMode)){
+        if(antiBotPlugin.getAntiBotManager().canDisable(disableMode)) {
             EventCaller.call(new AttackStateEvent(antiBotPlugin, AttackState.STOPPED, disableMode));
             antiBotPlugin.getAntiBotManager().disableMode(disableMode);
             return;

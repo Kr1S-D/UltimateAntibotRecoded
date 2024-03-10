@@ -148,7 +148,7 @@ public class FirewallService {
     private FancyPair<Boolean, String> checkInstallation() {
         String tables = RuntimeUtil.executeAndGetOutput("iptables --version");
         String ipset = RuntimeUtil.executeAndGetOutput("ipset --version");
-        return new FancyPair<>(tables.contains("iptables v") && ipset.contains("ipset v"), ipset);
+        return new FancyPair<>(tables.toLowerCase().contains("iptables v") && ipset.toLowerCase().contains("ipset v"), ipset);
     }
 
     private String getBlackListCommand(String ip) {
