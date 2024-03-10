@@ -63,7 +63,6 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         instance = this;
         this.isRunning = true;
         PerformanceHelper.init(ServerType.SPIGOT);
-        RuntimeUtil.setup(this);
         ServerUtil.setInstance(this);
         this.scheduler = Bukkit.getScheduler();
         this.config = new Config(this, "config");
@@ -102,10 +101,10 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         firewallService.enable();
         latencyThread = new LatencyThread(this);
         animationThread = new AnimationThread(this);
-        core = new UltimateAntiBotCore(this);
-        core.load();
         userDataService = new UserDataService(this);
         userDataService.load();
+        this.core = new UltimateAntiBotCore(this);
+        this.core.load();
         ((Logger) LogManager.getRootLogger()).addFilter(new BukkitAttackFilter(this));
         ((Logger) LogManager.getRootLogger()).addFilter(new Bukkit247Filter(this));
         satellite = new SatelliteServer(this);

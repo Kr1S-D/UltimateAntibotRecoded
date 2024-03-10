@@ -90,7 +90,6 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         this.isRunning = true;
         this.scheduler = server.getScheduler();
         PerformanceHelper.init(ServerType.VELOCITY);
-        RuntimeUtil.setup(this);
         ServerUtil.setInstance(this);
         long a = System.currentTimeMillis();
         this.config = new Config("%datafolder%/config.yml");
@@ -129,10 +128,10 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         this.firewallService.enable();
         this.latencyThread = new LatencyThread(this);
         this.animationThread = new AnimationThread(this);
-        this.core = new UltimateAntiBotCore(this);
-        this.core.load();
         this.userDataService = new UserDataService(this);
         this.userDataService.load();
+        this.core = new UltimateAntiBotCore(this);
+        this.core.load();
         ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new VelocityAttackFilter(this));
         ((org.apache.logging.log4j.core.Logger) LogManager.getRootLogger()).addFilter(new Velocity247Filter(this));
         satellite = new SatelliteServer(this);

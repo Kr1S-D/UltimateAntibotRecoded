@@ -9,20 +9,13 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class RuntimeUtil {
-    private static IAntiBotPlugin instance;
-
-    public static void setup(IAntiBotPlugin plugin){
-        if(instance != null) return;
-        instance = plugin;
-    }
-
     public static Process execute(String... command) {
         try {
             String[] args = new String[]{"/bin/bash", "-c"};
             String[] commands = Stream.concat(Arrays.stream(args), Arrays.stream(command)).toArray(String[]::new);
             return new ProcessBuilder(commands).start();
         } catch (IOException e) {
-            instance.getLogHelper().error("An error occurred while dispatching: " + Arrays.toString(command) + ", message -> " + e.getMessage());
+            ServerUtil.getInstance().getLogHelper().error("An error occurred while dispatching: " + Arrays.toString(command) + ", message -> " + e.getMessage());
         }
 
         return null;
@@ -42,7 +35,7 @@ public class RuntimeUtil {
                 stringBuilder.append(str);
             return stringBuilder.toString();
         } catch (IOException e) {
-            instance.getLogHelper().error("An error occurred while dispatching: " + command + ", message -> " + e.getMessage());
+            ServerUtil.getInstance().getLogHelper().error("An error occurred while dispatching: " + command + ", message -> " + e.getMessage());
         }
         return "";
     }

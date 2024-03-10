@@ -1,6 +1,7 @@
 package me.kr1s_d.ultimateantibot.common.core;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.DetectorService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
@@ -23,9 +24,16 @@ public class UltimateAntiBotCore {
     public void load() {
         plugin.getLogHelper().info("&fLoading &cCore...");
 
+        FancyInteger minute = new FancyInteger(0);
         plugin.scheduleRepeatingTask(() -> {
             refresh();
             DetectorService.tickDetectors();
+
+            minute.increase();
+            if(minute.get() > 60) {
+                plugin.getUserDataService().tickProfiles();
+                minute.reset();
+            }
         }, false, 1000L);
 
         plugin.scheduleRepeatingTask(() -> {
