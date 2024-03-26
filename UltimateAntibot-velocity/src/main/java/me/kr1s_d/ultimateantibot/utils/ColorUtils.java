@@ -51,35 +51,18 @@ public class ColorUtils {
     }
 
     public static Component format(String text) {
-        if(true) {
-            return Component.text(text.replace("&", "§"));
-        }
         for (Map.Entry<String, String> entry : colorMap.entrySet()) {
             text = text.replace(entry.getKey(), entry.getValue());
-        }
-
-        Matcher matcher = hexColorPattern.matcher(text);
-        while (matcher.find()) {
-            String color = text.substring(matcher.start(), matcher.end());
-            text = text.replace(color, "<" + color + ">");
         }
 
         return Component.text(text);
     }
 
     public static  <T> T format(String text, Function<String, T> computeAs) {
-        if(true) {
-            return computeAs.apply(text.replace("&", "§"));
-        }
         for (Map.Entry<String, String> entry : colorMap.entrySet()) {
             text = text.replace(entry.getKey(), entry.getValue());
         }
 
-        Matcher matcher = hexColorPattern.matcher(text);
-        while (matcher.find()) {
-            String color = text.substring(matcher.start(), matcher.end());
-            text = text.replace(color, "<" + color + ">");
-        }
 
         return computeAs.apply(text);
     }
