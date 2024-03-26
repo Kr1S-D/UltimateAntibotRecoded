@@ -37,6 +37,8 @@ import me.kr1s_d.ultimateantibot.scheduler.TaskScheduler;
 import me.kr1s_d.ultimateantibot.utils.ColorUtils;
 import me.kr1s_d.ultimateantibot.utils.Config;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 
@@ -358,7 +360,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
     public void log(LogHelper.LogType type, String log) {
         switch (type) {
             case ERROR:
-                logger.error(log);
+                this.server.getConsoleCommandSource().sendMessage(Component.text(log));
                 break;
             case WARNING:
                 logger.warn(log);
