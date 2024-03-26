@@ -79,7 +79,6 @@ public class SatelliteServer {
             JsonObject object = JsonParser.parseString(response.toString()).getAsJsonObject();
             CloudConfig.a = object.get("a").getAsBoolean();
             CloudConfig.i = object.get("b").getAsInt();
-            object.get("c").getAsString();
             plugin.getLogHelper().debug("[SATELLITE] json: " + object.toString());
 
             connection.disconnect();
