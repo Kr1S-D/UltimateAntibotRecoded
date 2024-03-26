@@ -30,7 +30,7 @@ public class LimitedList<E> implements Iterable<E>, Serializable {
         return this;
     }
 
-    public boolean matches(E element) {
+    public boolean contains(E element) {
         return list.contains(element);
     }
 

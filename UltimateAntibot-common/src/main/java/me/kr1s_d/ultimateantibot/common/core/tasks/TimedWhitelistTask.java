@@ -41,12 +41,12 @@ public class TimedWhitelistTask extends UABRunnable {
     }
 
     @Override
-    public boolean isAsync(){
+    public boolean isAsync() {
         return false;
     }
 
     @Override
-    public long getPeriod(){
+    public long getPeriod() {
         return 2000L;
     }
 }

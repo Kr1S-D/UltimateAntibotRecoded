@@ -5,20 +5,24 @@ import me.kr1s_d.ultimateantibot.common.UABRunnable;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class ServerUtil {
     private static IAntiBotPlugin instance;
     public static long blacklistPercentage = 0;
-    private static long lastAttack;
+    private static long lastAttack = -1;
     public static long lastStartAttack;
 
     public static void setInstance(IAntiBotPlugin instance) {
         ServerUtil.instance = instance;
     }
 
-
     public static long getLastAttack() {
         return lastAttack;
+    }
+
+    public static long getSecondsFromLastAttack() {
+        return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - lastAttack);
     }
 
     public static void setLastAttack(long lastAttack) {

@@ -12,8 +12,8 @@ public class DetectorService {
     private static final List<AbstractDetector> DETECTORS = new ArrayList<>();
     private static final Map<AbstractDetector, FancyInteger> TICKDATA = new HashMap<>();
 
-    public static void tickDetectors(){
-        for(AbstractDetector detector : DETECTORS){
+    public static void tickDetectors() {
+        for(AbstractDetector detector : DETECTORS) {
             int tickDelay = detector.getTickDelay();
             FancyInteger i = TICKDATA.getOrDefault(detector, new FancyInteger(0));
             i.increase();

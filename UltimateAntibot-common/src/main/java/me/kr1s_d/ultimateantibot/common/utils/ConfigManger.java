@@ -3,6 +3,7 @@ package me.kr1s_d.ultimateantibot.common.utils;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.objects.config.ProxyCheckConfig;
 import me.kr1s_d.ultimateantibot.common.objects.config.SlowCheckConfig;
+import me.kr1s_d.ultimateantibot.common.objects.profile.ConnectionProfile;
 
 import java.util.List;
 import java.util.SplittableRandom;
@@ -59,13 +60,18 @@ public class ConfigManger {
     public static boolean isRegisterCheckBlacklist;
     public static boolean isRegisterCheckAntiBotMode;
     public static boolean isRegisterCheckEnabled;
+    public static int connectionAnalyzeChatTrigger;
+    public static int connectionAnalyzeNameTrigger;
+    public static int connectionAnalyzeBlacklistTrigger;
+    public static ConnectionProfile.ConnectionScore connectionAnalyzeBlacklistFrom;
+    public static boolean isConnectionAnalyzeEnabled;
     public static boolean isIPApiVerificationEnabled;
     private static SlowCheckConfig packetSlowCheckConfig;
     private static SlowCheckConfig accountCheckConfig;
     private static ProxyCheckConfig proxyCheckConfig;
 
 
-    public static void init(IConfiguration cfg){
+    public static void init(IConfiguration cfg) {
         CONFIG = cfg;
 
         version = cfg.getDouble("version");
@@ -117,6 +123,11 @@ public class ConfigManger {
         isRegisterCheckBlacklist = cfg.getBoolean("checks.strange-register.blacklist");
         isRegisterCheckAntiBotMode = cfg.getBoolean("checks.strange-register.antibotmode");
         isRegisterCheckEnabled = cfg.getBoolean("checks.strange-register.enabled");
+        connectionAnalyzeChatTrigger = cfg.getInt("checks.connection-analyze.chat-trigger");
+        connectionAnalyzeNameTrigger = cfg.getInt("checks.connection-analyze.name-trigger");
+        connectionAnalyzeBlacklistFrom = ConnectionProfile.ConnectionScore.valueOf(getParamOrDefault("checks.connection-analyze.blacklist-from", ConnectionProfile.ConnectionScore.ALMOST_BOT.name()));
+        connectionAnalyzeBlacklistTrigger = cfg.getInt("checks.connection-analyze.blacklist-trigger");
+        isConnectionAnalyzeEnabled = cfg.getBoolean("checks.connection-analyze.enabled");
         packetSlowCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.packet");
         accountCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.account");
         proxyCheckConfig = new ProxyCheckConfig(cfg);
@@ -154,18 +165,18 @@ public class ConfigManger {
         return CONFIG.getBoolean(path);
     }
 
-    public static void incrementAuthCheckDifficulty(){
+    public static void incrementAuthCheckDifficulty() {
         SplittableRandom d = new SplittableRandom();
 
         int[] a = authMinMaxPing;
         int[] b = authMinMaxTimer;
 
-        for(int j = 0; j < a.length; j++){
+        for (int j = 0; j < a.length; j++) {
             int c = d.nextInt(1, 5);
             a[j] += c;
         }
 
-        for(int j = 0; j < b.length; j++){
+        for (int j = 0; j < b.length; j++) {
             int f = d.nextInt(1, 5);
             a[j] += f;
         }
@@ -186,14 +197,24 @@ public class ConfigManger {
      * @param i int array to fix
      * @return fixed int array
      */
-    private static int[] fix(int[] i){
-        if(i[0] == i[1]){
+    private static int[] fix(int[] i) {
+        if (i[0] == i[1]) {
             i[1] += 2;
             return i;
         }
 
         int min = Math.min(i[0], i[1]);
         int max = Math.max(i[0], i[1]);
-        return new int[] {min, max};
+        return new int[]{min, max};
+    }
+
+    private static String getParamOrDefault(String path, String def) {
+        String string = CONFIG.getString(path);
+        if(string == null) {
+            ServerUtil.getInstance().getLogHelper().error("Null value on config path: " + path + " using default of " + def);
+            return def;
+        }
+
+        return string;
     }
 }

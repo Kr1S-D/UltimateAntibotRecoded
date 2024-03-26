@@ -35,7 +35,7 @@ public class LegalNameCheck implements JoinCheck {
             return false;
         }
 
-        antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER, "_INVALID_");
+        antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER_INVALID_NAME, "_INVALID_");
         plugin.getLogHelper().debug("[UAB DEBUG] Detected bot on LegalNameCheck!");
         return true;
     }

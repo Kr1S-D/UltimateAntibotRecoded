@@ -7,7 +7,14 @@ public enum BlackListReason {
     TOO_MUCH_NAMES(MessageManager.reasonTooManyNicks),
     TOO_MUCH_JOINS(MessageManager.reasonTooManyJoins),
     ADMIN(MessageManager.reasonAdmin),
-    STRANGE_PLAYER(MessageManager.reasonStrangePlayer),
+    @Deprecated
+    STRANGE_PLAYER(MessageManager.reasonAdmin),
+    STRANGE_PLAYER_INVALID_NAME(MessageManager.reasonStrangePlayer),
+    STRANGE_PLAYER_INVALID_PROTOCOL(MessageManager.reasonStrangePlayer),
+    STRANGE_PLAYER_REGISTER(MessageManager.reasonStrangePlayer),
+    STRANGE_PLAYER_PACKET(MessageManager.reasonStrangePlayer),
+    STRANGE_PLAYER_CONNECTION(MessageManager.reasonStrangePlayer),
+    STRANGE_PLAYER_SLOW_JOIN(MessageManager.reasonStrangePlayer),
     VPN(MessageManager.reasonVPN);
 
     private final String reason;

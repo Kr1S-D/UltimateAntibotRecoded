@@ -27,6 +27,8 @@ public class FirstJoinCheck implements JoinCheck {
      */
     public boolean isDenied(String ip, String name) {
         if(!isEnabled()) {
+            //executes first join for other checks but not kicks player
+            userDataService.isFirstJoin(ip, name);
             return false;
         }
 

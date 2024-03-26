@@ -1,13 +1,13 @@
 package me.kr1s_d.ultimateantibot.common;
 
 import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
-import me.kr1s_d.ultimateantibot.common.core.detectors.AttackWatcherDetector;
+import me.kr1s_d.ultimateantibot.common.core.AttackWatcher;
 import me.kr1s_d.ultimateantibot.common.core.thread.DynamicCounterThread;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
 import me.kr1s_d.ultimateantibot.common.service.QueueService;
 import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 
-public abstract interface IAntiBotManager {
+public interface IAntiBotManager {
 
     long getJoinPerSecond();
 
@@ -73,7 +73,7 @@ public abstract interface IAntiBotManager {
 
     JoinCache getJoinCache();
 
-    AttackWatcherDetector getAttackDetector();
+    AttackWatcher getAttackWatcher();
 
     String replaceInfo(String str);
 }

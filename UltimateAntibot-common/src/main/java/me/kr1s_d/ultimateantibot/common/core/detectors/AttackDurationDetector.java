@@ -26,6 +26,10 @@ public class AttackDurationDetector extends AbstractDetector {
         duration = 0;
     }
 
+    public void resetDuration() {
+        this.duration = 0;
+    }
+
     public long getAttackDuration() {
         return duration;
     }

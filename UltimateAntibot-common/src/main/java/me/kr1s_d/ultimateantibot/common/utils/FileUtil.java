@@ -43,6 +43,16 @@ public class FileUtil {
         return str;
     }
 
+    public static void renameFile(String name, UABFolder folder, String newName) {
+        File file = getOrCreateFile(name, folder);
+
+        String parentPath = file.getParent();
+        File newFile = new File(parentPath + File.separator + newName);
+        if (file.renameTo(newFile)) return;
+
+        ServerUtil.getInstance().getLogHelper().error("Unable to rename file " + name);
+    }
+
     public static String getEncodedBase64(File file) {
         String str = "";
         try {
@@ -56,7 +66,7 @@ public class FileUtil {
         return str;
     }
 
-    public static File[] getFiles(UABFolder folder){
+    public static File[] getFiles(UABFolder folder) {
         File f = new File(ServerUtil.getDataFolder() + "/" + folder.getFolder());
         File[] array = f.listFiles();
 
@@ -75,12 +85,25 @@ public class FileUtil {
         }
     }
 
+    public static String readLine(String fileID, UABFolder folder) {
+        File file = getOrCreateFile(fileID, folder);
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fileReader);
+            return reader.readLine();
+        } catch (IOException e) {
+            //Logger.error("Error during file Writing! " + fileID);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public enum UABFolder {
         BACKUP,
         DATA,
         LOGS;
 
-        public String getFolder(){
+        public String getFolder() {
             return this.name().toLowerCase();
         }
     }

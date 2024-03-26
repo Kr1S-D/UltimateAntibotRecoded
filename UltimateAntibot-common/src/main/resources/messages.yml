@@ -1,4 +1,4 @@
-version: 4.3
+version: 4.4
 prefix: "&4&LU&c&LA&4&LB&r &7» "
 onping: #<-- works only on bungeecord!
   normal: "&c&l◆ &f&l$1&7/&c&l$2"
@@ -20,7 +20,7 @@ notifications:
   title: "&aToggled Title notifications!"
   bossbar: "&aToggled BossBar notifications"
 #(!) PLACEHOLDERS (!)
-#actionbar/title/stats allowed values
+#These placeholder can be used in the actionbar,title  and stats section below!
 #%bots% - return botpersecond
 #%queue% - return queue
 #%pings% - return pingpersecond
@@ -28,13 +28,14 @@ notifications:
 #%blacklist% - return blacklist size
 #%type% - return current attacktype
 #%checks% - return checkspersecond
-#%latency% - return server latency
+#%latency% - return server latency (require latency thread enabled)
 #%packets% - return packetspersecond
 #%totalpackets% - return totalpackets
 #%totalbots% - return totalbots
 #%totalpings% - return totalpings
 #%prefix% - return prefix
 #%underverification% - returns player under verification
+#%attack-types% - return a list of detected attack types (beta)
 actionbar:
   offline: "%prefix%&cJoin&7/&cPing &f%bots%&7/&f%pings% &4- &cVerify &f%underverification% &4- &cWhitelist &f%whitelist% » &c&l%type%"
   antibot: "%prefix%&cBot&7/&cPing &f%bots%&7/&f%pings% &4- &cBlacklist&7/&cQueue&7/&cWhitelist &f%blacklist%&7/&f%queue%&7/&f%whitelist% &4- &cVerify &f%underverification% » &c&l%type%"
@@ -50,6 +51,7 @@ stats:
   - "&cTotal Packets &f%totalpackets%"
   - "&cWhitelisted IP &f%whitelist%"
   - "&cBlacklisted IP &f%blacklist%"
+  - "&cCurrent Attacks &f%attack-types%"
   - ""
   - "&cCurrent server latency is &f%latency%"
 reason:
@@ -71,6 +73,7 @@ help:
   - "&c/uab logs list <amount> &7- &fReturns some info of an attack"
   - "&c/uab logs last <id> &7- &fShows last <amount> attacks"
   - "&c/uab cache status/clear &7- &fManage UAB cache"
+  - "&c/uab profile <nick> &7- &fCheck connection info"
   - "&c/uab &cfirewall &7- &fShows some firewall info"
   - "&c/uab &ccheck &f<id> &7- &fCheck for blacklisted player"
   - "&c/uab &creload &7- &fReloads the config & messages"

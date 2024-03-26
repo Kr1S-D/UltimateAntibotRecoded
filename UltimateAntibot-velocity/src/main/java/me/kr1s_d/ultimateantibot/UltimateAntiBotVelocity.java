@@ -98,7 +98,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         this.blacklist = new Config("%datafolder%/blacklist.yml");
         this.logHelper = new LogHelper(this);
         FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
-        updater.check(4.3, 4.3);
+        updater.check(4.4, 4.4);
         if (updater.requiresReassign()) {
             this.config = new Config("%datafolder%/config.yml");
             this.messages = new Config("%datafolder%/messages.yml");
@@ -164,6 +164,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         wrapper.register(new FirewallCommand(this));
         wrapper.register(new AttackLogCommand(this));
         wrapper.register(new CacheCommand());
+        wrapper.register(new ConnectionProfileCommand(this));
         commandManager.register(commandMeta, wrapper);
         server.getEventManager().register(this, new PingListener(this));
         server.getEventManager().register(this, new MainEventListener(this));

@@ -15,13 +15,11 @@ import me.kr1s_d.ultimateantibot.checks.AuthCheckVelocity;
 import me.kr1s_d.ultimateantibot.checks.PacketCheckVelocity;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.impl.*;
 import me.kr1s_d.ultimateantibot.common.core.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
-import me.kr1s_d.ultimateantibot.common.service.BlackListService;
-import me.kr1s_d.ultimateantibot.common.service.QueueService;
-import me.kr1s_d.ultimateantibot.common.service.UserDataService;
-import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
+import me.kr1s_d.ultimateantibot.common.service.*;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
@@ -131,13 +129,6 @@ public class MainEventListener {
             e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
             return;
         }
-        //
-        //FirstJoinCheck
-        //
-        if (firstJoinCheck.isDenied(ip, name)) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.firstJoinMessage)));
-            return;
-        }
 
         //
         // Invalid Name Check
@@ -171,6 +162,15 @@ public class MainEventListener {
             e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(
                     MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage))
             )));
+            return;
+        }
+
+        //
+        //FirstJoinCheck
+        //
+        if (firstJoinCheck.isDenied(ip, name)) {
+            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.firstJoinMessage)));
+            return;
         }
     }
 
@@ -198,7 +198,7 @@ public class MainEventListener {
         //SlowJoin check
         //
         if (slowJoinCheck.isDenied(ip, nickname)) {
-            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER, nickname);
+            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER_SLOW_JOIN, nickname);
             plugin.disconnect(ip, MessageManager.getSafeModeMessage());
             return;
         }
@@ -233,6 +233,10 @@ public class MainEventListener {
         //Register Check
         //
         registerCheck.onChat(ip, nickname, e.getMessage());
+        //
+        // Connection Analyze
+        //
+        CheckService.getCheck(CheckType.CONNECTION_ANALYZE, ConnectionAnalyzerCheck.class).onChat(ip, nickname, e.getMessage());
     }
 
     @Subscribe
@@ -244,6 +248,10 @@ public class MainEventListener {
         if (ServerUtil.blacklistPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()) {
             authCheck.onPing(e, ip);
         }
+        //
+        //Connection Analyze
+        //
+        CheckService.getCheck(CheckType.CONNECTION_ANALYZE, ConnectionAnalyzerCheck.class).onPing(ip);
     }
 
     @Subscribe

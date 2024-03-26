@@ -1,4 +1,4 @@
-package me.kr1s_d.ultimateantibot.common.objects.profile;
+package me.kr1s_d.ultimateantibot.common.objects.profile.entry;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;

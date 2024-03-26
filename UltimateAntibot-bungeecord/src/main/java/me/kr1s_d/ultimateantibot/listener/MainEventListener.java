@@ -5,6 +5,7 @@ import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.checks.PacketCheck;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.impl.*;
 import me.kr1s_d.ultimateantibot.common.core.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
@@ -57,6 +58,7 @@ public class MainEventListener implements Listener {
         this.registerCheck = new RegisterCheck(plugin);
         this.VPNService = plugin.getVPNService();
         this.userDataService = plugin.getUserDataService();
+        new ConnectionAnalyzerCheck(plugin);
     }
 
     @EventHandler(priority = -128)
@@ -129,14 +131,6 @@ public class MainEventListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        //
-        //FirstJoinCheck
-        //
-        if (firstJoinCheck.isDenied(ip, name)) {
-            e.setCancelReason(KComponentBuilder.colorized(MessageManager.firstJoinMessage));
-            e.setCancelled(true);
-            return;
-        }
 
         //
         // Invalid Name Check
@@ -173,6 +167,16 @@ public class MainEventListener implements Listener {
                     MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage))
             ));
             e.setCancelled(true);
+            return;
+        }
+
+        //
+        //FirstJoinCheck
+        //
+        if (firstJoinCheck.isDenied(ip, name)) {
+            e.setCancelReason(KComponentBuilder.colorized(MessageManager.firstJoinMessage));
+            e.setCancelled(true);
+            return;
         }
     }
 
@@ -200,7 +204,7 @@ public class MainEventListener implements Listener {
         //SlowJoin check
         //
         if (slowJoinCheck.isDenied(ip, nickname)) {
-            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER, nickname);
+            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER_SLOW_JOIN, nickname);
             plugin.disconnect(ip, MessageManager.getSafeModeMessage());
             return;
         }
@@ -235,6 +239,10 @@ public class MainEventListener implements Listener {
         //Register Check
         //
         registerCheck.onChat(ip, nickname, e.getMessage());
+        //
+        // Connection Analyze
+        //
+        CheckService.getCheck(CheckType.CONNECTION_ANALYZE, ConnectionAnalyzerCheck.class).onChat(ip, nickname, e.getMessage());
     }
 
     @EventHandler
@@ -246,6 +254,10 @@ public class MainEventListener implements Listener {
         if (ServerUtil.blacklistPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()) {
             authCheck.onPing(e, ip);
         }
+        //
+        //Connection Analyze
+        //
+        CheckService.getCheck(CheckType.CONNECTION_ANALYZE, ConnectionAnalyzerCheck.class).onPing(ip);
     }
 
     @EventHandler

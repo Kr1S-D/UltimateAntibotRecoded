@@ -25,7 +25,7 @@ public class HandShakeListener implements Listener {
         if (handshake.getRequestedProtocol() > 2 && antiBotManager.isSomeModeOnline()) {
             handshake.setRequestedProtocol(2); // converting to join
             if (ConfigManger.blacklistInvalidProtocol) {
-                antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER);
+                antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER_INVALID_PROTOCOL);
             }
         }
     }

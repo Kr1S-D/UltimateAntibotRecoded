@@ -67,7 +67,7 @@ public class RegisterCheck implements ChatCheck {
             for (String passwd : getOverLimitPasswords()) {
                 for (String ipToBlock : getSamePasswordIPS(passwd)) {
                     if (ConfigManger.isRegisterCheckBlacklist) {
-                        antiBotManager.getBlackListService().blacklist(ipToBlock, BlackListReason.STRANGE_PLAYER, nickname);
+                        antiBotManager.getBlackListService().blacklist(ipToBlock, BlackListReason.STRANGE_PLAYER_REGISTER, nickname);
                     }
                     if (ConfigManger.isRegisterCheckAntiBotMode) {
                         antiBotManager.enableSlowAntiBotMode();

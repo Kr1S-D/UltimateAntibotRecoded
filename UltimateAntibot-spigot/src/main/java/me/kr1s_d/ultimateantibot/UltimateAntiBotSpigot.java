@@ -71,7 +71,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.blacklist = new Config(this, "blacklist");
         this.logHelper = new LogHelper(this);
         FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
-        updater.check(4.3, 4.3);
+        updater.check(4.4, 4.4);
         if (updater.requiresReassign()) {
             this.config = new Config(this, "config");
             this.messages = new Config(this, "messages");
@@ -134,6 +134,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         commandManager.register(new FirewallCommand(this));
         commandManager.register(new AttackLogCommand(this));
         commandManager.register(new CacheCommand());
+        commandManager.register(new ConnectionProfileCommand(this));
         commandManager.setWrongArgumentMessage(MessageManager.commandWrongArgument);
         commandManager.setNoPlayerMessage("&fYou are not a &cplayer!");
         //commandManager.register(new SatelliteCommand(this));

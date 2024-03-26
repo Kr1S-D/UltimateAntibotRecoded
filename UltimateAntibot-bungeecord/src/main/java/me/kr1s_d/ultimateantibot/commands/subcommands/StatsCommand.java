@@ -13,7 +13,7 @@ public class StatsCommand implements SubCommand {
 
     private final IAntiBotPlugin iAntiBotPlugin;
 
-    public StatsCommand(IAntiBotPlugin iAntiBotPlugin){
+    public StatsCommand(IAntiBotPlugin iAntiBotPlugin) {
         this.iAntiBotPlugin = iAntiBotPlugin;
     }
 

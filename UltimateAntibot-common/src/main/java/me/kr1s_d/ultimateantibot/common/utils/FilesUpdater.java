@@ -70,7 +70,7 @@ public class FilesUpdater {
                     if(plugin.getLogHelper() == null) {
                         return;
                     }
-                    plugin.getLogHelper().warn("Unable to read config.yml and messages.yml! It was not possible to read the config.yml and the messages.yml, the two files have been regenerated!");
+                    plugin.getLogHelper().warn("Unable to read config.yml and messages.yml, the two files have been regenerated!");
                 }
             });
         }

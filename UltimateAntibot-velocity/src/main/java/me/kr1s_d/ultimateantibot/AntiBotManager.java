@@ -1,11 +1,12 @@
 package me.kr1s_d.ultimateantibot;
 
+import me.kr1s_d.ultimateantibot.common.AttackState;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.ModeType;
 import me.kr1s_d.ultimateantibot.common.cache.JoinCache;
 import me.kr1s_d.ultimateantibot.common.core.detectors.AttackDurationDetector;
-import me.kr1s_d.ultimateantibot.common.core.detectors.AttackWatcherDetector;
+import me.kr1s_d.ultimateantibot.common.core.AttackWatcher;
 import me.kr1s_d.ultimateantibot.common.core.thread.DynamicCounterThread;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.service.BlackListService;
@@ -15,8 +16,9 @@ import me.kr1s_d.ultimateantibot.common.service.WhitelistService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.Formatter;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
+import me.kr1s_d.ultimateantibot.event.AttackStateEvent;
 import me.kr1s_d.ultimateantibot.event.ModeEnableEvent;
-import me.kr1s_d.ultimateantibot.scheduler.task.ModeDisableTask;
 import me.kr1s_d.ultimateantibot.utils.EventCaller;
 
 public class AntiBotManager implements IAntiBotManager {
@@ -37,7 +39,7 @@ public class AntiBotManager implements IAntiBotManager {
     private final LogHelper logHelper;
     private final JoinCache joinCache;
     private final VPNService VPNService;
-    private AttackWatcherDetector attackDetector;
+    private final AttackWatcher attackWatcher;
 
     public AntiBotManager(IAntiBotPlugin plugin) {
         this.iAntiBotPlugin = plugin;
@@ -57,7 +59,7 @@ public class AntiBotManager implements IAntiBotManager {
         this.isPingModeEnabled = false;
         this.joinCache = new JoinCache();
         this.VPNService = plugin.getVPNService();
-        this.attackDetector = new AttackWatcherDetector(this);
+        this.attackWatcher = new AttackWatcher(this);
     }
 
     @Override
@@ -141,21 +143,20 @@ public class AntiBotManager implements IAntiBotManager {
 
     @Override
     public void disableMode(ModeType type) {
-        if(type.equals(ModeType.ANTIBOT)) {
+        if (type.equals(ModeType.ANTIBOT)) {
             this.isAntiBotModeOnline = false;
         }
-        if(type.equals(ModeType.SLOW)) {
+        if (type.equals(ModeType.SLOW)) {
             this.isSlowAntiBotModeOnline = false;
         }
-        if(type.equals(ModeType.PACKETS)) {
+        if (type.equals(ModeType.PACKETS)) {
             this.isPacketModeEnabled = false;
         }
-        if(type.equals(ModeType.PING)){
+        if (type.equals(ModeType.PING)) {
             this.isPingModeEnabled = false;
         }
-        if(type != ModeType.OFFLINE){
-            this.modeType = ModeType.OFFLINE;
-        }
+
+        this.modeType = ModeType.OFFLINE;
         EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.OFFLINE));
     }
 
@@ -214,10 +215,6 @@ public class AntiBotManager implements IAntiBotManager {
         isSlowAntiBotModeOnline = false;
         isPingModeEnabled = false;
         isPacketModeEnabled = false;
-        iAntiBotPlugin.scheduleDelayedTask(
-                new ModeDisableTask(iAntiBotPlugin, ModeType.ANTIBOT),
-                false, 1000L * ConfigManger.antiBotModeKeep
-        );
         EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.ANTIBOT));
     }
 
@@ -228,10 +225,6 @@ public class AntiBotManager implements IAntiBotManager {
         isSlowAntiBotModeOnline = true;
         isPingModeEnabled = false;
         isPacketModeEnabled = false;
-        iAntiBotPlugin.scheduleDelayedTask(
-                new ModeDisableTask(iAntiBotPlugin, ModeType.SLOW),
-                false, 1000L * ConfigManger.slowAntibotModeKeep
-        );
         EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.SLOW));
     }
 
@@ -242,10 +235,6 @@ public class AntiBotManager implements IAntiBotManager {
         isSlowAntiBotModeOnline = false;
         isPingModeEnabled = false;
         isPacketModeEnabled = true;
-        iAntiBotPlugin.scheduleDelayedTask(
-                new ModeDisableTask(iAntiBotPlugin, ModeType.PACKETS),
-                false, 1000L * ConfigManger.packetModeKeep
-        );
         EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.PACKETS));
     }
 
@@ -256,10 +245,6 @@ public class AntiBotManager implements IAntiBotManager {
         isSlowAntiBotModeOnline = false;
         isPingModeEnabled = true;
         isPacketModeEnabled = false;
-        iAntiBotPlugin.scheduleDelayedTask(
-                new ModeDisableTask(iAntiBotPlugin, ModeType.PING),
-                false, 1000L * ConfigManger.pingModeKeep
-        );
         EventCaller.call(new ModeEnableEvent(iAntiBotPlugin, ModeType.PING));
     }
 
@@ -272,19 +257,73 @@ public class AntiBotManager implements IAntiBotManager {
                 logHelper.info(replaceInfo(MessageManager.actionbarPackets.replace("%prefix%", "")));
             }
         }
+        checkModeDisable();
+    }
+
+    public void checkModeDisable() {
+        if(modeType.equals(ModeType.OFFLINE)) return;
+        long time = attackDurationDetector.getAttackDuration();
+        boolean canDisable = canDisable(modeType);
+        boolean timePasted = time > modeType.getKeepValue();
+
+        if(canDisable && timePasted) {
+            EventCaller.call(new AttackStateEvent(iAntiBotPlugin, AttackState.STOPPED, modeType));
+            disableMode(modeType);
+            ServerUtil.getInstance().getLogHelper().debug("[ANTIBOT MANAGER] Approved mode disabling for mode " + modeType);
+        }
+
+        if (timePasted) {
+            attackDurationDetector.resetDuration();
+            EventCaller.call(new AttackStateEvent(iAntiBotPlugin, AttackState.RUNNING, modeType));
+            ServerUtil.getInstance().getLogHelper().debug("[ANTIBOT MANAGER] Refused mode disabling for mode " + modeType);
+        }
+
+
+        int priority = -1;
+        ModeType selected = null;
+
+        for (ModeType mode : ModeType.values()) {
+            if (mode.checkConditions(joinPerSecond.getSlowCount(), pingPerSecond.getSlowCount(), packetPerSecond.getSlowCount())) {
+                int prior = mode.getPriority();
+                if (prior > priority) {
+                    priority = prior;
+                    selected = mode;
+                }
+            }
+        }
+
+        if(selected == null || selected.equals(modeType)) {
+            return;
+        }
+
+        switch (selected) {
+            case ANTIBOT:
+                enableAntiBotMode();
+                break;
+            case PACKETS:
+                enablePacketMode();
+                break;
+            case PING:
+                enablePingMode();
+                break;
+        }
     }
 
     @Override
     public boolean canDisable(ModeType modeType) {
-        if(modeType.equals(ModeType.ANTIBOT) || modeType.equals(ModeType.SLOW)){
+        if (modeType.equals(ModeType.ANTIBOT) || modeType.equals(ModeType.SLOW)) {
+            ServerUtil.getInstance().getLogHelper().debug("[ANTIBOT MANAGER] Requested mode disabling for " + modeType.name() + " result " + (joinPerSecond.getSlowCount() <= ConfigManger.antiBotModeTrigger));
             return joinPerSecond.getSlowCount() <= ConfigManger.antiBotModeTrigger;
         }
-        if(modeType.equals(ModeType.PING)){
+        if (modeType.equals(ModeType.PING)) {
+            ServerUtil.getInstance().getLogHelper().debug("[ANTIBOT MANAGER] Requested mode disabling for " + modeType.name() + " result " + (pingPerSecond.getSlowCount() <= ConfigManger.pingModeTrigger));
             return pingPerSecond.getSlowCount() <= ConfigManger.pingModeTrigger;
         }
         if (modeType.equals(ModeType.PACKETS)) {
+            ServerUtil.getInstance().getLogHelper().debug("[ANTIBOT MANAGER] Requested mode disabling for " + modeType.name() + " result " + (packetPerSecond.getSlowCount() < ConfigManger.packetModeTrigger));
             return packetPerSecond.getSlowCount() < ConfigManger.packetModeTrigger;
         }
+        ServerUtil.getInstance().getLogHelper().debug("[ANTIBOT MANAGER] Requested mode disabling for " + modeType);
         return false;
     }
 
@@ -294,8 +333,8 @@ public class AntiBotManager implements IAntiBotManager {
     }
 
     @Override
-    public AttackWatcherDetector getAttackDetector() {
-        return attackDetector;
+    public AttackWatcher getAttackWatcher() {
+        return attackWatcher;
     }
 
     @Override
@@ -314,6 +353,7 @@ public class AntiBotManager implements IAntiBotManager {
                 .replace("%latency%", iAntiBotPlugin.getLatencyThread().getLatency())
                 .replace("%prefix%", iAntiBotPlugin.getAnimationThread().getEmote() + " " + MessageManager.prefix)
                 .replace("%underverification%", String.valueOf(VPNService.getUnderVerificationSize()))
+                .replace("%attack-types%", attackWatcher.getFiredAttacks().toString())
                 ;
     }
 }

@@ -4,6 +4,7 @@ import me.kr1s_d.ultimateantibot.Notificator;
 import me.kr1s_d.ultimateantibot.checks.AuthCheckReloaded;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.impl.*;
 import me.kr1s_d.ultimateantibot.common.core.tasks.AutoWhitelistTask;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
@@ -12,6 +13,7 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import me.kr1s_d.ultimateantibot.utils.component.KComponentBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -119,13 +121,6 @@ public class MainEventListener implements Listener {
             return;
         }
         //
-        //FirstJoinCheck
-        //
-        if (firstJoinCheck.isDenied(ip, name)) {
-            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.firstJoinMessage));
-            return;
-        }
-        //
         // SuperJoinCheck
         //
         if (superJoinCheck.isDenied(ip, name)) {
@@ -152,6 +147,15 @@ public class MainEventListener implements Listener {
         //
         if (antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()) {
             e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage))));
+            return;
+        }
+
+        //
+        //FirstJoinCheck
+        //
+        if (firstJoinCheck.isDenied(ip, name)) {
+            e.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Utils.colora(MessageManager.firstJoinMessage));
+            return;
         }
     }
 
@@ -175,7 +179,7 @@ public class MainEventListener implements Listener {
         //SlowJoin check
         //
         if (slowJoinCheck.isDenied(ip, nickname)) {
-            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER, nickname);
+            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER_SLOW_JOIN, nickname);
             plugin.disconnect(ip, MessageManager.getSafeModeMessage());
             return;
         }
@@ -209,6 +213,10 @@ public class MainEventListener implements Listener {
         //Register Check
         //
         registerCheck.onChat(ip, nickname, e.getMessage());
+        //
+        // Connection Analyze
+        //
+        CheckService.getCheck(CheckType.CONNECTION_ANALYZE, ConnectionAnalyzerCheck.class).onChat(ip, nickname, e.getMessage());
     }
 
     @EventHandler
@@ -220,6 +228,10 @@ public class MainEventListener implements Listener {
         if (ServerUtil.blacklistPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()) {
             authCheck.onPing(e, ip);
         }
+        //
+        //Connection Analyze
+        //
+        CheckService.getCheck(CheckType.CONNECTION_ANALYZE, ConnectionAnalyzerCheck.class).onPing(ip);
     }
 
     @EventHandler

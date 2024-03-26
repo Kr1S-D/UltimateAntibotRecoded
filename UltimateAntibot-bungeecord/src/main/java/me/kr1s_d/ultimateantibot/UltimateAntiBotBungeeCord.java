@@ -71,7 +71,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         this.logHelper = new LogHelper(this);
         FilesUpdater updater = new FilesUpdater(this, config, messages, whitelist, blacklist);
-        updater.check(4.3, 4.3);
+        updater.check(4.4, 4.4);
         if (updater.requiresReassign()) {
             this.config = new Config(this, "%datafolder%/config.yml");
             this.messages = new Config(this, "%datafolder%/messages.yml");
@@ -131,6 +131,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         commandManager.register(new FirewallCommand(this));
         commandManager.register(new AttackLogCommand(this));
         commandManager.register(new CacheCommand());
+        commandManager.register(new ConnectionProfileCommand(this));
         commandManager.setDefaultCommandWrongArgumentMessage(MessageManager.commandWrongArgument);
         //commandManager.register(new SatelliteCommand(this));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, commandManager);

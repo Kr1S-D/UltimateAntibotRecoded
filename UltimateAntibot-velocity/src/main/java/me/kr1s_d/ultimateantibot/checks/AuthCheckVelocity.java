@@ -5,11 +5,15 @@ import com.velocitypowered.api.event.proxy.ProxyPingEvent;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import com.velocitypowered.api.scheduler.ScheduledTask;
 import me.kr1s_d.ultimateantibot.UltimateAntiBotVelocity;
+import me.kr1s_d.ultimateantibot.common.AttackType;
 import me.kr1s_d.ultimateantibot.common.AuthCheckType;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.core.server.CloudConfig;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.objects.profile.ConnectionProfile;
+import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ScoreTracker;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.ColorUtils;
@@ -77,6 +81,15 @@ public class AuthCheckVelocity {
     }
 
     public void onJoin(PreLoginEvent e, String ip) {
+        if(antibotManager.getAttackWatcher().getFiredAttacks().contains(AttackType.JOIN_NO_PING) && CloudConfig.a) {
+            ConnectionProfile profile = plugin.getUserDataService().getProfile(ip);
+
+            if(profile.getSecondsFromLastPing() <= 60) {
+                profile.process(ScoreTracker.ScoreID.AUTH_CHECK_PASS);
+                return;
+            }
+        }
+
         if (isCompletingPingCheck(ip)) {
             int currentIPPings = pingMap.computeIfAbsent(ip, j -> new FancyInteger(0)).get();
             int pingRequired = pingData.getOrDefault(ip, 0);

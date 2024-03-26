@@ -1,11 +1,17 @@
 package me.kr1s_d.ultimateantibot.checks;
 
 import me.kr1s_d.ultimateantibot.UltimateAntiBotBungeeCord;
+import me.kr1s_d.ultimateantibot.common.AttackType;
 import me.kr1s_d.ultimateantibot.common.AuthCheckType;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import me.kr1s_d.ultimateantibot.common.checks.AuthCheck;
+import me.kr1s_d.ultimateantibot.common.checks.CheckType;
+import me.kr1s_d.ultimateantibot.common.core.server.CloudConfig;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
+import me.kr1s_d.ultimateantibot.common.objects.profile.ConnectionProfile;
+import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ScoreTracker;
 import me.kr1s_d.ultimateantibot.common.service.VPNService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
@@ -36,7 +42,7 @@ public class AuthCheckReloaded {
     private final Map<String, String> checkInitiator;
     private final VPNService VPNService;
 
-    public AuthCheckReloaded(IAntiBotPlugin plugin){
+    public AuthCheckReloaded(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.antibotManager = plugin.getAntiBotManager();
         this.checking = new HashMap<>();
@@ -83,6 +89,15 @@ public class AuthCheckReloaded {
     }
 
     public void onJoin(PreLoginEvent e, String ip) {
+        if(antibotManager.getAttackWatcher().getFiredAttacks().contains(AttackType.JOIN_NO_PING) && CloudConfig.a) {
+            ConnectionProfile profile = plugin.getUserDataService().getProfile(ip);
+
+            if(profile.getSecondsFromLastPing() <= 60) {
+                profile.process(ScoreTracker.ScoreID.AUTH_CHECK_PASS);
+                return;
+            }
+        }
+
         if (isCompletingPingCheck(ip)) {
             int currentIPPings = pingMap.computeIfAbsent(ip, j -> new FancyInteger(0)).get();
             int pingRequired = pingData.getOrDefault(ip, 0);
@@ -137,7 +152,7 @@ public class AuthCheckReloaded {
      * @param ip IP to check
      * @return Ritorna se l'IP può iniziare una nuova task
      */
-    private boolean canStartTimerVerification(String ip){
+    private boolean canStartTimerVerification(String ip) {
         return runningTasks.containsKey(ip);
     }
 

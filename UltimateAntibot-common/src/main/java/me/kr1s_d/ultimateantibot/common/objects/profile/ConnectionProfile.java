@@ -1,38 +1,108 @@
 package me.kr1s_d.ultimateantibot.common.objects.profile;
 
 import me.kr1s_d.ultimateantibot.common.core.server.packet.SatellitePacket;
+import me.kr1s_d.ultimateantibot.common.objects.LimitedList;
+import me.kr1s_d.ultimateantibot.common.objects.profile.entry.IpEntry;
+import me.kr1s_d.ultimateantibot.common.objects.profile.entry.NickNameEntry;
+import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ContainerType;
+import me.kr1s_d.ultimateantibot.common.objects.profile.meta.MetadataContainer;
+import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ScoreTracker;
+import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionProfile implements Serializable, SatellitePacket {
     private static final long serialVersionUID = 7293619371231515414L;
+
     private String ip;
-    private String nickname;
+    private String currentNickName;
     private long firstJoinDate;
     private long lastJoin;
     private long minutePlayed;
-
     private boolean firstJoin;
+    private boolean isOnline;
 
-    public ConnectionProfile(String ip, String nickname) {
+    private long lastServerPing;
+    private final ScoreTracker score;
+    private final Map<ContainerType, MetadataContainer<String>> metadataContainerMap;
+
+
+    public ConnectionProfile(String ip) {
         this.ip = ip;
-        this.nickname = nickname;
+        this.currentNickName = null;
         this.lastJoin = System.currentTimeMillis();
         this.firstJoinDate = System.currentTimeMillis();
         this.minutePlayed = 0;
         this.firstJoin = true;
+        this.isOnline = false;
+
+        this.score = new ScoreTracker();
+        this.metadataContainerMap = new HashMap<>();
     }
 
-    public void onJoin(String nickname) {
-        this.nickname = nickname;
+    public void tickMinute() {
+        score.checkRemoval();
+        minutePlayed++;
+    }
+
+    public void trackJoin(String nickname) {
+        if(nickname == null) {
+            ServerUtil.getInstance().getLogHelper().error("[SEVERE] Null nickname on join, if this error persist please contact discord support!");
+            throw new NullPointerException("Null nickname on player join!");
+        }
+
+        this.currentNickName = nickname;
         this.lastJoin = System.currentTimeMillis();
+        this.isOnline = true;
+        score.expireScores(ScoreTracker.ScoreDurationType.EXPIRE_ON_JOIN);
+
+        //nickname change detection
+        MetadataContainer<String> nickMeta = getMetadata(ContainerType.KNOWN_NICKNAMES_IP);
+        LimitedList<NickNameEntry> nickHistory = nickMeta.getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<NickNameEntry>(10));
+        LimitedList<IpEntry> ipHistory = nickMeta.getOrPutDefault("ip-history", LimitedList.class, new LimitedList<IpEntry>(10));
+        if(!nickHistory.contains(NickNameEntry.comparable(nickname))) nickHistory.add(new NickNameEntry(nickname, System.currentTimeMillis()));
+        if(!ipHistory.contains(IpEntry.comparable(ip))) ipHistory.add(new IpEntry(ip, System.currentTimeMillis()));
+        //process abnormal name check
+        if(nickHistory.size() > 3) {
+            process(ScoreTracker.ScoreID.CHANGE_NAME);
+        }
+
+        //join info
+        MetadataContainer<String> joinMeta = getMetadata(ContainerType.JOIN_INFO);
+        joinMeta.insert("packet-received", false); //default
+        process(ScoreTracker.ScoreID.NO_PACKET_CHECK, false);
+        joinMeta.incrementInt("join-count", 0);
     }
 
-    public void onDisconnect() {
-        minutePlayed += TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - lastJoin);
+    public void trackPing() {
+        lastServerPing = System.currentTimeMillis();
+        score.expireScores(ScoreTracker.ScoreDurationType.EXPIRE_ON_PING);
+
+        //join info
+        MetadataContainer<String> joinMeta = getMetadata(ContainerType.JOIN_INFO);
+        joinMeta.incrementInt("ping-count", 0);
+    }
+
+    public void trackChat(String message) {
+        MetadataContainer<String> metadata =  getMetadata(ContainerType.CHAT_HISTORY);
+        LimitedList<String> history = metadata.getOrPutDefault("chat-history", LimitedList.class, new LimitedList<String>(15));
+        history.add(message);
+        metadata.insert("last-message", System.currentTimeMillis());
+    }
+
+    public void trackPacket() {
+        MetadataContainer<String> metadata = getMetadata(ContainerType.JOIN_INFO);
+        metadata.insert("packet-received", true);
+        process(ScoreTracker.ScoreID.NO_PACKET_CHECK, true);
+    }
+
+    public void trackDisconnect() {
+        this.isOnline = false;
+        score.expireScores(ScoreTracker.ScoreDurationType.EXPIRE_ON_QUIT);
     }
 
     public String getIP() {
@@ -43,12 +113,12 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         this.ip = ip;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getCurrentNickName() {
+        return currentNickName == null ? "_NULL_" : currentNickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setCurrentNickName(String currentNickName) {
+        this.currentNickName = currentNickName;
     }
 
     public long getFirstJoinDate() {
@@ -87,16 +157,130 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         return (int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastJoin);
     }
 
+    public long getSecondsFromLastPing() {
+        return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - lastServerPing);
+    }
+
+    public long getSecondsFromLastJoin() {
+        return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - lastJoin);
+    }
+
+    public long getSecondsFromFirstJoin() {
+        return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - firstJoinDate);
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public ScoreTracker getScoreTracker() {
+        return score;
+    }
+
+    public int getConnectionScoreNum() {
+        return score.getScore();
+    }
+
+    public ConnectionScore getConnectionScore() {
+        int score = getConnectionScoreNum();
+
+        if (score >= ConnectionScore.BOT_CONFIRMED.getDetectionScore()) {
+            return ConnectionScore.BOT_CONFIRMED;
+        } else if (score >= ConnectionScore.ALMOST_BOT.getDetectionScore()) {
+            return ConnectionScore.ALMOST_BOT;
+        } else if (score >= ConnectionScore.BOT_SUSPECTED.getDetectionScore()) {
+            return ConnectionScore.BOT_SUSPECTED;
+        } else if (score >= ConnectionScore.SUSPECT_ACTIVITY.getDetectionScore()) {
+            return ConnectionScore.SUSPECT_ACTIVITY;
+        } else {
+            return ConnectionScore.NOT_BOT;
+        }
+    }
+
+    public LimitedList<NickNameEntry> getLastNickNames() {
+        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<NickNameEntry>(10));
+    }
+
+    public LimitedList<IpEntry> getLastIPs() {
+        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("ip-history", LimitedList.class, new LimitedList<IpEntry>(10));
+    }
+
+    public LimitedList<String> getChatMessages() {
+        return getMetadata(ContainerType.CHAT_HISTORY).getOrPutDefault("chat-history", LimitedList.class, new LimitedList<String>(15));
+    }
+
+    public ConnectionProfile process(ScoreTracker.ScoreID scoreID, Object... o) {
+        int multiplier = 1;
+        if(ServerUtil.getSecondsFromLastAttack() < 300) {
+            multiplier = 2;
+            ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] Possible attack detected shortly after another attack ⚠");
+        }
+
+        switch (scoreID) {
+            case NO_PACKET_CHECK: //no multiplier to avoid false flags
+                boolean hasSentPacket = ((Boolean) o[0]);
+                if(hasSentPacket) {
+                    score.removeScore(scoreID, 250, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, false);
+                    return this;
+                }
+
+                score.addScore(scoreID, 250, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                break;
+            case IS_FIST_JOIN:
+                boolean isFirstJoin = ((Boolean) o[0]);
+                if(!isFirstJoin) return this;
+                score.addScore(scoreID, 150 * multiplier, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                break;
+            case JOIN_NO_PING:
+                if(getSecondsFromLastPing() >= 0 && getSecondsFromLastPing() <= 300) {
+                    return this;
+                }
+
+                score.addScore(scoreID, (int) ((double)250 * ((double) multiplier - (double) 0.6)), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                break;
+            case ABNORMAL_CHAT_MESSAGE:
+                score.addScore(scoreID, 25 * multiplier, true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 10);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                break;
+            case ABNORMAL_NAME:
+                score.addScore(scoreID, 75 * multiplier, true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 15);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                break;
+            case CHANGE_NAME:
+                score.addScore(scoreID, 100 * multiplier, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 5);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                break;
+            case AUTH_CHECK_PASS:
+                score.addScore(scoreID, ConnectionScore.SUSPECT_ACTIVITY.getDetectionScore(), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 10);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] Passed " + scoreID + " but maybe is a bot ✔");
+                break;
+        }
+
+        return this;
+    }
+
+    public void checkMetadata() {
+        for (Map.Entry<ContainerType, MetadataContainer<String>> map : metadataContainerMap.entrySet()) {
+            if (!map.getValue().isPersistent()) {
+                map.getValue().clear();
+            }
+        }
+    }
+
     @Override
     public String getID() {
         return "0x00";
     }
 
+
     @Override
     public void write(DataOutputStream out) {
         try {
             out.writeUTF(ip);
-            out.writeUTF(nickname);
+            out.writeUTF(currentNickName);
             out.writeLong(firstJoinDate);
             out.writeLong(lastJoin);
             out.writeLong(minutePlayed);
@@ -109,10 +293,32 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
     public String toString() {
         return "ConnectionProfile{" +
                 "ip='" + ip + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", nickname='" + currentNickName + '\'' +
                 ", firstJoin=" + firstJoinDate +
                 ", lastJoin=" + lastJoin +
                 ", minutePlayed=" + minutePlayed +
                 '}';
+    }
+
+    private MetadataContainer<String> getMetadata(ContainerType containerType) {
+        return metadataContainerMap.computeIfAbsent(containerType, k -> new MetadataContainer<>(containerType.isPersistence()));
+    }
+
+    public enum ConnectionScore {
+        NOT_BOT(0),
+        SUSPECT_ACTIVITY(200),
+        BOT_SUSPECTED(400),
+        ALMOST_BOT(600),
+        BOT_CONFIRMED(800);
+
+        public final int score;
+
+        ConnectionScore(int score) {
+            this.score = score;
+        }
+
+        public int getDetectionScore() {
+            return score;
+        }
     }
 }

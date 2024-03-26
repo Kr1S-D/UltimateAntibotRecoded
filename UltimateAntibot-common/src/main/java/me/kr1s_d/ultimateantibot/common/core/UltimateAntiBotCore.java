@@ -28,6 +28,7 @@ public class UltimateAntiBotCore {
         plugin.scheduleRepeatingTask(() -> {
             refresh();
             DetectorService.tickDetectors();
+            plugin.getUserDataService().checkBots();
 
             minute.increase();
             if(minute.get() > 60) {

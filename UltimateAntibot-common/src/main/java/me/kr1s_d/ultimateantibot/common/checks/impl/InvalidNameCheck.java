@@ -33,7 +33,7 @@ public class InvalidNameCheck implements JoinCheck {
             blacklisted = blacklisted.toLowerCase();
             
             if(name.toLowerCase().contains(blacklisted)) {
-                antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER, name);
+                antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER_INVALID_NAME, name);
                 plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on InvalidNameCheck!");
                 return true;
             }

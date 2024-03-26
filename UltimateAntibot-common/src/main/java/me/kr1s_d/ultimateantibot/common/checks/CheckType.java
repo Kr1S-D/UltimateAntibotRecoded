@@ -9,5 +9,5 @@ public enum CheckType {
     REGISTER,
     CONNECTION_ANALYZE,
     SLOW_JOIN,
-    SUPER_JOIN;
+    SUPER_JOIN,
 }

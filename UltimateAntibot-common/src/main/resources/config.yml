@@ -1,4 +1,4 @@
-version: 4.3
+version: 4.4
 #   _    _ _ _   _                 _                        _   _ _           _
 #  | |  | | | | (_)               | |           /\         | | (_) |         | |
 #  | |  | | | |_ _ _ __ ___   __ _| |_ ___     /  \   _ __ | |_ _| |__   ___ | |_
@@ -180,6 +180,19 @@ checks:
     blacklist: true
     antibotmode: true
     #This parameter allows you to activate or deactivate this check
+    enabled: true
+  #This check is very useful for detecting slow bot attacks, however it is not a guarantee and can cause false positives,
+  #in which case I recommend deactivating it if you receive too many blacklist reports for the reason: STRANGE_PLAYER_CONNECTION
+  connection-analyze:
+    #to change these parameters is suggested to ask on discord only if you are experiencing issues with them
+    chat-trigger: 5
+    name-trigger: 3
+    #This parameter indicates how many players with scores equal to the one assigned below must be there to trigger the check
+    blacklist-trigger: 1
+    #This parameter indicates the minimum classification that a player must have to be
+    #considered a bot, the classifications are below:
+    # [NOT_BOT, SUSPECT_ACTIVITY, BOT_SUSPECTED, ALMOST_BOT, BOT_CONFIRMED]
+    blacklist-from: ALMOST_BOT #this means that all connections with ALMOST_BOT or BOT_CONFIRMED will be tagged as bots
     enabled: true
   slowjoin:
     #This check will check if a player sends a certain packet,

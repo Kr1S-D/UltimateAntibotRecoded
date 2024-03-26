@@ -1,12 +1,17 @@
 package me.kr1s_d.ultimateantibot.common.core.server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.core.server.listener.SatelliteListener;
 import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
 import me.kr1s_d.ultimateantibot.common.objects.profile.ConnectionProfile;
 import me.kr1s_d.ultimateantibot.common.service.UserDataService;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+import me.kr1s_d.ultimateantibot.common.utils.FileUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -20,17 +25,21 @@ public class SatelliteServer {
     private final IAntiBotPlugin plugin;
     private SatelliteListener listener;
 
-    private final String sessionID;
+    private String sessionID;
     private long lastPingLatency;
 
     public SatelliteServer(IAntiBotPlugin plugin) {
         this.plugin = plugin;
-        //this.listener = new SatelliteListener(plugin);
 
-        //plugin.runTask(listener);
-        //init();
+        String sessionID = FileUtil.readLine("sessionID.uab", FileUtil.UABFolder.DATA);
 
-        this.sessionID = UUID.randomUUID().toString();
+        try {
+            this.sessionID = UUID.fromString(sessionID).toString();
+        }catch (Exception e) {
+            this.sessionID = UUID.randomUUID().toString();
+            FileUtil.writeLine("sessionID.uab", FileUtil.UABFolder.DATA, this.sessionID);
+        }
+
         plugin.scheduleRepeatingTask(() -> {
             if (plugin.getAntiBotManager().isSomeModeOnline()) {
                 return;
@@ -38,24 +47,6 @@ public class SatelliteServer {
 
             this.lastPingLatency = ping(this.sessionID);
         }, true, 600000L);
-    }
-
-    /**
-     * No more used
-     */
-    private void init() {
-        if(!listener.isConnected()) return;
-
-        plugin.scheduleRepeatingTask(() -> {
-            UserDataService users = plugin.getUserDataService();
-            List<ConnectionProfile> profiles = users.getProfiles();
-
-            for (ConnectionProfile profile : profiles) {
-                profile.setMinutePlayed(0);
-            }
-
-            listener.sendPackets(profiles);
-        }, false, 1000L * 60L);
     }
 
     /**
@@ -84,15 +75,13 @@ public class SatelliteServer {
             }
             reader.close();
 
-            // Deserializzazione dell'array JSON di indirizzi IP in una lista di stringhe
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            List<String> ipList = gson.fromJson(response.toString(), listType);
+            plugin.getLogHelper().debug("[SATELLITE] res: " + response.toString());
+            JsonObject object = JsonParser.parseString(response.toString()).getAsJsonObject();
+            CloudConfig.a = object.get("a").getAsBoolean();
+            CloudConfig.i = object.get("b").getAsInt();
+            object.get("c").getAsString();
+            plugin.getLogHelper().debug("[SATELLITE] json: " + object.toString());
 
-            // whitelist inside server framework
-            for (String ip : ipList) {
-                plugin.getAntiBotManager().getWhitelistService().whitelist(ip, 10);
-            }
             connection.disconnect();
         } catch (Exception e) {
             //this.plugin.getLogHelper().debug("Error during contacting UAB servers, are they down?");

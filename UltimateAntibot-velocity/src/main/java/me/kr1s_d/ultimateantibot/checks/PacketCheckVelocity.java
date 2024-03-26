@@ -62,6 +62,8 @@ public class PacketCheckVelocity {
         if (isEnabled() && !whitelistService.isWhitelisted(ip)) {
             packetReceived.add(ip);
         }
+
+        if(isEnabled()) iAntiBotPlugin.getUserDataService().getProfile(ip).trackPacket();
     }
 
     public void checkForAttack() {
@@ -79,7 +81,7 @@ public class PacketCheckVelocity {
                 Utils.disconnectAll(new ArrayList<>(suspected), MessageManager.getSafeModeMessage());
                 for (String ip : new ArrayList<>(suspected)) {
                     if (ConfigManger.getPacketCheckConfig().isBlacklist()) {
-                        blacklist.blacklist(ip, BlackListReason.STRANGE_PLAYER);
+                        blacklist.blacklist(ip, BlackListReason.STRANGE_PLAYER_PACKET);
                     }
                 }
                 if (ConfigManger.getPacketCheckConfig().isEnableAntiBotMode()) {
