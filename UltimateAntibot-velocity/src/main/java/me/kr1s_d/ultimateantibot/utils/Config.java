@@ -3,12 +3,14 @@ package me.kr1s_d.ultimateantibot.utils;
 import me.kr1s_d.ultimateantibot.UltimateAntiBotVelocity;
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
+import org.bspfsystems.yamlconfiguration.configuration.ConfigurationSection;
 import org.bspfsystems.yamlconfiguration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -127,7 +129,11 @@ public class Config implements IConfiguration {
     @Override
     public Set<String> getConfigurationSection(String path) {
         Set<String> p = new HashSet<>();
-        config.getConfigurationSection(path).getKeys(false).forEach(p::add);
+        ConfigurationSection section = config.getConfigurationSection(path);
+        if(section == null) return p;
+        Collection<String> keys = section.getKeys(false);
+        if(keys.isEmpty() || keys == null) return p;
+        p.addAll(keys);
         return p;
     }
 

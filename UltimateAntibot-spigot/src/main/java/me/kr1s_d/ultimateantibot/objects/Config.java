@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -98,9 +99,13 @@ public class Config implements IConfiguration {
 
     @Override
     public Set<String> getConfigurationSection(String path) {
-        ConfigurationSection sect = config.getConfigurationSection(path);
-        if(sect == null) return new HashSet<>();
-        return config.getConfigurationSection(path).getKeys(false);
+        Set<String> p = new HashSet<>();
+        ConfigurationSection section = config.getConfigurationSection(path);
+        if(section == null) return p;
+        Collection<String> keys = section.getKeys(false);
+        if(keys.isEmpty() || keys == null) return p;
+        p.addAll(keys);
+        return p;
     }
 
     @Override
