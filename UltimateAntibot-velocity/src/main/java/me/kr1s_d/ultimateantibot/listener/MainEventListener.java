@@ -64,6 +64,7 @@ public class MainEventListener {
         this.registerCheck = new RegisterCheck(plugin);
         this.VPNService = plugin.getVPNService();
         this.userDataService = plugin.getUserDataService();
+        new ConnectionAnalyzerCheck(plugin);
     }
 
     @Subscribe(order = PostOrder.FIRST)

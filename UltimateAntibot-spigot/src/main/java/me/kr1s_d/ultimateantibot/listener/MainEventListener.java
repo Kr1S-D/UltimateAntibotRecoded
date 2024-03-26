@@ -59,6 +59,7 @@ public class MainEventListener implements Listener {
         this.registerCheck = new RegisterCheck(plugin);
         this.VPNService = plugin.getVPNService();
         this.userDataService = plugin.getUserDataService();
+        new ConnectionAnalyzerCheck(plugin);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
