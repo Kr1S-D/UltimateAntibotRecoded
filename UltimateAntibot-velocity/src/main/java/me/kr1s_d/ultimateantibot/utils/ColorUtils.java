@@ -1,7 +1,6 @@
 package me.kr1s_d.ultimateantibot.utils;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +62,7 @@ public class ColorUtils {
         for (Map.Entry<String, String> entry : colorMap.entrySet()) {
             text = text.replace(entry.getKey(), entry.getValue());
         }
+
 
         return computeAs.apply(text);
     }

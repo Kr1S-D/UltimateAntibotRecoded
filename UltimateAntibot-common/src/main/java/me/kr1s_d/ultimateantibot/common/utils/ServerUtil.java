@@ -41,7 +41,7 @@ public class ServerUtil {
         instance.broadcast(message);
     }
 
-    public static String colorize(String text){
+    public static String colorize(String text) {
         return instance.colorize(text);
     }
 

@@ -38,7 +38,6 @@ import me.kr1s_d.ultimateantibot.utils.ColorUtils;
 import me.kr1s_d.ultimateantibot.utils.Config;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 
@@ -348,7 +347,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
 
     @Override
     public String colorize(String text) {
-        return ColorUtils.format(text, a -> a);
+        return ColorUtils.format(text, b -> b);
     }
 
     @Override
@@ -360,7 +359,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
     public void log(LogHelper.LogType type, String log) {
         switch (type) {
             case ERROR:
-                this.server.getConsoleCommandSource().sendMessage(Component.text(log));
+                this.server.getConsoleCommandSource().sendMessage(ColorUtils.format(log));
                 break;
             case WARNING:
                 logger.warn(log);
