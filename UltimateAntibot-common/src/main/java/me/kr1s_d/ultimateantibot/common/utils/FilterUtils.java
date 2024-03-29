@@ -6,6 +6,8 @@ import java.util.List;
 public class FilterUtils {
     public static void populateDefaultFilter(List<String> filter) {
         filter.addAll(Arrays.asList(
+                "disconnected",
+                "initial connection",
                 "InitialHandler",
                 "Connection reset by peer",
                 "Unexpected packet received",

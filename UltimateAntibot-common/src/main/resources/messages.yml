@@ -69,7 +69,7 @@ help:
   - "&c/uab &cstats &7- &fShows antibot stats"
   - "&c/uab &cclear &fblacklist/whitelist &7- &fClear blacklist or whitelist"
   - "&c/uab &cwhitelist &fadd/remove &f<ip> &7- &fManage whitelist"
-  - "&c/uab &cblacklist &fadd/remove &f<ip>&7- &fManage blacklist"
+  - "&c/uab &cblacklist &fadd/remove &f<ip/name>&7- &fManage blacklist"
   - "&c/uab logs list <amount> &7- &ffShows last <amount> attacks"
   - "&c/uab logs info <id> &7- &fShows last attack info"
   - "&c/uab cache status/clear &7- &fManage UAB cache"

@@ -69,6 +69,30 @@ public class StringUtil {
         return matchCount;
     }
 
+    public static boolean isValidIPv4(String s) {
+        s = s.replace("/", "");
+        String[] parts = s.split("\\.");
+
+        if (parts.length != 4) {
+            return false;
+        }
+
+        for (String part : parts) {
+            try {
+                int num = Integer.parseInt(part);
+
+                if (num < 0 || num > 255) {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
+        // If all checks passed, return true
+        return true;
+    }
+
     private static int countWords(String str) {
         return str.split("\\s+").length;
     }

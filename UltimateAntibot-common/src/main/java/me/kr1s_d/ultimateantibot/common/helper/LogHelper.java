@@ -5,6 +5,8 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 
+import javax.print.DocFlavor;
+
 import static me.kr1s_d.ultimateantibot.common.helper.LogHelper.LogType.*;
 
 public class LogHelper {
@@ -32,12 +34,25 @@ public class LogHelper {
     }
 
     public void sendLogo() {
+        if(PerformanceHelper.getRunning().equals(ServerType.VELOCITY)) {
+            sendVelocityLogo();
+            return;
+        }
         info("&c _    _         &c____ ");
         info("&c| |  | |§f  /\\   &c|  _ \\ ");
         info("&c| |  | |§f /  \\  &c| |_) |");
         info("&c| |  | |§f/ /\\ \\&c |  _ <");
         info("&c| |__| §f/ ____ \\&c| |_) |");
         info("&c\\____§f/_/     \\_&c\\____/");
+    }
+
+    public void sendVelocityLogo() {
+        info("&c _    _          &c____ ");
+        info("&c| |  | |§f  /\\    &c|  _ \\ ");
+        info("&c| |  | |§f /  \\   &c| |_) |");
+        info("&c| |  | |§f/ /\\ \\ &c |  _ <");
+        info("&c| |__| §f/ ____ \\ &c| |_) |");
+        info("&c\\____§f/_/     \\_ &c\\____/");
     }
 
     public enum LogType {

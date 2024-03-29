@@ -1,6 +1,9 @@
 package me.kr1s_d.ultimateantibot.common.utils;
 
 import me.kr1s_d.ultimateantibot.common.IConfiguration;
+import me.kr1s_d.ultimateantibot.common.IServerPlatform;
+import me.kr1s_d.ultimateantibot.common.helper.PerformanceHelper;
+import me.kr1s_d.ultimateantibot.common.helper.ServerType;
 import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListProfile;
 
 import java.util.List;
@@ -141,6 +144,7 @@ public class MessageManager {
     }
 
     private static String convertToString(List<String> stringList) {
+        if(PerformanceHelper.getRunning().equals(ServerType.VELOCITY)) return String.join("\n&r", stringList);
         return String.join("\n", stringList);
     }
 

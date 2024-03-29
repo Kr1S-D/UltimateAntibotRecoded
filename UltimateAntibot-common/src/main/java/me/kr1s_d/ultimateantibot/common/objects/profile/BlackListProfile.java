@@ -12,7 +12,7 @@ public class BlackListProfile {
     /**
      * @param reason Reason for BlackList
      */
-    public BlackListProfile(String ip, String reason){
+    public BlackListProfile(String ip, String reason) {
         this.ip = ip;
         this.id = UUID.randomUUID().toString().split("-")[0];
         this.name = "_NAME_NOT_FOUND_";

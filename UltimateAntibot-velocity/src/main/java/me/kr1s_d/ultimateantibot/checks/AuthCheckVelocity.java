@@ -18,6 +18,7 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.ColorUtils;
 import me.kr1s_d.ultimateantibot.utils.component.KComponentBuilder;
+import net.kyori.adventure.text.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,15 +60,15 @@ public class AuthCheckVelocity {
             if (antibotManager.isAntiBotModeEnabled()) {
                 int currentIPPings = pingMap.get(ip).get();
                 int pingRequired = pingData.get(ip);
+                Component description = e.getPing().getDescriptionComponent() == null ? Component.text("") : e.getPing().getDescriptionComponent();
                 ServerPing ping = null;
                 //Impostazion e Dell'interfaccia per il conteggio dei ping
                 if (currentIPPings == pingRequired) {
-                    ping = ServerPing.builder().version(new ServerPing.Version(0, ColorUtils.format(MessageManager.verifiedPingInterface, a -> a))).build();
+                    ping = ServerPing.builder().description(description).version(new ServerPing.Version(0, ColorUtils.replaceOlderLegacy(MessageManager.verifiedPingInterface))).build();
                 } else {
-                    ping = ServerPing.builder().version(new ServerPing.Version(0, ColorUtils.format(MessageManager.normalPingInterface
+                    ping = ServerPing.builder().description(description).version(new ServerPing.Version(0, ColorUtils.replaceOlderLegacy(MessageManager.normalPingInterface
                                     .replace("$1", String.valueOf(currentIPPings))
-                                    .replace("$2", String.valueOf(pingRequired)),
-                            string -> string))).build();
+                                    .replace("$2", String.valueOf(pingRequired))))).build();
                 }
                 //Imposto la risposta al ping
                 e.setPing(ping);

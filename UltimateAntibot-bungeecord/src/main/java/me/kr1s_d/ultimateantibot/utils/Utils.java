@@ -49,7 +49,7 @@ public class Utils {
     public static void disconnectAll(List<String> ips, List<String> reason){
         ProxyServer.getInstance().getPlayers().forEach(player -> {
             ips.forEach(ip -> {
-                if(Utils.getIP(player).equals(ip)){
+                if(Utils.getIP(player).equals(ip)) {
                     player.disconnect(new TextComponent(ServerUtil.colorize(convertToString(reason))));
                 }
             });

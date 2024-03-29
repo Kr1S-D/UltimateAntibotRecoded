@@ -2,6 +2,7 @@ package me.kr1s_d.ultimateantibot.utils.component.impl;
 
 import com.velocitypowered.api.proxy.Player;
 import me.kr1s_d.ultimateantibot.utils.ColorUtils;
+import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -11,7 +12,7 @@ public class InteractableComponentBuilder {
     private TextComponent component = null;
 
     public InteractableComponentBuilder(String text) {
-        this.component = ColorUtils.format(text, Component::text);
+        this.component = (TextComponent) Utils.colora(text);
     }
 
     public InteractableComponentBuilder click(ClickEvent.Action action, String value) {

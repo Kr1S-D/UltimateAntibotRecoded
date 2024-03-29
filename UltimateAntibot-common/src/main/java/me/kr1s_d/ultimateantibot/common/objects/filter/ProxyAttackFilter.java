@@ -42,7 +42,7 @@ public class ProxyAttackFilter implements Filter {
 
     public boolean isDenied(String record) {
         for (String str : blocked) {
-            if (record.contains(str)) {
+            if (record.toLowerCase().contains(str.toLowerCase())) {
                 return true;
             }
         }

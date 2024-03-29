@@ -28,7 +28,7 @@ public class BukkitAttackFilter implements Filter {
     public Result checkMessage(String record) {
         if(antiBotManager.isAntiBotModeEnabled()) {
             for (String str : blocked) {
-                if (record.contains(str)) {
+                if (record.toLowerCase().contains(str.toLowerCase())) {
                     return Result.DENY;
                 }
             }

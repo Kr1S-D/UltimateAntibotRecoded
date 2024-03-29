@@ -42,7 +42,7 @@ public class VelocityAttackFilter implements Filter {
     public Result isDenied(String record) {
         if(antiBotManager.isAntiBotModeEnabled()) {
             for (String str : blocked) {
-                if (record.contains(str)) {
+                if (record.toLowerCase().contains(str.toLowerCase())) {
                     return Result.DENY;
                 }
             }

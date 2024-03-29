@@ -347,7 +347,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
 
     @Override
     public String colorize(String text) {
-        return ColorUtils.format(text, b -> b);
+        return ColorUtils.replaceSerialize(text);
     }
 
     @Override
@@ -359,13 +359,13 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
     public void log(LogHelper.LogType type, String log) {
         switch (type) {
             case ERROR:
-                this.server.getConsoleCommandSource().sendMessage(ColorUtils.format(log));
+                logger.error(ColorUtils.removeFormatting(log));
                 break;
             case WARNING:
-                logger.warn(log);
+                logger.warn(ColorUtils.removeFormatting(log));
                 break;
             case INFO:
-                logger.info(log);
+                this.server.getConsoleCommandSource().sendMessage(ColorUtils.deserialize(log));
                 break;
         }
     }
