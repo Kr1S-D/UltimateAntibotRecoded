@@ -73,6 +73,7 @@ public class ConnectionProfileCommand implements SubCommand {
                 sender.sendMessage(Utils.colora("&f» &c" + s.toString()));
             }
         }
+        sender.sendMessage(Utils.colora("PS: If you see that you are suspected as a bot at the beginning it is normal, don't worry, at the beginning all players have a minimum level of suspicion for safety which should not cause problems with the default config."));
         sender.sendMessage("§8§l§n___________________________________________");
     }
 
