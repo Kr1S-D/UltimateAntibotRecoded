@@ -37,7 +37,6 @@ import me.kr1s_d.ultimateantibot.scheduler.TaskScheduler;
 import me.kr1s_d.ultimateantibot.utils.ColorUtils;
 import me.kr1s_d.ultimateantibot.utils.Config;
 import me.kr1s_d.ultimateantibot.utils.Utils;
-import net.kyori.adventure.text.Component;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 
@@ -114,7 +113,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
             this.logHelper.error("Error during config.yml & messages.yml loading!");
             return;
         }
-        Version.init(this);
+        //Version.init(this);
         //new Metrics(this, 11712);
         this.logHelper.info("§fLoading &cUltimateAntiBot...");
         this.firewallService = new FirewallService(this);
@@ -144,7 +143,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         this.logHelper.info("§cVersion: §f$1 &4| §cAuthor: §f$2 §4| §cCores: §f$3 §4| §cMode: &f$4"
                 .replace("$1", VERSION)
                 .replace("$2", AUTHOR)
-                .replace("$3", String.valueOf(Version.getCores()))
+                .replace("$3", String.valueOf(PerformanceHelper.getCores()))
                 .replace("$4", String.valueOf(PerformanceHelper.get())));
         this.logHelper.info("§fThe §cabyss&f is ready to swallow all the bots!");
         CommandManager commandManager = server.getCommandManager();

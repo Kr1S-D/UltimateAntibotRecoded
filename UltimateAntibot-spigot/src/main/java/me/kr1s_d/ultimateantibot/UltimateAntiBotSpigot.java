@@ -24,6 +24,7 @@ import me.kr1s_d.ultimateantibot.objects.filter.Bukkit247Filter;
 import me.kr1s_d.ultimateantibot.objects.filter.BukkitAttackFilter;
 import me.kr1s_d.ultimateantibot.utils.Metrics;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import me.kr1s_d.ultimateantibot.utils.Version;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.bukkit.Bukkit;
@@ -116,7 +117,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: &f$4"
                 .replace("$1", this.getDescription().getVersion())
                 .replace("$2", this.getDescription().getAuthors().toString())
-                .replace("$3", String.valueOf(Version.getCores()))
+                .replace("$3", String.valueOf(PerformanceHelper.getCores()))
                 .replace("$4", String.valueOf(PerformanceHelper.get()))
         );
         logHelper.info("&fThe &cabyss&f is ready to swallow all the bots!");

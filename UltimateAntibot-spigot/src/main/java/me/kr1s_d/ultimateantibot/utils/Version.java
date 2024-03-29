@@ -1,24 +1,20 @@
-package me.kr1s_d.ultimateantibot.common.utils;
+package me.kr1s_d.ultimateantibot.utils;
 
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
+import org.bukkit.Bukkit;
 
 public class Version {
 
-    private static int cores;
     private static String versionStr;
 
-    public static void init(IAntiBotPlugin plugin){
-        cores = Runtime.getRuntime().availableProcessors();
+    public static void init(IAntiBotPlugin plugin) {
         try {
-            versionStr = plugin.getClassInstance().getPackage().getName().replace(".", ",").split(",")[3];
+            versionStr = Bukkit.getServer().getBukkitVersion();
         }catch (Exception ignored){
 
         }
     }
 
-    public static int getCores() {
-        return cores;
-    }
 
     public static int getBukkitServerVersion() {
         if (versionStr == null)

@@ -86,7 +86,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
             this.logHelper.error("Error during config.yml & messages.yml loading!");
             return;
         }
-        Version.init(this);
+        //Version.init(this);
         new Metrics(this, 11712);
         this.logHelper.info("&fLoading &cUltimateAntiBot...");
         this.firewallService = new FirewallService(this);
@@ -115,7 +115,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.logHelper.info("&cVersion: &f$1 &4| &cAuthor: &f$2 &4| &cCores: &f$3 &4| &cMode: &f$4"
                 .replace("$1", getDescription().getVersion())
                 .replace("$2", getDescription().getAuthor())
-                .replace("$3", String.valueOf(Version.getCores()))
+                .replace("$3", String.valueOf(PerformanceHelper.getCores()))
                 .replace("$4", String.valueOf(PerformanceHelper.get())));
         this.logHelper.info("&fThe &cabyss&f is ready to swallow all the bots!");
         CommandManager commandManager = new CommandManager(this, "ultimateantibot", "", "ab", "uab");

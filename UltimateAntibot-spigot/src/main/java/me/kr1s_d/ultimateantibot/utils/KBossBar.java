@@ -1,6 +1,5 @@
 package me.kr1s_d.ultimateantibot.utils;
 
-import me.kr1s_d.ultimateantibot.common.utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;

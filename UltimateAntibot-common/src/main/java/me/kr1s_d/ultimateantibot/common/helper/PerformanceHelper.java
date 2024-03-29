@@ -2,14 +2,13 @@ package me.kr1s_d.ultimateantibot.common.helper;
 
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
-import me.kr1s_d.ultimateantibot.common.utils.Version;
 
 public class PerformanceHelper {
     private static PerformanceMode performanceMode;
     private static ServerType serverType;
 
     public static void init(ServerType serverType) {
-        int cores = Version.getCores();
+        int cores = getCores();
         PerformanceHelper.serverType = serverType;
 
         //return if disable
@@ -45,5 +44,9 @@ public class PerformanceHelper {
 
     public static ServerType getRunning() {
         return serverType;
+    }
+
+    public static int getCores() {
+        return Runtime.getRuntime().availableProcessors();
     }
 }
