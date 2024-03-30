@@ -58,12 +58,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.waterfallmc</groupId>
-            <artifactId>waterfall-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>me.kr1s_d.ultimateantibot</groupId>
             <artifactId>UltimateAntibot-common</artifactId>
             <version>${project.version}</version>

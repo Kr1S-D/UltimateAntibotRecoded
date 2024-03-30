@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.objects.filter;
 
+import com.google.gson.JsonParser;
 import me.kr1s_d.ultimateantibot.common.IAntiBotManager;
 import me.kr1s_d.ultimateantibot.common.IAntiBotPlugin;
 import me.kr1s_d.ultimateantibot.common.utils.FilterUtils;
