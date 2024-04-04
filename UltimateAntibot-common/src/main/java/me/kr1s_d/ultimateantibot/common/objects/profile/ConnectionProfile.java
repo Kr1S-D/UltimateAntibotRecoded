@@ -7,6 +7,7 @@ import me.kr1s_d.ultimateantibot.common.objects.profile.entry.NickNameEntry;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ContainerType;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.MetadataContainer;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ScoreTracker;
+import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 
 import java.io.DataOutputStream;
@@ -74,7 +75,7 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         //join info
         MetadataContainer<String> joinMeta = getMetadata(ContainerType.JOIN_INFO);
         joinMeta.insert("packet-received", false); //default
-        process(ScoreTracker.ScoreID.NO_PACKET_CHECK, false);
+        if(!ConfigManger.getPacketCheckConfig().isEnabled()) process(ScoreTracker.ScoreID.NO_PACKET_CHECK, false);
         joinMeta.incrementInt("join-count", 0);
     }
 
@@ -225,13 +226,13 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
                 }
 
                 score.addScore(scoreID, 250, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
-                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case IS_FIST_JOIN:
                 boolean isFirstJoin = ((Boolean) o[0]);
                 if(!isFirstJoin) return this;
                 score.addScore(scoreID, 150 * multiplier, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
-                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case JOIN_NO_PING:
                 if(getSecondsFromLastPing() >= 0 && getSecondsFromLastPing() <= 300) {
@@ -239,23 +240,23 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
                 }
 
                 score.addScore(scoreID, (int) ((double)250 * ((double) multiplier - (double) 0.6)), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
-                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case ABNORMAL_CHAT_MESSAGE:
-                score.addScore(scoreID, 25 * multiplier, true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 10);
-                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                score.addScore(scoreID, 20 * multiplier, true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 10);
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case ABNORMAL_NAME:
                 score.addScore(scoreID, 75 * multiplier, true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 15);
-                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case CHANGE_NAME:
                 score.addScore(scoreID, 100 * multiplier, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 5);
-                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] process " + scoreID + " ✔");
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case AUTH_CHECK_PASS:
                 score.addScore(scoreID, ConnectionScore.SUSPECT_ACTIVITY.getDetectionScore(), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 10);
-                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] Passed " + scoreID + " but maybe is a bot ✔");
+                ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " Passed " + scoreID + " but maybe is a bot ✔");
                 break;
         }
 

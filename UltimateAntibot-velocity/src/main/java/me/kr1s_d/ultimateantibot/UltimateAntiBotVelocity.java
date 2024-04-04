@@ -111,6 +111,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
             PerformanceHelper.init(ServerType.VELOCITY);
         } catch (Exception e) {
             this.logHelper.error("Error during config.yml & messages.yml loading!");
+            e.printStackTrace();
             return;
         }
         //Version.init(this);

@@ -17,7 +17,9 @@ import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 import me.kr1s_d.ultimateantibot.common.utils.StringUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is not a real check, it helps detect slow bot attacks and is inserted into different
@@ -41,14 +43,14 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
         this.userDataService = plugin.getUserDataService();
         this.whitelistService = antiBotManager.getWhitelistService();
 
+        CheckService.register(this);
         if(isEnabled()) {
-            CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
     }
 
     public void checkJoined() {
-        List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(10);
+        List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(15);
         List<ConnectionProfile> suspected = new ArrayList<>();
 
         for (ConnectionProfile profile : last) {
@@ -84,7 +86,7 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
     public void onChat(String ip, String nickname, String message) {
         userDataService.getProfile(ip).trackChat(message);
 
-        List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(10);
+        /*List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(15);
         MetadataContainer<ConnectionProfile> suspected = new MetadataContainer<>(false);
 
         for (int i = 0; i < last.size(); i++) {
@@ -117,7 +119,7 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
                     profile.process(ScoreTracker.ScoreID.ABNORMAL_CHAT_MESSAGE);
                 }
             }
-        }
+        }*/
     }
 
     public void onPing(String ip) {

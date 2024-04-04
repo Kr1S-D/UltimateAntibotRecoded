@@ -85,6 +85,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
             PerformanceHelper.init(ServerType.SPIGOT);
         } catch (Exception e) {
             logHelper.error("Error during config.yml & messages.yml loading!");
+            e.printStackTrace();
             return;
         }
         Version.init(this);
