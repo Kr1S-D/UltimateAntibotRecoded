@@ -34,7 +34,7 @@ public class Updater {
                 log.warn("&fA new &cversion&f has been found!");
                 log.warn("&fUpdate the &cplugin&f as soon as possible!");
                 log.warn("&fCurrent version &c$1, &fNew version &c$2".replace("$1", localVersion).replace("$2", newVersion));
-                log.warn("&fDownload new version here: &c&nhttps://ultimateantibot.kr1sd.me");
+                log.warn("&fDownload new version here: &c&nhttp://ultimateantibot.kr1sd.me");
             }, false, 1000L * 600);
         }
     }

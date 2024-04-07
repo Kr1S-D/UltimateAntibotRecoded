@@ -61,7 +61,7 @@ public class MainEventListener implements Listener {
         new ConnectionAnalyzerCheck(plugin);
     }
 
-    @EventHandler(priority = -128)
+    @EventHandler(priority = -64)
     public void onPreLoginEvent(PreLoginEvent e) {
         //e.registerIntent(UltimateAntiBotBungeeCord.getInstance());
         String ip = Utils.getIP(e.getConnection());

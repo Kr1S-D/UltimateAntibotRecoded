@@ -22,7 +22,7 @@ public class PingListener implements Listener {
         whitelistService = antiBotManager.getWhitelistService();
     }
 
-    @EventHandler(priority = -128)
+    @EventHandler(priority = -64)
     public void onPing(ProxyPingEvent e){
         String ip = Utils.getIP(e.getConnection());
 

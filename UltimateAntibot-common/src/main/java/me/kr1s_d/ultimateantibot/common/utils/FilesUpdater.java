@@ -12,8 +12,7 @@ public class FilesUpdater {
     private final IConfiguration whitelist;
     private final IConfiguration blacklist;
 
-    private boolean isDeleted;
-    private boolean upToDate;
+    private boolean reassign;
     private int i;
 
     public FilesUpdater(IAntiBotPlugin plugin, IConfiguration config, IConfiguration messages, IConfiguration whitelist, IConfiguration blacklist) {
@@ -24,7 +23,7 @@ public class FilesUpdater {
         this.whitelist = whitelist;
         this.blacklist = blacklist;
 
-        this.isDeleted = false;
+        this.reassign = false;
         this.i = 0;
     }
 
@@ -36,8 +35,9 @@ public class FilesUpdater {
             return;
         }
 
+        //for older uab version than 4.0
         if(cc < 4) {
-            isDeleted = true;
+            reassign = true;
             config.destroy();
             messages.destroy();
             whitelist.destroy();
@@ -45,9 +45,9 @@ public class FilesUpdater {
             return;
         }
 
-        if(cc != fc || cm != fm){
-            upToDate = true;
-            isDeleted = true;
+        //for newer uab versions
+        if(cc != fc || cm != fm) {
+            reassign = true;
 
             config.rename("old-config");
             messages.rename("old-messages");
@@ -77,11 +77,7 @@ public class FilesUpdater {
     }
 
     public boolean requiresReassign() {
-        return isDeleted;
-    }
-
-    public boolean isUpToDate() {
-        return upToDate;
+        return reassign;
     }
 
     private double getVersion(IConfiguration config) {

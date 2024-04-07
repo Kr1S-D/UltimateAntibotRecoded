@@ -90,7 +90,6 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
     public void onChat(String ip, String nickname, String message) {
         ConnectionProfile profile = userDataService.getProfile(ip);
         profile.trackChat(message);
-
         List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(15);
 
         List<String> entries = last.stream()

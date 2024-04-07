@@ -52,15 +52,16 @@ public class Utils {
     }
 
     public static void sendActionbar(Player player, String message) {
-        if (player == null || message == null)
-            return;
-        String nmsVersion = Bukkit.getServer().getClass().getPackage().getName();
-        nmsVersion = nmsVersion.substring(nmsVersion.lastIndexOf(".") + 1);
-        if (!nmsVersion.startsWith("v1_9_R") && !nmsVersion.startsWith("v1_8_R")) {
+        if (player == null || message == null) return;
+
+        if (Version.getBukkitServerVersion() > 19) {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(colora(message)));
             return;
         }
         try {
+            //in this case spigot jar will be legacy version so this method will 100% work
+            String nmsVersion = Bukkit.getServer().getClass().getPackage().getName();
+            nmsVersion = nmsVersion.substring(nmsVersion.lastIndexOf(".") + 1);
             Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + nmsVersion + ".entity.CraftPlayer");
             Object craftPlayer = craftPlayerClass.cast(player);
             Class<?> ppoc = Class.forName("net.minecraft.server." + nmsVersion + ".PacketPlayOutChat");

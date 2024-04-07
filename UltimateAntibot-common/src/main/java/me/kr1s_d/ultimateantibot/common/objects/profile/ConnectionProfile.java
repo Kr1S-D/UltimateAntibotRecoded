@@ -15,10 +15,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionProfile implements Serializable, SatellitePacket {
-    private static final long serialVersionUID = 7293619371231515414L;
+    private static final long serialVersionUID = 7293619371231515696L;
 
     private String ip;
     private String currentNickName;
@@ -43,7 +44,7 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         this.isOnline = false;
 
         this.score = new ScoreTracker();
-        this.metadataContainerMap = new HashMap<>();
+        this.metadataContainerMap = new ConcurrentHashMap<>();
     }
 
     public void tickMinute() {

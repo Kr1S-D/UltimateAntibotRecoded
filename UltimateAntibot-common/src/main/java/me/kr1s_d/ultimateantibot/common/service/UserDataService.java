@@ -104,11 +104,11 @@ public class UserDataService implements IService {
 
     @UnderAttackMethod
     public boolean isFirstJoin(String ip, String nickname) {
-        ConnectionProfile profile = profiles.get(ip, k -> new ConnectionProfile(ip));
+        ConnectionProfile profile = getProfile(ip);
         if(profile == null) return true;
         if(profile.isFirstJoin()) {
             //while listening for first join start checking for connection analyze
-            getProfile(ip).process(ScoreTracker.ScoreID.IS_FIST_JOIN, true);
+            profile.process(ScoreTracker.ScoreID.IS_FIST_JOIN, true);
             profile.setFirstJoin(false);
             return true;
         }
