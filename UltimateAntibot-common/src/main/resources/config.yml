@@ -185,10 +185,10 @@ checks:
   #in which case I recommend deactivating it if you receive too many blacklist reports for the reason: STRANGE_PLAYER_CONNECTION
   connection-analyze:
     #to change these parameters is suggested to ask on discord only if you are experiencing issues with them
-    chat-trigger: 5
-    name-trigger: 3
+    chat-trigger: 20
+    name-trigger: 4
     #This parameter indicates how many players with scores equal to the one assigned below must be there to trigger the check
-    blacklist-trigger: 1
+    blacklist-trigger: 3
     #This parameter indicates the minimum classification that a player must have to be
     #considered a bot, the classifications are below:
     # [NOT_BOT, SUSPECT_ACTIVITY, BOT_SUSPECTED, ALMOST_BOT, BOT_CONFIRMED]

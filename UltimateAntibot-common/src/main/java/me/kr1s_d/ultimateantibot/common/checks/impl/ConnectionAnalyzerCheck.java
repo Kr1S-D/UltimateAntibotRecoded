@@ -6,6 +6,7 @@ import me.kr1s_d.ultimateantibot.common.checks.CheckType;
 import me.kr1s_d.ultimateantibot.common.checks.StaticCheck;
 import me.kr1s_d.ultimateantibot.common.objects.LimitedList;
 import me.kr1s_d.ultimateantibot.common.objects.profile.ConnectionProfile;
+import me.kr1s_d.ultimateantibot.common.objects.profile.entry.MessageEntry;
 import me.kr1s_d.ultimateantibot.common.objects.profile.entry.NickNameEntry;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ContainerType;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.MetadataContainer;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This is not a real check, it helps detect slow bot attacks and is inserted into different
@@ -36,12 +38,14 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
     private IAntiBotManager antiBotManager;
     private UserDataService userDataService;
     private WhitelistService whitelistService;
+    private MetadataContainer<ConnectionProfile> chatSuspected;
 
     public ConnectionAnalyzerCheck(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
         this.userDataService = plugin.getUserDataService();
         this.whitelistService = antiBotManager.getWhitelistService();
+        this.chatSuspected = new MetadataContainer<>(false);
 
         CheckService.register(this);
         if(isEnabled()) {
@@ -84,42 +88,30 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
     }
 
     public void onChat(String ip, String nickname, String message) {
-        userDataService.getProfile(ip).trackChat(message);
+        ConnectionProfile profile = userDataService.getProfile(ip);
+        profile.trackChat(message);
 
-        /*List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(15);
-        MetadataContainer<ConnectionProfile> suspected = new MetadataContainer<>(false);
+        List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(15);
 
-        for (int i = 0; i < last.size(); i++) {
-            ConnectionProfile profile1 = last.get(i);
-            if (whitelistService.isWhitelisted(profile1.getIP())) continue;
+        List<String> entries = last.stream()
+                .filter(p -> !p.getIP().equals(ip)) //ignore self messages
+                .map(ConnectionProfile::getChatMessages)
+                .collect(ArrayList::new, (a, b) -> b.forEach(msg -> a.add(msg.getIP())), (a, b) -> {});
+        if(entries.isEmpty() || entries.size() > 10) return; //skip division for 0 and useless check
 
-            LimitedList<String> messages1 = profile1.getChatMessages();
-
-            for (int j = i + 1; j < last.size(); j++) {
-                ConnectionProfile profile2 = last.get(j);
-                if (whitelistService.isWhitelisted(profile2.getIP())) continue;
-
-                LimitedList<String> messages2 = profile2.getChatMessages();
-
-                // Controlla la similarità tra i messaggi dei due profili
-                for (String msg1 : messages1) {
-                    for (String msg2 : messages2) {
-                        if (StringUtil.calculateSimilarity(msg1, msg2) > 80) {
-                            suspected.incrementInt(profile2, 0);
-                            suspected.incrementInt(profile1, 0);
-                        }
-                    }
-                }
+        for (String entry : entries) {
+            if (StringUtil.spaces(message) < 2 && message.length() < 5) continue; //ignore small messages
+            if (StringUtil.calculateSimilarity(message, entry) > 85) {
+                chatSuspected.incrementInt(profile, 0);
             }
         }
+        double percent = (double) chatSuspected.getOrDefaultNoPut(profile, Integer.class, 0) / ((double) entries.size()) * 100D;
 
-        if (suspected.size() >= 3) {
-            for (ConnectionProfile profile : suspected) {
-                if(suspected.getOrDefaultNoPut(profile, Integer.class, 0) >= ConfigManger.connectionAnalyzeChatTrigger) {
-                    profile.process(ScoreTracker.ScoreID.ABNORMAL_CHAT_MESSAGE);
-                }
-            }
-        }*/
+        if (percent >= ConfigManger.connectionAnalyzeChatTrigger) {
+            profile.process(ScoreTracker.ScoreID.ABNORMAL_CHAT_MESSAGE);
+        }
+
+        plugin.getLogHelper().debug("[CONNECTION ANALYZER] Chat percent for " + nickname + " is " + percent);
     }
 
     public void onPing(String ip) {
@@ -143,16 +135,16 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
 
     @Override
     public long getCacheSize() {
-        return userDataService.size();
+        return chatSuspected.size();
     }
 
     @Override
     public void clearCache() {
-        //unsupported here
+        chatSuspected.clear();
     }
 
     @Override
     public void removeCache(String ip) {
-        //unsupported here
+        chatSuspected.removeIf(i -> i.getIP().equals(ip));
     }
 }

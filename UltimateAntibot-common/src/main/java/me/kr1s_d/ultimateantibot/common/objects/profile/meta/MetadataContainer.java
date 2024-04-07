@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 public class MetadataContainer<K> implements Serializable, Iterable<K> {
     private Map<K, Object> dataMap = new ConcurrentHashMap<>();
@@ -50,6 +51,14 @@ public class MetadataContainer<K> implements Serializable, Iterable<K> {
 
     public void remove(K key) {
         dataMap.remove(key);
+    }
+
+    public void removeIf(Predicate<K> tester) {
+        for (K k1 : dataMap.keySet()) {
+            if(tester.test(k1)) {
+                dataMap.remove(k1);
+            }
+        }
     }
 
     public Map<K, Object> getDataMap() {

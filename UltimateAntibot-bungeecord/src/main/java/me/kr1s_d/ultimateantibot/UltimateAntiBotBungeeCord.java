@@ -81,12 +81,12 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         try {
             ConfigManger.init(this.config);
             MessageManager.init(this.messages);
-            PerformanceHelper.init(ServerType.BUNGEECORD);
         } catch (Exception e) {
-            this.logHelper.error("Error during config.yml & messages.yml loading!");
+            this.logHelper.error("[ERROR] Error during config.yml & messages.yml loading!");
             e.printStackTrace();
             return;
         }
+        PerformanceHelper.init(ServerType.BUNGEECORD);
         //Version.init(this);
         new Metrics(this, 11712);
         this.logHelper.info("&fLoading &cUltimateAntiBot...");

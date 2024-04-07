@@ -3,6 +3,7 @@ package me.kr1s_d.ultimateantibot.common.objects.profile;
 import me.kr1s_d.ultimateantibot.common.core.server.packet.SatellitePacket;
 import me.kr1s_d.ultimateantibot.common.objects.LimitedList;
 import me.kr1s_d.ultimateantibot.common.objects.profile.entry.IpEntry;
+import me.kr1s_d.ultimateantibot.common.objects.profile.entry.MessageEntry;
 import me.kr1s_d.ultimateantibot.common.objects.profile.entry.NickNameEntry;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ContainerType;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.MetadataContainer;
@@ -90,8 +91,8 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
 
     public void trackChat(String message) {
         MetadataContainer<String> metadata =  getMetadata(ContainerType.CHAT_HISTORY);
-        LimitedList<String> history = metadata.getOrPutDefault("chat-history", LimitedList.class, new LimitedList<String>(15));
-        history.add(message);
+        LimitedList<MessageEntry> history = metadata.getOrPutDefault("chat-history", LimitedList.class, new LimitedList<String>(15));
+        history.add(new MessageEntry(message, System.currentTimeMillis()));
         metadata.insert("last-message", System.currentTimeMillis());
     }
 
@@ -206,7 +207,7 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
         return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("ip-history", LimitedList.class, new LimitedList<IpEntry>(10));
     }
 
-    public LimitedList<String> getChatMessages() {
+    public LimitedList<MessageEntry> getChatMessages() {
         return getMetadata(ContainerType.CHAT_HISTORY).getOrPutDefault("chat-history", LimitedList.class, new LimitedList<String>(15));
     }
 

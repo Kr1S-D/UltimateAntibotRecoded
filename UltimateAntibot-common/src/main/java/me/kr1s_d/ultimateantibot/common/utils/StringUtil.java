@@ -116,4 +116,14 @@ public class StringUtil {
         }
         return count;
     }
+
+    public static int spaces(String message) {
+        int count = 0;
+        for (int i = 0; i < message.length(); i++) {
+            if (message.charAt(i) == ' ') {
+                count++;
+            }
+        }
+        return count;
+    }
 }
