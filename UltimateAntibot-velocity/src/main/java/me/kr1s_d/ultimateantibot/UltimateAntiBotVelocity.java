@@ -107,13 +107,12 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         }
         try {
             ConfigManger.init(this.config);
+            PerformanceHelper.init(ServerType.VELOCITY);
             MessageManager.init(this.messages);
         } catch (Exception e) {
             this.logHelper.error("[ERROR] Error during config.yml & messages.yml loading!");
-            e.printStackTrace();
-            return;
+            throw e;
         }
-        PerformanceHelper.init(ServerType.VELOCITY);
         //Version.init(this);
         //new Metrics(this, 11712);
         this.logHelper.info("§fLoading &cUltimateAntiBot...");
