@@ -54,6 +54,7 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
     }
 
     public void checkJoined() {
+        if(true) return; //for now
         List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(15);
         List<ConnectionProfile> suspected = new ArrayList<>();
 
@@ -90,6 +91,7 @@ public class ConnectionAnalyzerCheck implements StaticCheck {
     public void onChat(String ip, String nickname, String message) {
         ConnectionProfile profile = userDataService.getProfile(ip);
         profile.trackChat(message);
+        if(true) return; //for now
         List<ConnectionProfile> last = userDataService.getLastJoinedAndConnectedProfiles(15);
 
         List<String> entries = last.stream()
