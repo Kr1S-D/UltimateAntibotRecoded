@@ -246,7 +246,7 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
                     return this;
                 }
 
-                score.addScore(scoreID, MathUtil.multiplyDouble(200, multiplier), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
+                score.addScore(scoreID, MathUtil.multiplyDouble(125, multiplier), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
                 ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case ABNORMAL_CHAT_MESSAGE:
