@@ -67,8 +67,8 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
 
         //nickname change detection
         MetadataContainer<String> nickMeta = getMetadata(ContainerType.KNOWN_NICKNAMES_IP);
-        LimitedList<NickNameEntry> nickHistory = nickMeta.getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<>(10));
-        LimitedList<IpEntry> ipHistory = nickMeta.getOrPutDefault("ip-history", LimitedList.class, new LimitedList<>(10));
+        LimitedList<NickNameEntry> nickHistory = nickMeta.getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<>(5));
+        LimitedList<IpEntry> ipHistory = nickMeta.getOrPutDefault("ip-history", LimitedList.class, new LimitedList<>(5));
         if(!nickHistory.contains(NickNameEntry.comparable(nickname))) nickHistory.add(new NickNameEntry(nickname, System.currentTimeMillis()));
         if(!ipHistory.contains(IpEntry.comparable(ip))) ipHistory.add(new IpEntry(ip, System.currentTimeMillis()));
         //process abnormal name check
@@ -206,11 +206,11 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
     }
 
     public LimitedList<NickNameEntry> getLastNickNames() {
-        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<>(10));
+        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<>(5));
     }
 
     public LimitedList<IpEntry> getLastIPs() {
-        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("ip-history", LimitedList.class, new LimitedList<>(10));
+        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("ip-history", LimitedList.class, new LimitedList<>(5));
     }
 
     public LimitedList<MessageEntry> getChatMessages() {
