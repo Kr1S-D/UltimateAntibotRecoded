@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 public class AttackLog implements Serializable {
+
+    private static final long serialVersionUID = 2273615571233515696L;
+
     private final int ID;
     private final String attackDate;
     private long previousBlacklist, previousBots, previousPings, previousPackets = 0;

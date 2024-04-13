@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.common.objects.profile;
 
+import me.kr1s_d.ultimateantibot.common.core.server.CloudConfig;
 import me.kr1s_d.ultimateantibot.common.core.server.packet.SatellitePacket;
 import me.kr1s_d.ultimateantibot.common.objects.LimitedList;
 import me.kr1s_d.ultimateantibot.common.objects.profile.entry.IpEntry;
@@ -9,6 +10,7 @@ import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ContainerType;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.MetadataContainer;
 import me.kr1s_d.ultimateantibot.common.objects.profile.meta.ScoreTracker;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
+import me.kr1s_d.ultimateantibot.common.utils.MathUtil;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 
 import java.io.DataOutputStream;
@@ -19,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionProfile implements Serializable, SatellitePacket {
-    private static final long serialVersionUID = 7293619371231515696L;
+    private static final long serialVersionUID = 7293619377351515696L;
 
     private String ip;
     private String currentNickName;
@@ -65,8 +67,8 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
 
         //nickname change detection
         MetadataContainer<String> nickMeta = getMetadata(ContainerType.KNOWN_NICKNAMES_IP);
-        LimitedList<NickNameEntry> nickHistory = nickMeta.getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<NickNameEntry>(10));
-        LimitedList<IpEntry> ipHistory = nickMeta.getOrPutDefault("ip-history", LimitedList.class, new LimitedList<IpEntry>(10));
+        LimitedList<NickNameEntry> nickHistory = nickMeta.getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<>(10));
+        LimitedList<IpEntry> ipHistory = nickMeta.getOrPutDefault("ip-history", LimitedList.class, new LimitedList<>(10));
         if(!nickHistory.contains(NickNameEntry.comparable(nickname))) nickHistory.add(new NickNameEntry(nickname, System.currentTimeMillis()));
         if(!ipHistory.contains(IpEntry.comparable(ip))) ipHistory.add(new IpEntry(ip, System.currentTimeMillis()));
         //process abnormal name check
@@ -76,8 +78,11 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
 
         //join info
         MetadataContainer<String> joinMeta = getMetadata(ContainerType.JOIN_INFO);
-        joinMeta.insert("packet-received", false); //default
-        if(!ConfigManger.getPacketCheckConfig().isEnabled()) process(ScoreTracker.ScoreID.NO_PACKET_CHECK, false);
+        joinMeta.insert("packet-received", true); //default
+        if(ConfigManger.getPacketCheckConfig().isEnabled()) {
+            process(ScoreTracker.ScoreID.NO_PACKET_CHECK, false);
+            joinMeta.insert("packet-received", false);
+        }
         joinMeta.incrementInt("join-count", 0);
     }
 
@@ -92,7 +97,7 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
 
     public void trackChat(String message) {
         MetadataContainer<String> metadata =  getMetadata(ContainerType.CHAT_HISTORY);
-        LimitedList<MessageEntry> history = metadata.getOrPutDefault("chat-history", LimitedList.class, new LimitedList<String>(15));
+        LimitedList<MessageEntry> history = metadata.getOrPutDefault("chat-history", LimitedList.class, new LimitedList<>(15));
         history.add(new MessageEntry(message, System.currentTimeMillis()));
         metadata.insert("last-message", System.currentTimeMillis());
     }
@@ -201,21 +206,21 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
     }
 
     public LimitedList<NickNameEntry> getLastNickNames() {
-        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<NickNameEntry>(10));
+        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("nickname-history", LimitedList.class, new LimitedList<>(10));
     }
 
     public LimitedList<IpEntry> getLastIPs() {
-        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("ip-history", LimitedList.class, new LimitedList<IpEntry>(10));
+        return getMetadata(ContainerType.KNOWN_NICKNAMES_IP).getOrPutDefault("ip-history", LimitedList.class, new LimitedList<>(10));
     }
 
     public LimitedList<MessageEntry> getChatMessages() {
-        return getMetadata(ContainerType.CHAT_HISTORY).getOrPutDefault("chat-history", LimitedList.class, new LimitedList<String>(15));
+        return getMetadata(ContainerType.CHAT_HISTORY).getOrPutDefault("chat-history", LimitedList.class, new LimitedList<>(15));
     }
 
     public ConnectionProfile process(ScoreTracker.ScoreID scoreID, Object... o) {
-        int multiplier = 1;
+        double multiplier = 1;
         if(ServerUtil.getSecondsFromLastAttack() < 300) {
-            multiplier = 2;
+            multiplier = CloudConfig.m;
             ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] Possible attack detected shortly after another attack ⚠");
         }
 
@@ -223,17 +228,17 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
             case NO_PACKET_CHECK: //no multiplier to avoid false flags
                 boolean hasSentPacket = ((Boolean) o[0]);
                 if(hasSentPacket) {
-                    score.removeScore(scoreID, 250, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, false);
+                    score.removeScore(scoreID, MathUtil.multiplyDouble(250, multiplier), ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, false);
                     return this;
                 }
 
-                score.addScore(scoreID, 250, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
+                score.addScore(scoreID, MathUtil.multiplyDouble(250, multiplier), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
                 ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case IS_FIST_JOIN:
                 boolean isFirstJoin = ((Boolean) o[0]);
                 if(!isFirstJoin) return this;
-                score.addScore(scoreID, 150 * multiplier, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
+                score.addScore(scoreID, MathUtil.multiplyDouble(150, multiplier), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
                 ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case JOIN_NO_PING:
@@ -241,19 +246,19 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
                     return this;
                 }
 
-                score.addScore(scoreID, (int) ((double)250 * ((double) multiplier - (double) 0.6)), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
+                score.addScore(scoreID, MathUtil.multiplyDouble(200, multiplier), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 30);
                 ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case ABNORMAL_CHAT_MESSAGE:
-                score.addScore(scoreID, 20 * multiplier, true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 10);
+                score.addScore(scoreID, MathUtil.multiplyDouble(20, multiplier), true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 10);
                 ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case ABNORMAL_NAME:
-                score.addScore(scoreID, 75 * multiplier, true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 15);
+                score.addScore(scoreID, MathUtil.multiplyDouble(40, multiplier), true, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 15);
                 ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case CHANGE_NAME:
-                score.addScore(scoreID, 100 * multiplier, false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 5);
+                score.addScore(scoreID, MathUtil.multiplyDouble(175, multiplier), false, ScoreTracker.ScoreDurationType.EXPIRE_BY_TIME, 5);
                 ServerUtil.getInstance().getLogHelper().debug("[CONNECTION PROFILE] " + getCurrentNickName() + " process " + scoreID + " ✔");
                 break;
             case AUTH_CHECK_PASS:

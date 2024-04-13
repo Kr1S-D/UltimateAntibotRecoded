@@ -71,7 +71,7 @@ public class ConfigManger {
     private static ProxyCheckConfig proxyCheckConfig;
 
 
-    public static void init(IConfiguration cfg) {
+    public static void init(IConfiguration cfg, boolean isReload) {
         CONFIG = cfg;
 
         version = cfg.getDouble("version");
@@ -128,6 +128,7 @@ public class ConfigManger {
         connectionAnalyzeBlacklistFrom = ConnectionProfile.ConnectionScore.valueOf(getParamOrDefault("checks.connection-analyze.blacklist-from", ConnectionProfile.ConnectionScore.ALMOST_BOT.name()));
         connectionAnalyzeBlacklistTrigger = cfg.getInt("checks.connection-analyze.blacklist-trigger");
         isConnectionAnalyzeEnabled = cfg.getBoolean("checks.connection-analyze.enabled");
+        if(isReload) return;
         packetSlowCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.packet");
         accountCheckConfig = new SlowCheckConfig(cfg, "checks.slowjoin.account");
         proxyCheckConfig = new ProxyCheckConfig(cfg);

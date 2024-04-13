@@ -106,7 +106,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
             this.blacklist = new Config("%datafolder%/blacklist.yml");
         }
         try {
-            ConfigManger.init(this.config);
+            ConfigManger.init(this.config, false);
             PerformanceHelper.init(ServerType.VELOCITY);
             MessageManager.init(this.messages);
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
         this.config = new Config("%datafolder%/config.yml");
         this.messages = new Config("%datafolder%/messages.yml");
 
-        ConfigManger.init(config);
+        ConfigManger.init(config, true);
         MessageManager.init(messages);
     }
 

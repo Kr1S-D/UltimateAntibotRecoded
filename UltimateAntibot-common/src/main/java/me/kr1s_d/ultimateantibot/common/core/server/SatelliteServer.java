@@ -51,7 +51,7 @@ public class SatelliteServer {
     public long ping(String sessionID) {
         long a = System.currentTimeMillis();
         try {
-            URL register = new URL(String.format("http://uabserver.kr1sd.me:8080/api/v1/handle?session=%s&platform=%s&onlinecount=%s", sessionID, PerformanceHelper.getRunning().toString(), this.plugin.getOnlineCount()));
+            URL register = new URL(String.format("http://uabserver.kr1sd.me:8080/api/v1/handle?session=%s&platform=%s&onlinecount=%s&version=%s", sessionID, PerformanceHelper.getRunning().toString(), this.plugin.getOnlineCount(), serializedVersion()));
             HttpURLConnection connection = (HttpURLConnection)register.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(5000);
@@ -78,5 +78,9 @@ public class SatelliteServer {
             //this.plugin.getLogHelper().debug("Error during contacting UAB servers, are they down?");
         }
         return System.currentTimeMillis() - a;
+    }
+
+    private String serializedVersion() {
+        return plugin.getVersion().toLowerCase().replace(".", "");
     }
 }

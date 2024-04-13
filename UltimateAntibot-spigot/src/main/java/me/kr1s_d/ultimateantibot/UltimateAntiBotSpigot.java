@@ -80,7 +80,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
             this.blacklist = new Config(this, "blacklist");
         }
         try {
-            ConfigManger.init(config);
+            ConfigManger.init(config, false);
             PerformanceHelper.init(ServerType.SPIGOT);
             MessageManager.init(messages);
         } catch (Exception e) {
@@ -169,7 +169,7 @@ public final class UltimateAntiBotSpigot extends JavaPlugin implements IAntiBotP
         this.config = new Config(this, "config");
         this.messages = new Config(this, "messages");
 
-        ConfigManger.init(config);
+        ConfigManger.init(config, true);
         MessageManager.init(messages);
     }
 

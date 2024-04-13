@@ -79,7 +79,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
             this.blacklist = new Config(this, "%datafolder%/blacklist.yml");
         }
         try {
-            ConfigManger.init(this.config);
+            ConfigManger.init(this.config, false);
             PerformanceHelper.init(ServerType.BUNGEECORD);
             MessageManager.init(this.messages);
         } catch (Exception e) {
@@ -165,7 +165,7 @@ public final class UltimateAntiBotBungeeCord extends Plugin implements IAntiBotP
         this.config = new Config(this, "%datafolder%/config.yml");
         this.messages = new Config(this, "%datafolder%/messages.yml");
 
-        ConfigManger.init(config);
+        ConfigManger.init(config, true);
         MessageManager.init(messages);
     }
 
