@@ -9,6 +9,8 @@ import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class InvalidNameCheck implements JoinCheck {
     private final IAntiBotPlugin plugin;
@@ -29,10 +31,10 @@ public class InvalidNameCheck implements JoinCheck {
 
     @Override
     public boolean isDenied(String ip, String name) {
-        for(String blacklisted : invalidNames){
-            blacklisted = blacklisted.toLowerCase();
-            
-            if(name.toLowerCase().contains(blacklisted)) {
+        for (String patternString : invalidNames) {
+            Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(name);
+            if (matcher.find()) {
                 antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER_INVALID_NAME, name);
                 plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on InvalidNameCheck!");
                 return true;
