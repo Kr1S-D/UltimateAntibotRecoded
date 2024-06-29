@@ -39,7 +39,7 @@ public class InvalidNameCheck implements JoinCheck {
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
 
-        if(isEnabled()){
+        if(isEnabled()) {
             loadTask();
             CheckService.register(this);
             plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
