@@ -7,6 +7,7 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import me.kr1s_d.ultimateantibot.utils.KBossBar;
 import me.kr1s_d.ultimateantibot.utils.Utils;
+import me.kr1s_d.ultimateantibot.utils.Version;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -21,20 +22,23 @@ public class Notificator implements INotificator {
         if(actionbars.contains(player)) return;
         actionbars.remove(player);
         bar.removePlayer(player);
-
-        if (ConfigManger.enableBossBarAutomaticNotification) {
+        if (ConfigManger.enableBossBarAutomaticNotification && Version.getBukkitServerVersion() > 19) {
             bar.addPlayer(player);
         }
         actionbars.add(player);
     }
 
     public static void toggleBossBar(Player player){
-        if(!bar.isCreated()) return;
+        if(!bar.isSupported()) return;
+        if(Version.getBukkitServerVersion() < 19) {
+            player.sendMessage(Utils.colora(MessageManager.prefix + "&cBossbar&f notifications are not supported on &c1.8.x!"));
+            return;
+        }
         if(bar.getPlayers().contains(player)){
             bar.removePlayer(player);
         }else{
             bar.addPlayer(player);
-         }
+        }
         player.sendMessage((ServerUtil.colorize(MessageManager.prefix + MessageManager.toggledBossBar)));
     }
 
@@ -84,7 +88,7 @@ public class Notificator implements INotificator {
 
     @Override
     public void sendBossBarMessage(String str, float health) {
-        if(!bar.isCreated()) return;
+        if(!bar.isSupported()) return;
         bar.setTitle(ServerUtil.colorize(str));
         bar.setProgress(health);
     }

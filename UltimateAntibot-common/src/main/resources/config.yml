@@ -164,8 +164,9 @@ checks:
   invalidname:
     #If a player who enters contains one of the following strings in his name he will be blocked!
     invalid:
-      - "MCSTORM_IO"
+      - "MCSTORM_IO" #No regex
       - "MC_BOT_IO"
+      - "REGEX-BotName_[A-Za-z0-9]+" #REGEX SUPPORT (must start with REGEX-{enter here your regex like the example})
     blacklist: true
     #This parameter allows you to activate or deactivate this check
     enabled: true

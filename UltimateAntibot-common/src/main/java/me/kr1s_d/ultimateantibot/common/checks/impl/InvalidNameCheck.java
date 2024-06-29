@@ -8,17 +8,30 @@ import me.kr1s_d.ultimateantibot.common.objects.profile.BlackListReason;
 import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InvalidNameCheck implements JoinCheck {
     private final IAntiBotPlugin plugin;
     private final IAntiBotManager antiBotManager;
     private final List<String> invalidNames;
+    private final List<String> regexes;
     
     public InvalidNameCheck(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
-        this.invalidNames = ConfigManger.invalidNamesBlockedEntries;
+        this.invalidNames = new ArrayList<>();
+        this.regexes = new ArrayList<>();
+
+        for (String invalidNamesBlockedEntry : ConfigManger.invalidNamesBlockedEntries) {
+            if(invalidNamesBlockedEntry.startsWith("REGEX-")) {
+                regexes.add(invalidNamesBlockedEntry.split("-")[1]);
+            }else{
+                invalidNames.add(invalidNamesBlockedEntry);
+            }
+        }
 
         if(isEnabled()){
             loadTask();
@@ -34,8 +47,23 @@ public class InvalidNameCheck implements JoinCheck {
             
             if(name.toLowerCase().contains(blacklisted)) {
                 antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER_INVALID_NAME, name);
-                plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on InvalidNameCheck!");
+                plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on InvalidNameCheck! (name)");
                 return true;
+            }
+        }
+
+        for (String regex : regexes) {
+            try {
+                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(name);
+
+                if(matcher.matches()) {
+                    antiBotManager.getBlackListService().blacklist(ip, BlackListReason.STRANGE_PLAYER_INVALID_NAME, name);
+                    plugin.getLogHelper().debug("[UAB DEBUG] Detected attack on InvalidNameCheck! (regex)");
+                    return true;
+                }
+            }catch (Exception e){
+                plugin.getLogHelper().debug("[UAB DEBUG] Unable to validate regex for input" + regex);
             }
         }
         

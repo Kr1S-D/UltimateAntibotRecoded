@@ -11,25 +11,26 @@ import java.util.List;
 public class KBossBar {
 
     private BossBar bar;
-    private final boolean isCreated;
+    private final boolean isSupported;
 
-    public KBossBar(){
+    public KBossBar() {
         if(Version.getBukkitServerVersion() < 19) {
-            this.isCreated = false;
+            this.isSupported = false;
             return;
         }
-        this.isCreated = true;
+
+        this.isSupported = true;
         bar = Bukkit.createBossBar(Utils.colora("&fWaiting for a new attack!"), BarColor.RED, BarStyle.SOLID);
     }
 
 
     public void addPlayer(Player player) {
-        if(!isCreated) return;
+        if(!isSupported) return;
         bar.addPlayer(player);
     }
 
     public void removePlayer(Player player) {
-        if(!isCreated) return;
+        if(!isSupported) return;
         bar.removePlayer(player);
     }
 
@@ -45,7 +46,7 @@ public class KBossBar {
         bar.setProgress(health);
     }
 
-    public boolean isCreated() {
-        return isCreated;
+    public boolean isSupported() {
+        return isSupported;
     }
 }
