@@ -26,11 +26,17 @@ public class InvalidNameCheck implements JoinCheck {
         this.regexes = new ArrayList<>();
 
         for (String invalidNamesBlockedEntry : ConfigManger.invalidNamesBlockedEntries) {
-            if(invalidNamesBlockedEntry.startsWith("REGEX-")) {
-                regexes.add(invalidNamesBlockedEntry.split("-")[1]);
-            }else{
-                invalidNames.add(invalidNamesBlockedEntry);
+            try {
+                if(invalidNamesBlockedEntry.startsWith("REGEX-")) {
+                    regexes.add(invalidNamesBlockedEntry.split("-", 1)[1]);
+                }else{
+                    invalidNames.add(invalidNamesBlockedEntry);
+                }
+            }catch (Exception e) {
+                plugin.getLogHelper().info("Unable to validate regex for input " + invalidNamesBlockedEntry);
             }
+
+            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
 
         if(isEnabled()){
@@ -63,7 +69,7 @@ public class InvalidNameCheck implements JoinCheck {
                     return true;
                 }
             }catch (Exception e){
-                plugin.getLogHelper().debug("[UAB DEBUG] Unable to validate regex for input" + regex);
+                plugin.getLogHelper().info("Unable to validate regex for input" + regex);
             }
         }
         
