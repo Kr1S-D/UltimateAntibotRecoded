@@ -46,10 +46,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "ultimateantibot-velocity", name = "UltimateAntiBotVelocity", version = "4.1.1-ABYSS", url = "ultimateantibot.kr1sd.me", description = "Just another antibot plugin :D", authors = {"Kr1S_D"})
+@Plugin(id = "ultimateantibot-velocity", name = "UltimateAntiBotVelocity", version = "4.1.2-ABYSS", url = "ultimateantibot.kr1sd.me", description = "Just another antibot plugin :D", authors = {"Kr1S_D"})
 public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform {
     private static final String AUTHOR = "Kr1S_D";
-    private static final String VERSION = "4.1.1-ABYSS";
+    private static final String VERSION = "4.1.2-ABYSS";
     private static UltimateAntiBotVelocity instance;
 
     //defaults
