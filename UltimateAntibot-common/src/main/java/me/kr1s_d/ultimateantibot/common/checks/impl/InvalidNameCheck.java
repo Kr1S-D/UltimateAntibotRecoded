@@ -9,6 +9,7 @@ import me.kr1s_d.ultimateantibot.common.service.CheckService;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,15 +29,17 @@ public class InvalidNameCheck implements JoinCheck {
         for (String invalidNamesBlockedEntry : ConfigManger.invalidNamesBlockedEntries) {
             try {
                 if(invalidNamesBlockedEntry.startsWith("REGEX-")) {
-                    regexes.add(invalidNamesBlockedEntry.split("-", 1)[1]);
+                    String regexFormula = invalidNamesBlockedEntry.split("-", 2)[1];
+                    regexes.add(regexFormula);
+                    plugin.getLogHelper().debug("[REGEX VALIDATOR] Input: " + regexFormula + " complete array: " + Arrays.toString(invalidNamesBlockedEntry.split("-", 2)));
                 }else{
                     invalidNames.add(invalidNamesBlockedEntry);
                 }
             }catch (Exception e) {
-                plugin.getLogHelper().info("Unable to validate regex for input " + invalidNamesBlockedEntry);
+                plugin.getLogHelper().error("Unable to validate regex for input " + invalidNamesBlockedEntry);
+                if(ConfigManger.isDebugModeOnline) e.printStackTrace();
             }
 
-            plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
         }
 
         if(isEnabled()) {
@@ -69,7 +72,7 @@ public class InvalidNameCheck implements JoinCheck {
                     return true;
                 }
             }catch (Exception e){
-                plugin.getLogHelper().info("Unable to validate regex for input" + regex);
+                plugin.getLogHelper().error("Unable to validate regex for input " + regex);
             }
         }
         
