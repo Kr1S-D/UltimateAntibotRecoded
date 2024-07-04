@@ -32,6 +32,9 @@ public class Version {
         if (versionStr.contains("1.18")) return 118;
         if (versionStr.contains("1.19")) return 119;
         if (versionStr.contains("1.20")) return 120;
+        if (versionStr.contains("1.21")) return 121;
+        if (versionStr.contains("1.22")) return 122;
+        if (versionStr.contains("1.23")) return 123;
         return 999;
     }
 
