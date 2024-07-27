@@ -25,12 +25,13 @@ public class ProxyCheckProvider implements VPNProvider {
         VPNResults res = getResults(ip);
         if(res == null) return;
 
-        if(res.isProxy){
+        if(res.isProxy) {
             BlackListProfile profile = plugin.getAntiBotManager().getBlackListService().blacklistAndGet(ip, BlackListReason.VPN, name);
             plugin.disconnect(ip, MessageManager.getBlacklistedMessage(profile));
         }else {
             plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
             plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip, 30));
+            plugin.getVPNService().setVerified(ip);
         }
     }
 

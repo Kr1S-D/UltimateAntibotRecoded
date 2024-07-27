@@ -9,7 +9,9 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class VPNService implements IService {
@@ -17,6 +19,7 @@ public class VPNService implements IService {
     private final IAntiBotPlugin plugin;
     private final LogHelper logHelper;
     private final List<String> underVerification;
+    private final Set<String> verified = new HashSet<>();
 
     private int currentChecks;
     public VPNService(IAntiBotPlugin plugin){
@@ -41,7 +44,7 @@ public class VPNService implements IService {
     }
 
     public void submitIP(String ip, String name){
-        if(underVerification.contains(ip)){
+        if(underVerification.contains(ip) || verified.contains(ip)) {
             return;
         }
         IAntiBotManager antiBotManager = plugin.getAntiBotManager();
@@ -56,7 +59,7 @@ public class VPNService implements IService {
             if(antiBotManager.getBlackListService().isBlackListed(ip)){
                 return;
             }
-            if(ConfigManger.isIPApiVerificationEnabled && currentChecks < 45){
+            if(ConfigManger.isIPApiVerificationEnabled && currentChecks < 45) {
                 new IPAPIProvider(plugin).process(ip, name);
                 underVerification.remove(ip);
                 currentChecks++;
@@ -78,5 +81,9 @@ public class VPNService implements IService {
 
     public List<String> getIPSUnderVerification() {
         return underVerification;
+    }
+
+    public void setVerified(String ip) {
+        verified.add(ip);
     }
 }

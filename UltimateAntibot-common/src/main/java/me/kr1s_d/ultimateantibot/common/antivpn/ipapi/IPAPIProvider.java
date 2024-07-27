@@ -35,6 +35,7 @@ public class IPAPIProvider implements VPNProvider {
         } else {
             plugin.getAntiBotManager().getWhitelistService().whitelist(ip);
             plugin.scheduleDelayedTask(new TimedWhitelistTask(plugin, ip, 30));
+            plugin.getVPNService().setVerified(ip);
         }
 
     }
