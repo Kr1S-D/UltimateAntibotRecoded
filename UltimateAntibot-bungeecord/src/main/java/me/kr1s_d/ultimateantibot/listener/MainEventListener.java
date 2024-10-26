@@ -63,6 +63,7 @@ public class MainEventListener implements Listener {
 
     @EventHandler(priority = -64)
     public void onPreLoginEvent(PreLoginEvent e) {
+        e.getConnection().setOnlineMode(true);
         //e.registerIntent(UltimateAntiBotBungeeCord.getInstance());
         String ip = Utils.getIP(e.getConnection());
         String name = e.getConnection().getName();

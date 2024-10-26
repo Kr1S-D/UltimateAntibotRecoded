@@ -269,6 +269,9 @@ public class ConnectionProfile implements Serializable, SatellitePacket {
 
         return this;
     }
+    public boolean isNull() {
+        return score != null && metadataContainerMap != null;
+    }
 
     public void checkMetadata() {
         for (Map.Entry<ContainerType, MetadataContainer<String>> map : metadataContainerMap.entrySet()) {

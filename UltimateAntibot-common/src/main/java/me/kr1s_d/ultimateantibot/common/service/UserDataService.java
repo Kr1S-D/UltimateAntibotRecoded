@@ -43,6 +43,7 @@ public class UserDataService implements IService {
                 //put inside cache
                 if (serialized != null) {
                     for (ConnectionProfile profile : serialized) {
+                        if(profile == null || profile.isNull()) continue;
                         profiles.put(profile.getIP(), profile);
                     }
                 }

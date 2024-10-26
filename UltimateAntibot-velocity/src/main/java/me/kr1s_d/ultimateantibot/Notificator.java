@@ -60,7 +60,7 @@ public class Notificator implements INotificator {
     }
 
     public static void toggleActionBar(Player player){
-        if(actionbars.contains(player)){
+        if(actionbars.contains(player)) {
             actionbars.remove(player);
         }else {
             actionbars.add(player);
