@@ -47,7 +47,7 @@ public class Config implements IConfiguration {
             config.save(file);
         } catch (IOException e) {
             if (exceptionHandler == null)
-                Bukkit.getLogger().severe(String.format("C'è stato un errore durante il salvataggio di %s.yml", file.getName()));
+                Bukkit.getLogger().severe(String.format("Unable to save file %s.yml", file.getName()));
             else
                 exceptionHandler.accept(e);
         }
